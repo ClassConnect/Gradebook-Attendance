@@ -1,0 +1,21 @@
+-columns = [{:type => 'html', :class => "first"}, {:type => 'html'}, {:type => 'html'}, {:type => nil, :class => "last"}]
+
+=datatable(columns, {:sort_by => "[0, 'desc']"})
+
+%h1 #{@course.name}   
+%table{:id => "example", :cellpadding => 2, :cellspacing => 2}
+  %thead
+    %tr
+      %th Name
+      -@assignments.each do |assignment|
+        %th{:width => 100}= assignment.name
+      -#number_of_assignments = @assignments.count
+
+  %tbody
+  -@students.each do |student|
+    %tr
+      -if @course.legacy?
+        -if student.is_student?
+          %td= student.last_name.capitalize + ", " + student.first_name.capitalize
+          -@assignments.each do |assignment|
+            %td= assignment.name

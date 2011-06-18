@@ -1,0 +1,21 @@
+<h1>Listing grade_scales</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @grade_scales.each do |grade_scale| %>
+  <tr>
+    <td><%= link_to 'Show', grade_scale %></td>
+    <td><%= link_to 'Edit', edit_grade_scale_path(grade_scale) %></td>
+    <td><%= link_to 'Destroy', grade_scale, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Grade scale', new_grade_scale_path %>

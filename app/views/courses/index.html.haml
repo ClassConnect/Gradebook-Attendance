@@ -1,0 +1,13 @@
+%h1 Courses#index
+
+%table
+  %tr
+    %th Name
+    %th Description
+
+  - @courses.each do |course|
+    %tr
+      %td= course.name
+      %td= course.description
+  
+    

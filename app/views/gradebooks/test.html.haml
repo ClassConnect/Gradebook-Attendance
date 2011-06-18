@@ -1,0 +1,18 @@
+:javascript
+  $(document).ready(function(){
+    $('#example').dataTable();
+  });
+
+%h1 #{@course.name}   
+%table{:id => "example", :cellpadding => 2, :cellspacing => 2}
+  %th Name
+  -@assignments.each do |assignment|
+    %th{:width => 100}= assignment.name
+  -#number_of_assignments = @assignments.count
+  -@students.each do |student|
+    %tr
+      -if @course.legacy?
+        -if student.is_student?
+          %td= student.last_name.capitalize + ", " + student.first_name.capitalize
+          -@assignments.each do |assignment|
+            %td= assignment.name
