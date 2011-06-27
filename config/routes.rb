@@ -1,6 +1,9 @@
 Gradebook::Application.routes.draw do
   get "courses/index"
 
+  match 'gradebooks/:course_id/table' => 'gradebooks#table'
+  match 'submit_grade' => 'assignment_grades#submit'
+
   resources :grade_scales
   resources :courses
 
@@ -9,6 +12,7 @@ Gradebook::Application.routes.draw do
   match 'gradebooks/:course_id', :to => 'gradebooks#show'
 
   resources :assignment_grades
+  resources :assignments
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

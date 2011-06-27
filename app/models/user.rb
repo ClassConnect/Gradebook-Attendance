@@ -44,6 +44,8 @@ class User < ActiveRecord::Base
 
 
 #Student functionality
+#Near the end, we should see if there's an easy way to just have a 
+#student and user model
   def active_assignments     
     courses.each do |course|
       course.active_assignments
@@ -51,7 +53,32 @@ class User < ActiveRecord::Base
   end
 
   def get_grades
-    AssignmentGrade.where(student_id: id).ascending(:created_at)
+    AssignmentGrade.where(student_id: id, graded: false).ascending(:updated_at)
   end
+
+  def get_grades_for_course(course_id)
+    AssignmentGrade.where(student_id: id, course_id: course_id)
+  end
+
+  def get_grades_for_gradebook
+    AssignmentGrade.where(student_id: id)
+  end
+
+  #Custom serializer for students, needs to be this format for datatables
+  def prepare_ajax
+    assignment_grades = get_grades_for_gradebook
+    #name = "[1"
+    name = "[\"#{last_name.capitalize}, #{first_name.capitalize}\""
+    grade_json = String.new 
+
+    unless assignment_grades.count == 0
+      assignment_grades.each do |grade|
+        grade_json << ", #{grade.value}"
+      end
+    end
+
+    name << (assignment_grades.count != 0 ? (grade_json << "]") : "]")
+  end
+
 
 end

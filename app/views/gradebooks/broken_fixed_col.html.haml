@@ -1,0 +1,104 @@
+-#columns = [{:type => 'html'}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'}]
+
+-#columns = html_columns(@assignments.count + 1)
+
+-#=datatable(columns, {:sort_by => "[0, 'desc']"})
+:javascript
+
+  jQuery.ajaxSetup({
+    'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+  });
+
+  $(document).ready(function() {
+      initTable();
+
+  $('#new_assignment').submit(function(){
+    $.post($(this).attr("action"), $(this).serialize(), null, "script");
+    oTable.fnDestroy();
+    initTable();
+    return false;
+  });
+      
+  $('#add_column').click(function() {
+    oTable.fnDestroy();
+    $("<th width='100' class='sorting'>New</th>").insertAfter('thead th:last');
+    $('.datatable tbody tr').each(function(){
+      $(this).append("<td width='100'>1</td>");
+    });
+    initTable();
+  });
+
+  $('#destroy').click(function() {
+    alert($(".datatable").width());
+  });
+
+  function initTable()
+  {
+    oTable = $('.datatable').dataTable(
+      {
+      "iDisplayLength": #{@students.count},
+      "bDestroy": true,
+      "bAutoWidth": false,
+      "sScrollX": "100%"
+    });
+    //new FixedColumns(oTable, {
+    //  "iLeftColumns": 2,
+    //  "iLeftWidth": 200
+    //});
+
+    x = new FixedColumns(oTable);
+
+    /*jEditable handlers are go */
+    $('td', oTable.fnGetNodes()).editable('/submit_grade', {
+      "callback" : function(value, settings) {
+        var aPos = oTable.fnGetPosition(this);
+        oTable.fnUpdate(value, aPos[0], aPos[1]);
+      },
+      "submitdata" : function(value, settings){
+        return {
+          "row_id": this.parentNode.getAttribute('id'),
+          "column": oTable.fnGetPosition(this)[2]
+        };
+      },
+      "height": "14px"
+    });
+      }
+  }); 
+
+
+=form_for Assignment.new() do |f|
+  =f.hidden_field :course_id, :value => @course.id
+  %div{:class => "field"}
+    =f.label :name
+    =f.text_field :name
+  %div{:class => "field"}
+    =f.label :description
+    =f.text_area :description
+  %div{:class => "field"}
+    =f.label :date_due
+    =f.text_field :date_due
+  %div{:class => "button"}
+    =f.submit "Submit"
+
+%h1 #{@course.name}   
+%input{:type => "submit", :value => "Add", :class => "button", :id => "add_column"}
+-#%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{200 + @assignments.count * 100}px"}
+%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{200 + @assignments.count * 100}px"}
+  %thead
+    %tr{:id => "assignments"}
+      %th{:width => 100} First Name
+      -#%th{:width => 100} Last Name
+      -@assignments.each do |assignment|
+        %th{:width => 100}= assignment.name
+
+  %tbody
+    -@students.each do |student|
+      -if student.is_student?
+        %tr{:id => "#{student.id}"}
+          %td{:width => 100}= student.first_name.capitalize
+          -#%td{:width => 100}= student.last_name.capitalize
+          -student.get_grades_for_course(@course.id).each do |grade|
+            -if grade.graded
+              %td{:width => 100, :id=> "#{grade.id}", :align => "center"}=grade.value
+            -else
+              %td{:width => 100, :id=> "#{grade.id}", :align => "center"}="-"

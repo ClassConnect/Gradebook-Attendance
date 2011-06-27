@@ -9,6 +9,7 @@ gem 'mysql2'
 gem 'mongoid'
 gem 'bson_ext'
 
+
 # Asset template engines
 gem 'haml'
 gem 'sass'
@@ -29,6 +30,7 @@ gem 'kaminari'
 
 group :developoment do
   gem 'rspec-rails'
+  gem 'annotate'
 end
 
 group :test do

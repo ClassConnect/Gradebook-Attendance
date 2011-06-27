@@ -1,0 +1,10 @@
+grade_array = [];
+<% @assignment.assignment_grades.each do |grade| %>
+  grade_array.unshift('<%= grade.id %>');
+<% end %>
+
+oTable.fnDestroy();
+$("<th width='100' class='sorting'><%= @assignment.name %></th>").insertAfter('thead th:last');
+$('.datatable tbody tr').each(function(index, value){
+  $(this).append("<td id=" + grade_array.pop() + ">Lol</td>");
+});

@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.8.0
+ * Version:     1.8.1.dev
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
  * Created:     28/3/2008
@@ -67,7 +67,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.8.0";
+	_oExt.sVersion = "1.8.1.dev";
 	
 	/*
 	 * Variable: sErrMode
@@ -1926,13 +1926,6 @@
 			if ( $.isArray(mData) && typeof mData == 'object' )
 			{
 				/* Array update - update the whole row */
-				if ( mData.length != oSettings.aoColumns.length )
-				{
-					_fnLog( oSettings, 0, 'An array passed to fnUpdate must have the same number of '+
-						'columns as the table in question - in this case '+oSettings.aoColumns.length );
-					return 1;
-				}
-
 				oSettings.aoData[iRow]._aData = mData.slice();
 
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
@@ -2145,9 +2138,6 @@
 			/* Flag to note that the table is currently being destoryed - no action should be taken */
 			oSettings.bDestroying = true;
 			
-			/* Blitz all DT events */
-			$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
-			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
@@ -2156,6 +2146,9 @@
 					this.fnSetColumnVis( i, true );
 				}
 			}
+			
+			/* Blitz all DT events */
+			$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
 			
 			/* If there is an 'empty' indicator row, remove it */
 			$('tbody>tr>td.'+oSettings.oClasses.sRowEmpty, oSettings.nTable).parent().remove();
@@ -2227,7 +2220,10 @@
 			}
 			
 			/* Restore the width of the original table */
-			oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
+			if ( oSettings.bAutoWidth === true )
+			{
+			  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
+			}
 			
 			/* If the were originally odd/even type classes - then we add them back here. Note
 			 * this is not fool proof (for example if not all rows as odd/even classes - but 
@@ -2627,6 +2623,12 @@
 				oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 				oCol.sSortingClassJUI = "";
 			}
+			else if ( oCol.bSortable ||
+                ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+      {
+        oCol.sSortingClass = oSettings.oClasses.sSortable;
+        oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
+      }
 			else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) == -1 )
 			{
 				oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
@@ -4185,14 +4187,18 @@
 		 */
 		function _fnFeatureHtmlFilter ( oSettings )
 		{
+			var sSearchStr = oSettings.oLanguage.sSearch;
+			sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
+			  sSearchStr.replace('_INPUT_', '<input type="text" />') :
+			  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
+			
 			var nFilter = document.createElement( 'div' );
+			nFilter.className = oSettings.oClasses.sFilter;
+			nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
 			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
 			{
 				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
 			}
-			nFilter.className = oSettings.oClasses.sFilter;
-			var sSpace = oSettings.oLanguage.sSearch==="" ? "" : " ";
-			nFilter.innerHTML = oSettings.oLanguage.sSearch+sSpace+'<input type="text" />';
 			
 			var jqFilter = $("input", nFilter);
 			jqFilter.val( oSettings.oPreviousSearch.sSearch.replace('"','&quot;') );
@@ -5194,7 +5200,7 @@
 				nLength.setAttribute( 'id', oSettings.sTableId+'_length' );
 			}
 			nLength.className = oSettings.oClasses.sLength;
-			nLength.innerHTML = oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu );
+			nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
 			
 			/*
 			 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,

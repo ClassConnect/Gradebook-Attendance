@@ -1,0 +1,6 @@
+%table
+  -@assignments.each do |assignment|
+    %tr
+      %td=assignment.name
+
+=link_to 'New Assignment', new_assignment_path

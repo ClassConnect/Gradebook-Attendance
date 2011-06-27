@@ -57,6 +57,30 @@ module RailsDatatables
     </script>
     }.html_safe
   end
+ 
+  def html_columns(count)
+    columns_array = []
+    count.times do |column|
+      columns_array.push({:type => 'html'})
+    end
+    return columns_array
+  end
+
+  def columnify(params)
+    puts params
+    columns_array = []
+    params.each do |param|
+     columns_array.push({:type => param}) 
+    end
+    return columns_array
+  end
+  
+  def self.included m
+    return unless m < ActionController::Base
+    m.helper_method :datatable
+  end
+
+  
 
   private
     def formatted_columns(columns)
@@ -72,6 +96,7 @@ module RailsDatatables
           "{
           'sType': '#{c[:type] || "string"}',
           'bSortable':#{sortable},
+          'sWidth': #{300},
           'bSearchable':#{searchable}
           #{",'sClass':'#{c[:class]}'" if c[:class]}
           }"

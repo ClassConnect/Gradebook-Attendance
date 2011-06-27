@@ -14,13 +14,20 @@ class Assignment
   field :name, :type => String
   field :description, :type => String
   field :date_due, :type => Date
-  field :date_submitted, :type => Date
+
+  before_destroy :destroy_grades
 
   def init_grades
     course = Course.find(course_id)
     course.students.each do |student|
-      assignment_grades.create(:student_id => student.id, :course_id => course.id, :value => 0, :graded => false)
+      unless student.is_teacher?
+        assignment_grades.create(:student_id => student.id, :course_id => course.id, :value => 0, :graded => false)
+      end
     end
+  end
+
+  def destroy_grades
+    assignment_grades.destroy_all
   end
 
 

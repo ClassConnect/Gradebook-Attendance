@@ -1,21 +1,94 @@
--columns = [{:type => 'html', :class => "first"}, {:type => 'html'}, {:type => 'html'}, {:type => nil, :class => "last"}]
+-#columns = [{:type => 'html'}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'}]
 
-=datatable(columns, {:sort_by => "[0, 'desc']"})
+-#columns = html_columns(@assignments.count + 1)
 
-%h1 #{@course.name}   
-%table{:id => "example", :cellpadding => 2, :cellspacing => 2}
-  %thead
-    %tr
-      %th Name
-      -@assignments.each do |assignment|
-        %th{:width => 100}= assignment.name
-      -#number_of_assignments = @assignments.count
+-#=datatable(columns, {:sort_by => "[0, 'desc']"})
+:javascript
 
-  %tbody
-  -@students.each do |student|
-    %tr
-      -if @course.legacy?
+  jQuery.ajaxSetup({
+    'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+  });
+
+  $(document).ready(function() {
+      initTable();
+
+  $('#new_assignment').bind('submit', function(){
+    $.post($(this).attr("action"), $(this).serialize(), null, "script")
+    .success(function(){
+      initTable();
+    });
+    return false;
+  });
+
+  function initTable()
+  {
+    oTable = $('.datatable').dataTable(
+      {
+      "iDisplayLength": #{@students.count},
+      "bDestroy": true,
+      "bAutoWidth": false,
+      "sScrollX": "100%",
+      "aaSorting": [[1, 'asc']]
+    });
+    new FixedColumns(oTable, {
+      "iLeftColumns": 2,
+      "iLeftWidth": 220
+    });
+
+
+    /*jEditable handlers are go */
+    $('td', oTable.fnGetNodes()).editable('/submit_grade', {
+      "callback" : function(value, settings) {
+        var aPos = oTable.fnGetPosition(this);
+        //oTable.fnUpdate(value, aPos[0], aPos[1]);
+      },
+      "submitdata" : function(value, settings){
+        return {
+          "row_id": this.parentNode.getAttribute('id'),
+          "column": oTable.fnGetPosition(this)[2]
+        };
+      },
+      "height": "14px"
+    });
+      }
+  }); 
+
+
+=form_for Assignment.new() do |f|
+  =f.hidden_field :course_id, :value => @course.id
+  %div{:class => "field"}
+    =f.label :name
+    =f.text_field :name
+  %div{:class => "field"}
+    =f.label :description
+    =f.text_area :description
+  %div{:class => "field"}
+    =f.label :date_due
+    =f.text_field :date_due
+  %div{:class => "button"}
+    =f.submit "Submit"
+
+%h1{:id => "course_name"} #{@course.name}   
+%input{:type => "submit", :value => "Add", :class => "button", :id => "add_column"}
+-if @assignments.count == 0
+  %h2 You have no assignments. Add one?
+-else
+  %table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{200 + @assignments.count * 100}px"}
+    %thead
+      %tr{:id => "assignments"}
+        %th{:width => 110} First Name
+        %th{:width => 110} Last Name
+        -@assignments.each do |assignment|
+          %th{:width => 100}= assignment.name
+
+    %tbody
+      -@students.each do |student|
         -if student.is_student?
-          %td= student.last_name.capitalize + ", " + student.first_name.capitalize
-          -@assignments.each do |assignment|
-            %td= assignment.name
+          %tr{:id => "#{student.id}"}
+            %td{:width => 100}= student.first_name.capitalize
+            %td{:width => 100}= student.last_name.capitalize
+            -student.get_grades_for_course(@course.id).each do |grade|
+              -if grade.graded
+                %td{:width => 100, :id=> "#{grade.id}", :align => "center"}=grade.value
+              -else
+                %td{:width => 100, :id=> "#{grade.id}", :align => "center"}="-"

@@ -80,4 +80,17 @@ class AssignmentGradesController < ApplicationController
       format.json { head :ok }
     end
   end
+
+  def submit
+    @grade = AssignmentGrade.find(params[:id])
+    #value returned to datatables to put back into box
+    @returned = params[:value]
+    puts @grade.value
+    @grade.write_attributes(
+      value: params[:value],
+      graded: true
+    )
+    @grade.save
+  end
+
 end

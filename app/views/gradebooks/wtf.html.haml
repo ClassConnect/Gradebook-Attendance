@@ -1,0 +1,31 @@
+-#columns = [{:type => 'html'}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'}, {:type => 'html'}]
+
+-#columns = html_columns(@assignments.count + 1)
+
+-#=datatable(columns, {:sort_by => "[0, 'desc']"})
+
+
+:javascript
+  $('#{
+
+
+
+%h1 #{@course.name}   
+%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2}
+  %thead
+    %tr
+      %th Name
+      -@assignments.each do |assignment|
+        %th{:width => 100}= assignment.name
+
+  %tbody
+    -@students.each do |student|
+      -if student.is_student?
+        %tr{:id => "#{student.id}"}
+          %td= student.last_name.capitalize + ", " + student.first_name.capitalize
+          -student.get_grades_for_course(@course.id).each do |grade|
+            -if grade.graded
+              %td{:id => "#{grade.id}", :align => "center"}=grade.value
+            -else
+              %td{:id => "#{grade.id}", :align => "center"}="-"
+            

@@ -1,0 +1,6 @@
+{"sEcho": <%= params[:sEcho] || -1 %>,
+"iTotalRecords": <%= @students.count %>,
+"iTotalDisplayRecords": <%= @students.count %>,
+"aaData":
+<%= prepare_for_datatables.html_safe %>
+}
