@@ -19,9 +19,10 @@ class User < ActiveRecord::Base
   has_many :course_teachers, :foreign_key => "uid"
   has_many :taught_courses, :through => :course_teachers, :source => :course
 
-
   #In some legacy entries, there are users who are both teachers and students
   #As of ClassConnect 4, this should not happen
+
+
 
   
   def is_teacher?
@@ -57,7 +58,7 @@ class User < ActiveRecord::Base
   end
 
   def get_grades_for_course(course_id)
-    AssignmentGrade.where(student_id: id, course_id: course_id)
+    AssignmentGrade.where(student_id: id, course_id: course_id).ascending(:id)
   end
 
   def get_grades_for_gradebook

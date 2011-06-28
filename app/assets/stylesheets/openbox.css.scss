@@ -1,0 +1,69 @@
+/* cc dialog box */
+
+#blackbox {  
+ display:none;  
+ background:#000000;  
+ opacity:0.9;  
+ filter:alpha(opacity=90);  
+ position:absolute;  
+ top:0px;  
+ left:0px;  
+ min-width:100%;  
+ min-height:100%;  
+ z-index:9998;  
+}  
+#clearbox {  
+ display:none;  
+ position:absolute;  
+ top:0px;  
+ left:0px;  
+ min-width:100%;  
+ min-height:100%;  
+ z-index:9998;  
+}  
+/* Lightbox panel with some content */  
+#dialogBox {  
+ display:none;  
+ position:absolute;  
+ top:100px;  
+ left:50%;  
+ background:#FFFFFF;   
+  border:6px solid #999;  
+ z-index:9999; 
+ /*--Top left rounded corner--*/
+	-moz-border-radius-bottomleft: 5px;
+	-khtml-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	/*--Top left rounded corner--*/
+	-moz-border-radius-topleft: 5px;
+	-khtml-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	/*--Top right rounded corner--*/
+	-moz-border-radius-bottomright: 5px;
+	-khtml-border-radius-bottomright: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	/*--Top right rounded corner--*/
+	-moz-border-radius-topright: 5px;
+	-khtml-border-radius-topright: 5px;
+	-webkit-border-top-right-radius: 5px; 
+	
+	-moz-box-shadow: 0 0 20px #ccc;
+  -webkit-box-shadow: 0 0 20px #ccc;
+  box-shadow: 0 0 20px #ccc;
+}
+#dialogBox .headTitle{ 
+	background: #CCC url(/images/header/bkg.png) repeat-x;
+	height: 40px;
+	border-bottom:1px solid #999;
+	font-size:20px;
+	padding-left:10px;
+	overflow:hidden;
+}
+#dialogBox .headTitle div{ 
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+#dialogBox .headTitle img{ 
+
+	float:left;
+}

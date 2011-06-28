@@ -1,8 +1,14 @@
 :javascript
-  $(function() {
-    $("#assignment_date_due").datepicker({dateFormat: 'yy-mm-dd'});
-  });
-=form_for (@assignment) do |f|
+  $(document).ready(function() {
+    $('#new_assignment').bind('submit', function(){
+    $.post($(this).attr("action") + '.js', $(this).serialize(), null, "script");
+    closeBox();
+    return false;
+    });
+
+  }); 
+
+=form_for @assignment, :html => {:id => "new_assignment"} do |f|
   %div{:class => "field"}  
     =f.label :course_id
     =f.text_field :course_id
@@ -17,5 +23,3 @@
     =f.text_field :date_due
   %div{:class => "button"}
     =f.submit "Submit"
-
- 

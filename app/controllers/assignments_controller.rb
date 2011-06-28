@@ -32,10 +32,10 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       if @assignment.save
         @assignment.init_grades
-        format.html { redirect_to(new_assignment_path, :notice => 'Assignment was created.')}
+        format.html
         format.js
       else
-        format.html { render :action => "new"}
+        format.html
         format.js
       end
     end
