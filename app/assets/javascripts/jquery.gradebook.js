@@ -16,6 +16,8 @@ function initTable(num_students) {
   $('td', oTable.fnGetNodes()).editable('/submit_grade', {
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
+      //FixedCol resets indices 
+      //So the 3rd column has index 0
       oTable.fnUpdate(value, aPos[0], aPos[1] + 2);
     },
     "submitdata" : function(value, settings){
@@ -28,3 +30,8 @@ function initTable(num_students) {
   });
 }
 
+
+function isNumeric(value){
+  if (value == null || !value.toString().match(/^[-]?\d*\.?\d*$/)) return false;
+  return true;
+}

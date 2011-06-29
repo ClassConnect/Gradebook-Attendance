@@ -2,40 +2,38 @@
 
   $(document).ready(function() {
       initTable(#{@students.count});
+      if(!#{@assignments.count}){
+        $('.datatable').hide();
+      }
         
-  $('#add_column').click(function(){
-    openBox('/assignments/new', 350);
-  });
-
- 
+    $('#add_assignment_button').click(function(){
+      openBox('/gradebooks/#{@course.id}/assignments', 350);
+    });
   }); 
 
 
 
-%h1{:id => "course_name"} #{@course.name}   
-%input{:type => "submit", :value => "Add", :class => "button", :id => "add_column"}
--if @assignments.count == 0
-  %h2 You have no assignments. Add one?
--else
-  %table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 100}px"}
-    %thead
-      %tr{:id => "assignments"}
-        %th{:width => 110} First Name
-        %th{:width => 110} Last Name
-        -@assignments.each do |assignment|
-          %th{:width => 100}= assignment.name
+%h1{:id => "course_name", :testtag => "haha"} #{@course.name}   
+%input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
+%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 100}px"}
+  %thead
+    %tr{:id => "assignments"}
+      %th{:width => 110} First Name
+      %th{:width => 110} Last Name
+      -@assignments.each do |assignment|
+        %th{:width => 100}= assignment.name
 
-    %tbody
-      -@students.each do |student|
-        -if student.is_student?
-          %tr{:id => "#{student.id}"}
-            %td{:width => 100}= student.first_name.capitalize
-            %td{:width => 100}= student.last_name.capitalize
-            -student.get_grades_for_course(@course.id).each do |grade|
-              -if grade.graded
-                %td{:width => 100, :id=> "#{grade.id}", :align => "center"}=grade.value
-              -else
-                %td{:width => 100, :id=> "#{grade.id}", :align => "center"}="-"
+  %tbody
+    -@students.each do |student|
+      -if student.is_student?
+        %tr{:id => "#{student.id}"}
+          %td{:width => 100}= student.first_name.capitalize
+          %td{:width => 100}= student.last_name.capitalize
+          -student.get_grades_for_course(@course.id).each do |grade|
+            -if grade.graded
+              %td{:width => 100, :id=> "#{grade.id}", :align => "center", :testtag => "LOL"}=grade.value
+            -else
+              %td{:width => 100, :id=> "#{grade.id}", :align => "center", :testtag => "LOL"}="-"
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}

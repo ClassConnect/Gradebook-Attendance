@@ -1,6 +1,8 @@
 module GradebooksHelper
   include RailsDatatables
 
+#I made this shit for ajax'd datatables
+#Don't have the heart to delete it now
   def prepare_for_datatables
     prepared_students = "["
     @students.each do |student|
@@ -25,5 +27,8 @@ module GradebooksHelper
     end
     columns << "]"
   end
+
+
+
 
 end

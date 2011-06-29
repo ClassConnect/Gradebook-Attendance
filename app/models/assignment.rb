@@ -13,6 +13,7 @@ class Assignment
 
   field :name, :type => String
   field :description, :type => String
+  field :point_value, :type => Integer
   field :date_due, :type => Date
 
   before_destroy :destroy_grades

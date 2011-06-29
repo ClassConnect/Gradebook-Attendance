@@ -91,6 +91,9 @@ class AssignmentGradesController < ApplicationController
       graded: true
     )
     @grade.save
+    respond_to do |format|
+      format.html {render :text => @returned}
+    end
   end
 
 end

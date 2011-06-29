@@ -10,7 +10,7 @@ Gradebook::Application.routes.draw do
   #In production, this should be changed...
   #For now, it might be too confusing
   match 'gradebooks/:course_id', :to => 'gradebooks#show'
-
+  match 'gradebooks/:course_id/assignments', :to => "assignments#new"
   resources :assignment_grades
   resources :assignments
 

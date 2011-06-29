@@ -9,9 +9,7 @@
   }); 
 
 =form_for @assignment, :html => {:id => "new_assignment"} do |f|
-  %div{:class => "field"}  
-    =f.label :course_id
-    =f.text_field :course_id
+  =f.hidden_field :course_id, :value => params[:course_id]
   %div{:class => "field"}
     =f.label :name
     =f.text_field :name
@@ -19,7 +17,11 @@
     =f.label :description
     =f.text_area :description
   %div{:class => "field"}
+    =f.label :point_value
+    =f.text_field :point_value
+  %div{:class => "field"}
     =f.label :date_due
     =f.text_field :date_due
   %div{:class => "button"}
     =f.submit "Submit"
+    =close_openBox_input
