@@ -28,7 +28,7 @@
             %span{:class => "assignment", :id => "#{assignment.id}"}
               =assignment.name
               =image_tag("exclm.png", {:align => "right", :class => "hover_button"})
-          -total_points += assignment.point_value
+              -total_points += assignment.point_value
 
     %tbody{:total_points => total_points}
       -@students.each do |student|

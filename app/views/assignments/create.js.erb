@@ -13,6 +13,6 @@ $('tbody').attr('total_points', function(i, value){
 });
 $("<th width='150' class='sorting' align='center'><%= @assignment.name %></th>").insertAfter('thead th:last');
 $('.datatable tbody tr').each(function(index, value){
-  $(this).append("<td point-value=" + <%= @assignment.point_value %> + " align='center' id=" + grade_array.pop() + "width='150'></td>");
+  $(this).append("<td points=" + <%= @assignment.point_value %> + " align='center' id=" + grade_array.pop() + " width='150'></td>");
 });
 initTable(<%= @assignment.assignment_grades.count %>);

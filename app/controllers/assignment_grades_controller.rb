@@ -93,6 +93,7 @@ class AssignmentGradesController < ApplicationController
     @grade.save
     respond_to do |format|
       format.html {render :text => @returned}
+      format.js {render :text => @returned}
     end
   end
 
