@@ -4,12 +4,15 @@ grade_array = [];
 <% end %>
 
 oTable.fnDestroy();
-$('datatable').show();
+$('.datatable').show();
 $('.datatable').width(function(index, value){
-  return value + 100;
+  return value + 120;
 })
-$("<th width='100' class='sorting' align='center'><%= @assignment.name %></th>").insertAfter('thead th:last');
+$('tbody').attr('total_points', function(i, value){
+  return parseInt(value) + <%= @assignment.point_value %>
+});
+$("<th width='150' class='sorting' align='center'><%= @assignment.name %></th>").insertAfter('thead th:last');
 $('.datatable tbody tr').each(function(index, value){
-  $(this).append("<td point-value='" + <%= @assignment.point_value %> + "align='center' id=" + grade_array.pop() + ">-</td>");
+  $(this).append("<td point-value=" + <%= @assignment.point_value %> + " align='center' id=" + grade_array.pop() + "width='150'></td>");
 });
 initTable(<%= @assignment.assignment_grades.count %>);

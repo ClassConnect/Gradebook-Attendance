@@ -2,6 +2,7 @@ class Assignment
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  
   has_many :assignment_grades
   has_one :assignment_type
 
@@ -30,7 +31,5 @@ class Assignment
   def destroy_grades
     assignment_grades.destroy_all
   end
-
-
 
 end

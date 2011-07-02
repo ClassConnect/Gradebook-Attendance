@@ -14,6 +14,10 @@
     =f.label :name
     =f.text_field :name
   %div{:class => "field"}
+    =f.label :type
+    =options_from_collection_for_select(@types, :id, :name)
+    =collection_select(:type, :assignment_type_id, @types, :id, :name)
+  %div{:class => "field"}
     =f.label :description
     =f.text_area :description
   %div{:class => "field"}
@@ -25,3 +29,4 @@
   %div{:class => "button"}
     =f.submit "Submit"
     =close_openBox_input
+    

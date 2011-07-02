@@ -15,6 +15,7 @@ gem 'haml'
 gem 'sass'
 gem 'coffee-script'
 gem 'uglifier'
+gem 'coffee-haml-filter'
 
 gem 'jquery-rails'
 gem 'kaminari'

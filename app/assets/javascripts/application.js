@@ -8,6 +8,4 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.dataTables
-//= require teststuff
 //= require_tree .
-

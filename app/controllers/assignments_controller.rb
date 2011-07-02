@@ -18,8 +18,9 @@ class AssignmentsController < ApplicationController
   end
 
   def new
+    @course = Course.find(params[:course_id])
     @assignment = Assignment.new
-
+    @types = AssignmentType.where(:course_id => params[:course_id])
     respond_to do |format|
       format.html
     end

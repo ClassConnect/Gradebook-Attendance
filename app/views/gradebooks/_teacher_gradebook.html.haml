@@ -1,39 +1,48 @@
 :javascript
-
   $(document).ready(function() {
+      var scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}]
+      $('.datatable tbody tr').each(function(){
+        initGrade(this, scale);
+      });
       initTable(#{@students.count});
-      if(!#{@assignments.count}){
-        $('.datatable').hide();
-      }
-        
+      //$('.datatable').attr('style', "width: 300px; margin-left: 0px;");
+
     $('#add_assignment_button').click(function(){
       openBox('/gradebooks/#{@course.id}/assignments', 350);
     });
+
   }); 
 
-
-
-%h1{:id => "course_name", :testtag => "haha"} #{@course.name}   
+-total_points = 0
+%h1{:id => "course_name"}#{@course.name}   
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
-%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 100}px"}
-  %thead
-    %tr{:id => "assignments"}
-      %th{:width => 110} First Name
-      %th{:width => 110} Last Name
-      -@assignments.each do |assignment|
-        %th{:width => 100}= assignment.name
+%div{:class => "ex_highlight"}
+  %table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
+    %thead
+      %tr{:id => "assignments"}
+        %th{:width => 110, :height => 29} First Name
+        %th{:width => 110, :height => 29} Last Name
+        %th{:width => 50, :height => 29} Grade
+        -@assignments.each do |assignment|
+          %th{:align => "left", :width => 150, :height => 29}
+            %span{:class => "assignment", :id => "#{assignment.id}"}
+              =assignment.name
+              =image_tag("exclm.png", {:align => "right", :class => "hover_button"})
+          -total_points += assignment.point_value
 
-  %tbody
-    -@students.each do |student|
-      -if student.is_student?
-        %tr{:id => "#{student.id}"}
-          %td{:width => 100}= student.first_name.capitalize
-          %td{:width => 100}= student.last_name.capitalize
-          -student.get_grades_for_course(@course.id).each do |grade|
-            -if grade.graded
-              %td{:width => 100, :id=> "#{grade.id}", :align => "center", :testtag => "LOL"}=grade.value
-            -else
-              %td{:width => 100, :id=> "#{grade.id}", :align => "center", :testtag => "LOL"}="-"
+    %tbody{:total_points => total_points}
+      -@students.each do |student|
+        -i=0
+        -if student.is_student?
+          %tr{:id => "#{student.id}"}
+            %td{:width => 100}=student.first_name.capitalize
+            %td{:width => 100}=student.last_name.capitalize
+            %td{:align => "center", :width => 100, :class => "grade"}="" 
+            -student.get_grades_for_course(@course.id).each do |grade|
+              -if grade.graded
+                %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=grade.value
+              -else
+                %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=""
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}
