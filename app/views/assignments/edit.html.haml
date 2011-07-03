@@ -1,0 +1,20 @@
+=form_for @assignment do |f|
+  %div{:class => "field"}
+    =f.label :name
+    =f.text_field :name, :value => @assignment.name
+  %div{:class => "field"}
+    =f.label :assignment_type_id
+    =collection_select(:assignment, :assignment_type, @types, :id, :name, {:selected => @assignment.assignment_type.id});
+  %div{:class => "field"}
+    =f.label :description
+    =f.text_area :description, :value => @assignment.description
+  %div{:class => "field"}
+    =f.label :point_value
+    =f.text_field :point_value, :value => @assignment.point_value
+  %div{:class => "field"}
+    =f.label :date_due
+    =f.text_field :date_due, :value => @assignment.date_due
+  %div{:class => "button"}
+    =f.submit "Submit"
+    =close_openBox_input
+    =link_to("Delete", assignment_path(@assignment), :method => :delete, :class => 'action')
