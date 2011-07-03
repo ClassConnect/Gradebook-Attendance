@@ -14,9 +14,8 @@
     =f.label :name
     =f.text_field :name
   %div{:class => "field"}
-    =f.label :type
-    =options_from_collection_for_select(@types, :id, :name)
-    =collection_select(:type, :assignment_type_id, @types, :id, :name)
+    =f.label :assignment_type_id
+    =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
   %div{:class => "field"}
     =f.label :description
     =f.text_area :description

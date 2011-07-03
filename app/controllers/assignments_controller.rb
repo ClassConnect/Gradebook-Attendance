@@ -14,7 +14,27 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       format.html
     end
+  end
 
+  #GET /gradebooks/:course_id/:assignment_id
+  def edit
+    @assignment = Assignment.find(params[:assignment_id])
+    @types = AssignmentType.where(:course_id => params[:course_id])
+  end
+
+  #PUT /gradebooks/:course_id/:assignment_id
+    def update
+    @assignment = Assignment.find(params[:id])
+
+    respond_to do |format|
+      if @assignment.update_attributes(params[:assignment])
+        format.html { redirect_to @assignment, notice: 'Grade was successfully updated.' }
+        format.json { head :ok }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @grade.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def new

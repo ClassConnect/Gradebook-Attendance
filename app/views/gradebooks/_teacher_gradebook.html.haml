@@ -26,7 +26,7 @@
         -@assignments.each do |assignment|
           %th{:align => "left", :width => 150, :height => 29}
             %span{:class => "assignment", :id => "#{assignment.id}"}
-              =assignment.name
+              =link_to assignment.name, edit_assignment_path(assignment)
               =image_tag("exclm.png", {:align => "right", :class => "hover_button"})
               -total_points += assignment.point_value
 

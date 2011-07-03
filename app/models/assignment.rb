@@ -4,7 +4,7 @@ class Assignment
 
   
   has_many :assignment_grades
-  has_one :assignment_type
+  belongs_to :assignment_type
 
   field :course_id, :type => Integer
   index :course_id
