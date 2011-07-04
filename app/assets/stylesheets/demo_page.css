@@ -97,3 +97,13 @@
 	width: 50%;
 	margin-bottom: 1em;
 }
+
+.tooltip {
+  display:none;
+  background:transparent url(/tools/img/tooltip/black_arrow.png);
+  font-size:12px;
+  height:70px;
+  width:160px;
+  padding:25px;
+  color:#fff;
+}

@@ -86,3 +86,8 @@ function initGrade(dom_element, scale){
     return grade;
   }
 }
+
+function _openbox_helper(text, content_url){
+  var string ='<a class="button" href="#" onclick="openBox(content_url, 350); return false;">'+ text +'</a>'
+  return string;
+}

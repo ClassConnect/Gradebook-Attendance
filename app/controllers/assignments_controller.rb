@@ -1,38 +1,28 @@
 class AssignmentsController < ApplicationController
-  def index
-    @assignments = Assignment.all
-
-    respond_to do |format|
-      format.html
-      format.xml { render :xmp => @assignments }
-    end
-  end
-
-  def show
-    @assignment = Assignment.find(params[:id])
-
-    respond_to do |format|
-      format.html
-    end
-  end
-
   #GET /gradebooks/:course_id/:assignment_id
   def edit
     @assignment = Assignment.find(params[:assignment_id])
     @types = AssignmentType.where(:course_id => params[:course_id])
   end
 
-  #PUT /gradebooks/:course_id/:assignment_id
-    def update
+  def show
     @assignment = Assignment.find(params[:id])
 
     respond_to do |format|
+      format.html {render text: @assignment}
+      format.json {render json: @assignment}
+    end
+  end
+
+  #PUT /gradebooks/:course_id/:assignment_id
+    def update
+    puts params
+    @assignment = Assignment.find(params[:assignment][:id])
+    respond_to do |format|
       if @assignment.update_attributes(params[:assignment])
-        format.html { redirect_to @assignment, notice: 'Grade was successfully updated.' }
-        format.json { head :ok }
+        format.js
       else
-        format.html { render action: "edit" }
-        format.json { render json: @grade.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -49,7 +39,6 @@ class AssignmentsController < ApplicationController
 
   def create
     @assignment = Assignment.new(params[:assignment])
-
     respond_to do |format|
       if @assignment.save
         @assignment.init_grades

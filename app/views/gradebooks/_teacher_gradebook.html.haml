@@ -1,5 +1,6 @@
 :javascript
   $(document).ready(function() {
+      //START OTHER STUFF
       var scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}]
       $('.datatable tbody tr').each(function(){
         initGrade(this, scale);
@@ -11,8 +12,34 @@
       openBox('/gradebooks/#{@course.id}/assignments', 350);
     });
 
+    var popup_content;
+    $("img").tooltip({
+      onBeforeShow: function(){
+        var assignment_id = this.getTrigger().parent().attr('id');
+        var url_string = '/assignments/' + assignment_id + '.json';
+        $.ajax({
+          type: 'GET',
+          async: false,
+          url: url_string,
+          dataType: "json",
+          success: function(data){
+            popup_content = data;
+          }
+        });
+      },
+      onShow: function(){
+          var text = popup_content['name'];
+          var url = "/gradebooks/238/" + this.getTrigger().parent().attr('id') + "/edit";
+          var openbox_link = '<a class="button" href="#" onclick="openBox('
+          openbox_link += "'" + url + "'" + ', 350); return false;">'+ "text" +'</a>'
+          $('.tooltip').html(openbox_link);
+        }
+    });
+
   }); 
 
+%div{:id => "testing_data"}
+=link_to_openBox("Haha", "/gradebooks/238/4e0ff65b80f6e301bd00026b/edit")
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
@@ -26,8 +53,8 @@
         -@assignments.each do |assignment|
           %th{:align => "left", :width => 150, :height => 29}
             %span{:class => "assignment", :id => "#{assignment.id}"}
-              =link_to assignment.name, edit_assignment_path(assignment)
-              =image_tag("exclm.png", {:align => "right", :class => "hover_button"})
+              =assignment.name
+              =image_tag("exclm.png", {:align => "right", :class => "hover_button", :title => "pic"})
               -total_points += assignment.point_value
 
     %tbody{:total_points => total_points}

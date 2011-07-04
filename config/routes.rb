@@ -12,7 +12,8 @@ Gradebook::Application.routes.draw do
   match 'gradebooks/:course_id', :to => 'gradebooks#show'
   match 'gradebooks/:course_id/assignments', :to => "assignments#new"
   resources :assignment_grades
-  resources :assignments
+  resources :assignments, :except => [:edit, :update, :index]
+  match 'assignments/update/' => 'assignments#update', :via => :post
   match 'gradebooks/:course_id/assignments/update' => 'assignments#update' , :via => :post
   match 'gradebooks/:course_id/:assignment_id/edit' => 'assignments#edit'
 

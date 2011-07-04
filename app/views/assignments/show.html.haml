@@ -1,6 +1,4 @@
 %p= @assignment.name
-%p= @assignment.description
-%p= @assignment.date_due
 %p= @assignment.course_id
-%p= @assignment.assignment_type.name
-  
+%div{:id => "type"}
+  =@assignment.assignment_type.name

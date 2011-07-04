@@ -1,4 +1,15 @@
-=form_for @assignment do |f|
+:javascript
+  $(document).ready(function() {
+    $('#edit_assignment').bind('submit', function(){
+    $.post('/assignments/update.js', $(this).serialize(), null, "script");
+    closeBox();
+    return false;
+    });
+  }); 
+
+=form_for @assignment, :remote => true, :html => {:method => :post, :id => "edit_assignment"} do |f|
+  =f.hidden_field :id, :value => params[:assignment_id] 
+  =f.hidden_field :course_id, :value => params[:course_id]
   %div{:class => "field"}
     =f.label :name
     =f.text_field :name, :value => @assignment.name

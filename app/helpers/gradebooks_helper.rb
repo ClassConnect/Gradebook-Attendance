@@ -28,9 +28,5 @@ module GradebooksHelper
     columns << "]"
   end
 
-  def assignments_to_array
-    @assignments.to_json
-  end
-
 
 end
