@@ -1,0 +1,72 @@
+#assignmentPopupContainer
+{
+    position:absolute;
+    left:0;
+    top:0;
+    display:none;
+    z-index: 20000;
+}
+
+.assignmentPopupPopup
+{
+}
+
+#assignmentPopupContent
+{
+    background-color: #FFF;
+    min-width: 175px;
+    min-height: 50px;
+}
+
+.assignmentPopupPopup .assignmentPopupImage
+{
+    margin: 5px;
+    margin-right: 15px;
+}
+
+.assignmentPopupPopup .corner 
+{
+    width: 19px;
+    height: 15px;
+}
+    
+.assignmentPopupPopup .topLeft 
+{
+    background: url(../images/personpopup/balloon_topLeft.png) no-repeat;
+}
+    
+.assignmentPopupPopup .bottomLeft 
+{
+    background: url(../images/personpopup/balloon_bottomLeft.png) no-repeat;
+}
+    
+.assignmentPopupPopup .left 
+{
+    background: url(../images/personpopup/balloon_left.png) repeat-y;
+}
+    
+.assignmentPopupPopup .right 
+{
+    background: url(../images/personpopup/balloon_right.png) repeat-y;
+}
+    
+.assignmentPopupPopup .topRight 
+{
+    background: url(../images/personpopup/balloon_topRight.png) no-repeat;
+}
+    
+.assignmentPopupPopup .bottomRight 
+{
+    background: url(../images/personpopup/balloon_bottomRight.png) no-repeat;
+}
+    
+.assignmentPopupPopup .top 
+{
+    background: url(../images/personpopup/balloon_top.png) repeat-x;
+}
+    
+.assignmentPopupPopup .bottom 
+{
+    background: url(../images/personpopup/balloon_bottom.png) repeat-x;
+    text-align: center;
+}
