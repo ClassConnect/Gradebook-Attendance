@@ -1,9 +1,10 @@
 :javascript
+  var oTable;
   $(document).ready(function() {
       //START OTHER STUFF
       var scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}]
       $('.datatable tbody tr').each(function(){
-        initGrade(this, scale);
+        calculateGrade(this, scale);
       });
       initTable(#{@students.count});
       //$('.datatable').attr('style', "width: 300px; margin-left: 0px;");

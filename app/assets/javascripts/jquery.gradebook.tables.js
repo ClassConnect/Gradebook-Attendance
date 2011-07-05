@@ -22,8 +22,9 @@ function initTable(num_students) {
       //FixedCol resets indices 
       //So the 4th column has index 0
       oTable.fnUpdate(value, aPos[0], aPos[1] + 3);
-      var grade = initGrade($(this).parent(), scale);
+      var grade = calculateGrade($(this).parent(), scale);
       oTable.fnUpdate(grade, aPos[0], 2);
+      alert(aPos[0]);
     },
     "submitdata" : function(value, settings){
       return {
@@ -42,17 +43,6 @@ function isNumeric(value){
   return true;
 }
 
-function calculateGrade(dom_element){
-  var node = $(dom_element).parent();
-  var points_sum = 0;
-  var grade = 0;
-  $(node).children().each(function(){
-    points_sum += parseInt($(this).html());
-  });
-  grade = $('tbody').attr('total_points') / points_sum;
-  return grade;
-}
-
 function gradeMatch(value, scale){
   //Note: reverse while loop is faster
   length = scale.length;
@@ -64,7 +54,7 @@ function gradeMatch(value, scale){
   return scale[length-1]['name'];
 }
 
-function initGrade(dom_element, scale){
+function calculateGrade(dom_element, scale){
   var grade=0, total_points=0, graded=false;
   id = "#" + $(dom_element).attr('id');
   id = id + " > .grade"
@@ -86,7 +76,13 @@ function initGrade(dom_element, scale){
     $(id).html(grade);
     return grade;
   }
+  return false;
 }
+
+function table_tester(){
+  oTable.fnGetPosition();
+}
+
 
 function _openbox_helper(text, content_url){
   var string ='<a class="button" href="#" onclick="openBox(content_url, 350); return false;">'+ text +'</a>'
