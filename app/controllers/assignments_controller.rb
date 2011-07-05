@@ -49,4 +49,15 @@ class AssignmentsController < ApplicationController
       end
     end
   end
+
+  def destroy
+    @assignment = Assignment.find(params[:id])
+    @grade_ids =[]
+    @assignment.assignment_grades.each do |grade|
+      @grade_ids.push(grade.id)
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
 end

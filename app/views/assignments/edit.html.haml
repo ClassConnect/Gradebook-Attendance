@@ -1,10 +1,18 @@
 :javascript
   $(document).ready(function() {
     $('#edit_assignment').bind('submit', function(){
-    $.post('/assignments/update.js', $(this).serialize(), null, "script");
-    closeBox();
-    return false;
+      $.post('/assignments/update.js', $(this).serialize(), null, "script");
+      closeBox();
+      return false;
     });
+
+    $('#delete_assignment').bind('click', function(){
+      $.post('/assignments/#{@assignment.id}', { _method: 'delete'}, null, "script");
+      alert("certified everywhere");
+      closeBox();
+      return false;
+    });
+
   }); 
 
 =form_for @assignment, :remote => true, :html => {:method => :post, :id => "edit_assignment"} do |f|
@@ -28,4 +36,4 @@
   %div{:class => "button"}
     =f.submit "Submit"
     =close_openBox_input
-    =link_to("Delete", assignment_path(@assignment), :method => :delete, :class => 'action')
+    %input{:id => "delete_assignment", :type => "button", :value => "Delete Assignment"}

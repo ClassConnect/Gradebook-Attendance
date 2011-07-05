@@ -32,7 +32,7 @@
           var text = popup_content['name'];
           var url = "/gradebooks/238/" + this.getTrigger().parent().attr('id') + "/edit";
           var openbox_link = '<a class="button" href="#" onclick="openBox('
-          openbox_link += "'" + url + "'" + ', 350); return false;">'+ "text" +'</a>'
+          openbox_link += "'" + url + "'" + ', 350); return false;">'+ text +'</a>'
           $('.tooltip').html(openbox_link);
         }
     });
