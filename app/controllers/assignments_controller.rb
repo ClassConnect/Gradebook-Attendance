@@ -36,7 +36,6 @@ class AssignmentsController < ApplicationController
     end
   end
 
-
   def create
     @assignment = Assignment.new(params[:assignment])
     respond_to do |format|
@@ -50,5 +49,4 @@ class AssignmentsController < ApplicationController
       end
     end
   end
-
 end

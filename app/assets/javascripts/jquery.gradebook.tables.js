@@ -1,5 +1,5 @@
 function initTable(num_students) {
-  var scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}];
+  scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}];
   oTable = $('.datatable').dataTable(
   {
     "iDisplayLength": num_students,
@@ -61,6 +61,7 @@ function gradeMatch(value, scale){
       return scale[i]['name'];
     }
   }
+  return scale[length-1]['name'];
 }
 
 function initGrade(dom_element, scale){

@@ -1,0 +1,9 @@
+var grade_id;
+var new_point_value = <%= @assignment.point_value %>;
+var student_id;
+alert(new_point_value);
+<% @assignment.assignment_grades.each do |grade|%>
+  grade_id = "#" + "<%= grade.id %>";
+  $(grade_id).attr('points', new_point_value);
+  initGrade($(grade_id).parent(), scale);
+<% end %>

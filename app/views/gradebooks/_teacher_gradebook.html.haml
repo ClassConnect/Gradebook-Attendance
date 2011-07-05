@@ -38,8 +38,6 @@
 
   }); 
 
-%div{:id => "testing_data"}
-=link_to_openBox("Haha", "/gradebooks/238/4e0ff65b80f6e301bd00026b/edit")
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
@@ -70,6 +68,7 @@
                 %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=grade.value
               -else
                 %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=""
+              -i += 1
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}
