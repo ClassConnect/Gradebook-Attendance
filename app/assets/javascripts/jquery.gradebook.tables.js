@@ -86,7 +86,6 @@ function _openbox_helper(text, content_url){
 }
 
 function hideColumn(iCol){
-  var xTable = $('.datatable').dataTable();
-  var bVis = xTable.fnSettings().aoColumns[iCol].bVisible;
-  xTable.fnSetColumnVis(iCol, bVis ? false : true);
+  var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+  oTable.fnSetColumnVis(iCol, bVis ? false : true);
 }
