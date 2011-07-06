@@ -37,10 +37,15 @@
         }
     });
 
+    $('#col_button').click(function(){
+      hideColumn(3);
+    });
+
   }); 
 
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
+%input{:type => "button", :value => "hide", :class => "button", :id => "col_button"}
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %div{:class => "ex_highlight"}
   %table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}

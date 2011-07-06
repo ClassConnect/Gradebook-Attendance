@@ -6,7 +6,8 @@ function initTable(num_students) {
     "bDestroy": true,
     "bAutoWidth": false,
     "sScrollX": "100%",
-    "aaSorting": [[1, 'asc']]
+    "aaSorting": [[1, 'asc']],
+    "bRetrieve": true
   });
 
   new FixedColumns(oTable, {
@@ -79,12 +80,13 @@ function calculateGrade(dom_element, scale){
   return false;
 }
 
-function table_tester(){
-  oTable.fnGetPosition();
-}
-
-
 function _openbox_helper(text, content_url){
   var string ='<a class="button" href="#" onclick="openBox(content_url, 350); return false;">'+ text +'</a>'
   return string;
+}
+
+function hideColumn(iCol){
+  var xTable = $('.datatable').dataTable();
+  var bVis = xTable.fnSettings().aoColumns[iCol].bVisible;
+  xTable.fnSetColumnVis(iCol, bVis ? false : true);
 }
