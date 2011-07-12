@@ -2,7 +2,7 @@
   var oTable;
   $(document).ready(function() {
       //START OTHER STUFF
-      var scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}]
+      var scale = #{GradebooksController::DEFAULT_SCALE.to_json};
       $('.datatable tbody tr').each(function(){
         calculateGrade(this, scale);
       });
@@ -10,6 +10,7 @@
       //$('.datatable').attr('style', "width: 300px; margin-left: 0px;");
 
     $('#add_assignment_button').click(function(){
+      console.log(_testing_vars);
       openBox('/gradebooks/#{@course.id}/assignments', 350);
     });
 
@@ -37,15 +38,10 @@
         }
     });
 
-    $('#col_button').click(function(){
-      hideColumn(3);
-    });
-
   }); 
 
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
-%input{:type => "button", :value => "hide", :class => "button", :id => "col_button"}
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %div{:class => "ex_highlight"}
   %table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
@@ -54,18 +50,20 @@
         %th{:width => 110, :height => 29} First Name
         %th{:width => 110, :height => 29} Last Name
         %th{:width => 50, :height => 29} Grade
+        -i=3
         -@assignments.each do |assignment|
           %th{:align => "left", :width => 150, :height => 29}
-            %span{:class => "assignment", :id => "#{assignment.id}"}
+            %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
               =assignment.name
               =image_tag("exclm.png", {:align => "right", :class => "hover_button", :title => "pic"})
               -total_points += assignment.point_value
+              -i += 1
 
     %tbody{:total_points => total_points}
       -@students.each do |student|
         -i=0
         -if student.is_student?
-          %tr{:id => "#{student.id}"}
+          %tr{:height => 30, :id => "#{student.id}"}
             %td{:width => 100}=student.first_name.capitalize
             %td{:width => 100}=student.last_name.capitalize
             %td{:align => "center", :width => 100, :class => "grade"}="" 

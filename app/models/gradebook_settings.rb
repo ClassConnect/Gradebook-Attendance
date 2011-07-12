@@ -3,6 +3,6 @@ class GradebookSettings
 
   field :course_id, :type => Integer
   field :first_load, :type => Boolean, default: true
-  embeds_many :grade_scales
+  field :grading_scale, :type => Array
   
 end

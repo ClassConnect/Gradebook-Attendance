@@ -17,7 +17,7 @@ function initTable(num_students) {
 
   $('td', oTable.fnGetNodes()).editable('/submit_grade', {
     "placeholder": "",
-    "width": '90px',
+    "width": 'none',
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
@@ -25,7 +25,6 @@ function initTable(num_students) {
       oTable.fnUpdate(value, aPos[0], aPos[1] + 3);
       var grade = calculateGrade($(this).parent(), scale);
       oTable.fnUpdate(grade, aPos[0], 2);
-      alert(aPos[0]);
     },
     "submitdata" : function(value, settings){
       return {
@@ -85,7 +84,9 @@ function _openbox_helper(text, content_url){
   return string;
 }
 
-function hideColumn(iCol){
-  var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
-  oTable.fnSetColumnVis(iCol, bVis ? false : true);
+//Helper to generate openbox link so I don't have to do that bullshit by hand
+function link_to_openbox(text, url){
+  var openbox_link = '<a class="button" href="#" onclick="openBox(';
+  openbox_link += "'" + url + "'" + ', 350); return false;">'+ text +'</a>';
+  return openbox_link;
 }

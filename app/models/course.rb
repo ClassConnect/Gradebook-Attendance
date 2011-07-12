@@ -31,10 +31,6 @@ class Course < ActiveRecord::Base
     Assignment.where(course_id: id)
   end
 
-  def assignments_asc
-
-  end
-
   def get_assignment_by_type(type)
     Assignment.where(type: type)
   end

@@ -8,7 +8,6 @@
 
     $('#delete_assignment').bind('click', function(){
       $.post('/assignments/#{@assignment.id}', { _method: 'delete'}, null, "script");
-      alert("certified everywhere");
       closeBox();
       return false;
     });

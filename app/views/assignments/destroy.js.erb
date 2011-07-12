@@ -1,1 +1,18 @@
-alert("LOL");
+var id = "#" + "<%= @assignment.id %>";
+var column = $(id).attr('col');
+var new_grade;
+i=0;
+<% @assignment.assignment_grades.each do |grade|%>
+  grade_id = "#" + "<%= grade.id %>";
+  $(grade_id).html("");
+  new_grade = calculateGrade($(grade_id).parent(), scale);
+  if(new_grade){
+    oTable.fnUpdate(new_grade, i, 2, false, false);
+  }
+  else{
+    oTable.fnUpdate("", i, 2, false, false);
+  }
+  i++;
+<% end %>  
+//fnUpdate can be made faster. Look into this later
+oTable.fnSetColumnVis(column, false);
