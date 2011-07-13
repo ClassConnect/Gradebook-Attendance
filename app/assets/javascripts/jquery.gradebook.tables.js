@@ -17,7 +17,7 @@ function initTable(num_students) {
 
   $('td', oTable.fnGetNodes()).editable('/submit_grade', {
     "placeholder": "",
-    "width": 'none',
+    "width": '140px',
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
@@ -54,8 +54,10 @@ function gradeMatch(value, scale){
   return scale[length-1]['name'];
 }
 
+//TODO: Use JSON parse function. I dunno what the hell it's called
 function calculateGrade(dom_element, scale){
   var grade=0, total_points=0, graded=false;
+  //var test_scale = $('tbody').attr('grading_scale');
   id = "#" + $(dom_element).attr('id');
   id = id + " > .grade"
   $(dom_element).children().each(function(){
@@ -83,6 +85,7 @@ function _openbox_helper(text, content_url){
   var string ='<a class="button" href="#" onclick="openBox(content_url, 350); return false;">'+ text +'</a>'
   return string;
 }
+
 
 //Helper to generate openbox link so I don't have to do that bullshit by hand
 function link_to_openbox(text, url){

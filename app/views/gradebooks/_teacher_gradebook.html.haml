@@ -7,10 +7,10 @@
         calculateGrade(this, scale);
       });
       initTable(#{@students.count});
-      //$('.datatable').attr('style', "width: 300px; margin-left: 0px;");
+      $('.dataTables_scroll .datatable').attr('style', "");
+
 
     $('#add_assignment_button').click(function(){
-      console.log(_testing_vars);
       openBox('/gradebooks/#{@course.id}/assignments', 350);
     });
 
@@ -30,11 +30,9 @@
         });
       },
       onShow: function(){
-          var text = popup_content['name'];
-          var url = "/gradebooks/238/" + this.getTrigger().parent().attr('id') + "/edit";
-          var openbox_link = '<a class="button" href="#" onclick="openBox('
-          openbox_link += "'" + url + "'" + ', 350); return false;">'+ text +'</a>'
-          $('.tooltip').html(openbox_link);
+          var edit_link = "/gradebooks/#{@course.id}/" + this.getTrigger().parent().attr('id') + "/edit";
+          openbox_url = link_to_openbox(popup_content['name'], edit_link );
+          $('.tooltip').html(openbox_url);
         }
     });
 
@@ -43,36 +41,35 @@
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
-%div{:class => "ex_highlight"}
-  %table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
-    %thead
-      %tr{:id => "assignments"}
-        %th{:width => 110, :height => 29} First Name
-        %th{:width => 110, :height => 29} Last Name
-        %th{:width => 50, :height => 29} Grade
-        -i=3
-        -@assignments.each do |assignment|
-          %th{:align => "left", :width => 150, :height => 29}
-            %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
-              =assignment.name
-              =image_tag("exclm.png", {:align => "right", :class => "hover_button", :title => "pic"})
-              -total_points += assignment.point_value
-              -i += 1
+%table{:id => "test_table", :class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
+  %thead
+    %tr{:id => "assignments"}
+      %th{:width => 110, :height => 29} First Name
+      %th{:width => 110, :height => 29} Last Name
+      %th{:width => 50, :height => 29} Grade
+      -i=3
+      -@assignments.each do |assignment|
+        %th{:align => "left", :width => 150, :height => 29}
+          %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
+            =assignment.name
+            =image_tag("exclm.png", {:align => "right", :class => "hover_button", :title => "pic"})
+            -total_points += assignment.point_value
+            -i += 1
 
-    %tbody{:total_points => total_points}
-      -@students.each do |student|
-        -i=0
-        -if student.is_student?
-          %tr{:height => 30, :id => "#{student.id}"}
-            %td{:width => 100}=student.first_name.capitalize
-            %td{:width => 100}=student.last_name.capitalize
-            %td{:align => "center", :width => 100, :class => "grade"}="" 
-            -student.get_grades_for_course(@course.id).each do |grade|
-              -if grade.graded
-                %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=grade.value
-              -else
-                %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=""
-              -i += 1
+  %tbody{:total_points => total_points, :grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :cols => i}
+    -@students.each do |student|
+      -i=0
+      -if student.is_student?
+        %tr{:height => 30, :id => "#{student.id}"}
+          %td{:width => 100}=student.first_name.capitalize
+          %td{:width => 100}=student.last_name.capitalize
+          %td{:align => "center", :width => 100, :class => "grade"}="" 
+          -student.get_grades_for_course(@course.id).each do |grade|
+            -if grade.graded
+              %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=grade.value
+            -else
+              %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=""
+            -i += 1
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}
