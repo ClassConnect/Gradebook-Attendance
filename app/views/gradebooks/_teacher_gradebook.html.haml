@@ -1,5 +1,5 @@
 :javascript
-  var oTable;
+  var oTable, keys;
   $(document).ready(function() {
       //START OTHER STUFF
       var scale = #{GradebooksController::DEFAULT_SCALE.to_json};
@@ -48,7 +48,7 @@
       %th{:width => 110, :height => 29} Last Name
       %th{:width => 50, :height => 29} Grade
       -i=3
-      -@assignments.each do |assignment|
+      -@assignments.asc(:created_at).each do |assignment|
         %th{:align => "left", :width => 150, :height => 29}
           %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
             =assignment.name
@@ -64,7 +64,7 @@
           %td{:width => 100}=student.first_name.capitalize
           %td{:width => 100}=student.last_name.capitalize
           %td{:align => "center", :width => 100, :class => "grade"}="" 
-          -student.get_grades_for_course(@course.id).each do |grade|
+          -student.get_grades_for_course(@course.id).asc(:created_at).each do |grade|
             -if grade.graded
               %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=grade.value
             -else

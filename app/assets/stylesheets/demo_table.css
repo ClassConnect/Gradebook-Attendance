@@ -505,28 +505,12 @@ tr.even.gradeU td.sorting_3 {
 /*
  * KeyTable
  */
-table.KeyTable td {
+table td {
 	border: 3px solid transparent;
 }
 
-table.KeyTable td.focus {
+table td.focus {
 	border: 3px solid #3366FF;
-}
-
-table.display tr.gradeA {
-	background-color: #eeffee;
-}
-
-table.display tr.gradeC {
-	background-color: #ddddff;
-}
-
-table.display tr.gradeX {
-	background-color: #ffdddd;
-}
-
-table.display tr.gradeU {
-	background-color: #ddd;
 }
 
 div.box {

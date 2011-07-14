@@ -17,6 +17,9 @@ class Assignment
   field :point_value, :type => Integer
   field :date_due, :type => Date
 
+  field :average, :type => Float
+  field :dirty_grade, :type => Boolean, :default => false
+
   before_destroy :destroy_grades
 
   def init_grades
@@ -30,6 +33,11 @@ class Assignment
 
   def destroy_grades
     assignment_grades.destroy_all
+  end
+
+  def calculate_average
+    num_students = assignment_grades.count
+    return num_students
   end
 
 end

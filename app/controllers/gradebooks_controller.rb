@@ -27,4 +27,8 @@ class GradebooksController < ApplicationController
     render :layout => false
   end
 
+  def report
+    @course = Course.find(params[:course_id])
+    @assignments = @course.assignments
+  end
 end

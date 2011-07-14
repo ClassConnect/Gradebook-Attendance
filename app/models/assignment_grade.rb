@@ -3,6 +3,8 @@ class AssignmentGrade
   include Mongoid::Timestamps
 #belongs_to :student, :class_name => :User, :foreign_key => "uid"
 #TODO: Fix relations when Mongoid team adds support for relations with AR objects
+  
+  scope :by_date, desc(:created_at)
 
   belongs_to :assignment
   field :student_id, :type => Integer
@@ -13,5 +15,6 @@ class AssignmentGrade
   field :graded, :type => Boolean, :default => false
 
   key :student_id, :assignment_id
+
 
 end

@@ -15,6 +15,13 @@ function initTable(num_students) {
     "iLeftWidth": 300
   });
 
+  /*
+  keys = new KeyTable({
+    "table": document.getElementById('test_table'),
+    "datatable": oTable
+  });
+  */
+
   $('td', oTable.fnGetNodes()).editable('/submit_grade', {
     "placeholder": "",
     "width": '140px',

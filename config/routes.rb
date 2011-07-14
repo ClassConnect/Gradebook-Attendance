@@ -16,6 +16,7 @@ Gradebook::Application.routes.draw do
   match 'assignments/update/' => 'assignments#update', :via => :post
   match 'gradebooks/:course_id/assignments/update' => 'assignments#update' , :via => :post
   match 'gradebooks/:course_id/:assignment_id/edit' => 'assignments#edit'
+  match 'gradebooks/:course_id/report' => 'gradebooks#report'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

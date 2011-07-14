@@ -90,6 +90,10 @@ class AssignmentGradesController < ApplicationController
       value: params[:value],
       graded: true
     )
+    #Set assignment as dirty for average calculation
+    @grade.assignment.write_attributes(dirty_grade: true)
+    @grade.assignment.save
+    puts @grade.assignment.name
     @grade.save
     respond_to do |format|
       format.html {render :text => @returned}
