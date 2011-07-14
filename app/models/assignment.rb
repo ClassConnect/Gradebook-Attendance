@@ -36,8 +36,16 @@ class Assignment
   end
 
   def calculate_average
-    num_students = assignment_grades.count
-    return num_students
+    if(dirty_grade)
+      total_grade=0.0
+      to_grade = assignment_grades.where(:graded => true)
+      to_grade.each do |grade|
+        total_grade += grade.value
+      end
+      self.average = ((total_grade / point_value) / to_grade.count) * 100
+      self.dirty_grade = false
+      self.save
+    end
   end
 
 end

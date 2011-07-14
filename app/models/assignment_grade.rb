@@ -16,5 +16,9 @@ class AssignmentGrade
 
   key :student_id, :assignment_id
 
+  def dirty_parent
+    self.assignment.write_attributes(dirty_grade: true)
+    self.assignment.save
+  end
 
 end

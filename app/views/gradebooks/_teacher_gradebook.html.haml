@@ -18,21 +18,19 @@
     $("img").tooltip({
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().attr('id');
-        var url_string = '/assignments/' + assignment_id + '.json';
+        var url_string = '/assignments/' + assignment_id; 
         $.ajax({
           type: 'GET',
           async: false,
           url: url_string,
-          dataType: "json",
+          dataType: "html",
           success: function(data){
             popup_content = data;
           }
         });
       },
       onShow: function(){
-          var edit_link = "/gradebooks/#{@course.id}/" + this.getTrigger().parent().attr('id') + "/edit";
-          openbox_url = link_to_openbox(popup_content['name'], edit_link );
-          $('.tooltip').html(openbox_url);
+          $('.tooltip').html(popup_content);
         }
     });
 

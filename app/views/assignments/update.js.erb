@@ -6,8 +6,6 @@ var i=0;
   grade_id = "#" + "<%= grade.id %>";
   $(grade_id).attr('points', new_point_value);
   new_grade = calculateGrade($(grade_id).parent(), scale);
-  if(new_grade){
-    oTable.fnUpdate(new_grade, i, 2);
-  }
+  oTable.fnUpdate(new_grade, i, 2);
   i++;
 <% end %>  

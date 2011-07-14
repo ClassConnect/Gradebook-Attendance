@@ -86,13 +86,19 @@ class AssignmentGradesController < ApplicationController
     #value returned to datatables to put back into box
     @returned = params[:value]
     puts @grade.value
-    @grade.write_attributes(
-      value: params[:value],
-      graded: true
-    )
+    if(@returned != "")
+      @grade.write_attributes(
+        value: params[:value],
+        graded: true
+      )
+    else
+      @grade.write_attributes(
+        value: params[:value],
+        graded: false
+      )
+    end
     #Set assignment as dirty for average calculation
-    @grade.assignment.write_attributes(dirty_grade: true)
-    @grade.assignment.save
+    @grade.dirty_parent
     puts @grade.assignment.name
     @grade.save
     respond_to do |format|

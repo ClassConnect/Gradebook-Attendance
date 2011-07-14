@@ -7,14 +7,13 @@ class AssignmentsController < ApplicationController
 
   def show
     @assignment = Assignment.find(params[:id])
-
+    puts @assignment.calculate_average
     respond_to do |format|
-      format.html {render text: @assignment}
+      format.html {render :layout => false}
       format.json {render json: @assignment}
     end
   end
 
-  #PUT /gradebooks/:course_id/:assignment_id
     def update
     puts params
     @assignment = Assignment.find(params[:assignment][:id])

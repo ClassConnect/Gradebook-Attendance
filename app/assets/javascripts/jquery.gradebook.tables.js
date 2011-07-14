@@ -85,7 +85,7 @@ function calculateGrade(dom_element, scale){
     $(id).html(grade);
     return grade;
   }
-  return false;
+  return "";
 }
 
 function _openbox_helper(text, content_url){
