@@ -1,3 +1,14 @@
+function add_new_input(){
+  $.editable.addInputType('example', {
+    element : function(settings, original){
+      var input = $('<input type="text" style="width: 25px;">');
+      $(this).append(input);
+      $(this).append("/" + original.getAttribute('points'));
+      return(input);
+    }
+  });
+}
+
 function initTable(num_students) {
   scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}];
   oTable = $('.datatable').dataTable(
@@ -22,9 +33,13 @@ function initTable(num_students) {
   });
   */
 
+  
   $('td', oTable.fnGetNodes()).editable('/submit_grade', {
+    "type": "example",
+    "width": "50px",
     "placeholder": "",
-    "width": '140px',
+    "cssclass": "test",
+    "style": "align='center'",
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
@@ -39,8 +54,7 @@ function initTable(num_students) {
         "column": oTable.fnGetPosition(this)[2]
       };
     },
-    "height": "14px",
-    tooltip: 'Click to edit...'
+    "height": "14px"
   });
 }//last one
 
@@ -100,3 +114,5 @@ function link_to_openbox(text, url){
   openbox_link += "'" + url + "'" + ', 350); return false;">'+ text +'</a>';
   return openbox_link;
 }
+
+

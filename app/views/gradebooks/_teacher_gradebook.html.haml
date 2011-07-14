@@ -2,6 +2,7 @@
   var oTable, keys;
   $(document).ready(function() {
       //START OTHER STUFF
+      add_new_input();
       var scale = #{GradebooksController::DEFAULT_SCALE.to_json};
       $('.datatable tbody tr').each(function(){
         calculateGrade(this, scale);
@@ -33,21 +34,20 @@
           $('.tooltip').html(popup_content);
         }
     });
-
   }); 
 
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
-%table{:id => "test_table", :class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
+%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
   %thead
     %tr{:id => "assignments"}
-      %th{:width => 110, :height => 29} First Name
-      %th{:width => 110, :height => 29} Last Name
-      %th{:width => 50, :height => 29} Grade
+      %th{:width => 110, :height => 35} First Name
+      %th{:width => 110, :height => 35} Last Name
+      %th{:width => 50, :height => 35} Grade
       -i=3
       -@assignments.asc(:created_at).each do |assignment|
-        %th{:align => "left", :width => 150, :height => 29}
+        %th{:align => "left", :width => 150, :height => 35}
           %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
             =assignment.name
             =image_tag("exclm.png", {:align => "right", :class => "hover_button", :title => "pic"})
@@ -58,7 +58,7 @@
     -@students.each do |student|
       -i=0
       -if student.is_student?
-        %tr{:height => 30, :id => "#{student.id}"}
+        %tr{:height => 35, :id => "#{student.id}"}
           %td{:width => 100}=student.first_name.capitalize
           %td{:width => 100}=student.last_name.capitalize
           %td{:align => "center", :width => 100, :class => "grade"}="" 
