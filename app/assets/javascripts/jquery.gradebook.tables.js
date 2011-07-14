@@ -26,12 +26,12 @@ function initTable(num_students) {
     "iLeftWidth": 300
   });
 
-  /*
+  
   keys = new KeyTable({
-    "table": document.getElementById('test_table'),
+    "table": document.getElementById('gradebook_display'),
     "datatable": oTable
   });
-  */
+  
 
   
   $('td', oTable.fnGetNodes()).editable('/submit_grade', {

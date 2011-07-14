@@ -39,7 +39,7 @@
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
 %input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
-%table{:class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
+%table{:id => "gradebook_display", :class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
   %thead
     %tr{:id => "assignments"}
       %th{:width => 110, :height => 35} First Name
