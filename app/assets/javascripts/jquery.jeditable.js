@@ -265,20 +265,21 @@
 
                 /* Discard, submit or nothing with changes when clicking outside. */
                 /* Do nothing is usable when navigating with tab. */
+                /* CC note: lowered the timeouts below to speed up animation*/
                 var t;
                 if ('cancel' == settings.onblur) {
                     input.blur(function(e) {
                         /* Prevent canceling if submit was clicked. */
                         t = setTimeout(function() {
                             reset.apply(form, [settings, self]);
-                        }, 500);
+                        }, 50);
                     });
                 } else if ('submit' == settings.onblur) {
                     input.blur(function(e) {
                         /* Prevent double submit if submit was clicked. */
                         t = setTimeout(function() {
                             form.submit();
-                        }, 200);
+                        }, 50);
                     });
                 } else if ($.isFunction(settings.onblur)) {
                     input.blur(function(e) {

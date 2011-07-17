@@ -26,20 +26,20 @@ function initTable(num_students) {
     "iLeftWidth": 300
   });
 
-  
-  keys = new KeyTable({
-    "table": document.getElementById('gradebook_display'),
-    "datatable": oTable
-  });
-  
-
-  
-  $('td', oTable.fnGetNodes()).editable('/submit_grade', {
+  $('td', oTable.fnGetNodes()).editable(function(value, settings){
+    if(value != $(this).attr('score')){
+       $.ajax({
+         type: 'POST',
+         url: '/submit_grade',
+         data: {"id": this.getAttribute('id'), "value": value},
+         dataType: "html"
+       });
+     }
+     return value;
+    }, {
     "type": "example",
-    "width": "50px",
     "placeholder": "",
-    "cssclass": "test",
-    "style": "align='center'",
+    "onblur": "submit",
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
@@ -47,15 +47,13 @@ function initTable(num_students) {
       oTable.fnUpdate(value, aPos[0], aPos[1] + 3);
       var grade = calculateGrade($(this).parent(), scale);
       oTable.fnUpdate(grade, aPos[0], 2);
-    },
-    "submitdata" : function(value, settings){
-      return {
-        "row_id": this.parentNode.getAttribute('id'),
-        "column": oTable.fnGetPosition(this)[2]
-      };
+      $(this).attr('score', value);
     },
     "height": "14px"
-  });
+    });
+  
+  
+  
 }//last one
 
 

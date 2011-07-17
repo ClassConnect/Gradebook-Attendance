@@ -1,0 +1,23 @@
+:javascript
+  $(document).ready(function() {
+    $('#edit_scale').bind('submit', function(){
+      $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
+      closeBox();
+      return false;
+    });
+  }); 
+
+=form_for @scale, :remote => true, :html => {:id => "edit_scale", :method => "put"} do |s|
+  -#Nested models ignore scope, so you need to do it as the second arg
+  =s.fields_for :grade_ranges, @scale.grade_ranges.desc(:from) do |builder|  
+    %span{:class => "grade_detail_row"}
+      =builder.label :from
+      =builder.text_field :from, {:size => "1"}
+      =builder.label :to
+      =builder.text_field :to, {:size => "1"}
+      =builder.label "="
+      =builder.text_field :name, {:size => "2"}
+  %br
+  =s.submit
+  =close_openBox_input
+    

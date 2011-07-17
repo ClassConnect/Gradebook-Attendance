@@ -3,7 +3,7 @@
   $(document).ready(function() {
       //START OTHER STUFF
       add_new_input();
-      var scale = #{GradebooksController::DEFAULT_SCALE.to_json};
+      var scale = #{@settings.grade_scale.grade_ranges.to_json :except => [:_id]}
       $('.datatable tbody tr').each(function(){
         calculateGrade(this, scale);
       });
@@ -13,6 +13,10 @@
 
     $('#add_assignment_button').click(function(){
       openBox('/gradebooks/#{@course.id}/assignments', 350);
+    });
+
+    $('#edit_scale_button').click(function(){
+      openBox('/gradebooks/grading_scale/#{@course.id}', 200);
     });
 
     var popup_content;
@@ -38,7 +42,8 @@
 
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
-%input{:type => "submit", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
+%input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
+%input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
 %table{:id => "gradebook_display", :class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}
   %thead
     %tr{:id => "assignments"}
@@ -64,7 +69,7 @@
           %td{:align => "center", :width => 100, :class => "grade"}="" 
           -student.get_grades_for_course(@course.id).asc(:created_at).each do |grade|
             -if grade.graded
-              %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=grade.value
+              %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value, :score => grade.value}=grade.value
             -else
               %td{:width => 150, :id=> "#{grade.id}", :align => "center", :points => @assignments[i].point_value}=""
             -i += 1

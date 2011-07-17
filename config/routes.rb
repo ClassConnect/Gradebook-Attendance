@@ -18,6 +18,9 @@ Gradebook::Application.routes.draw do
   match 'gradebooks/:course_id/:assignment_id/edit' => 'assignments#edit'
   match 'gradebooks/:course_id/report' => 'gradebooks#report'
 
+  match 'gradebooks/grading_scale/:course_id' => 'grade_scales#scale'
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
