@@ -12,6 +12,9 @@ class GradeScalesController < ApplicationController
 
   def scale
     @scale = GradeScale.where(course_id: params[:course_id]).first
+    respond_to do |format|
+      format.html {render :layout => false}
+    end
   end
 
   # GET /grade_scales/1

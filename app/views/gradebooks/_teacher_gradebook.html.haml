@@ -10,6 +10,7 @@
       initTable(#{@students.count});
       $('.dataTables_scroll .datatable').attr('style', "");
 
+      init_keytable();
 
     $('#add_assignment_button').click(function(){
       openBox('/gradebooks/#{@course.id}/assignments', 350);
@@ -18,6 +19,7 @@
     $('#edit_scale_button').click(function(){
       openBox('/gradebooks/grading_scale/#{@course.id}', 200);
     });
+
 
     var popup_content;
     $("img").tooltip({
@@ -42,6 +44,8 @@
 
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
+%input{:type => "text", :id => "test_box"}
+%br
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
 %table{:id => "gradebook_display", :class=> "datatable", :cellpadding => 2, :cellspacing => 2, :width => "#{@assignments.count * 150}px"}

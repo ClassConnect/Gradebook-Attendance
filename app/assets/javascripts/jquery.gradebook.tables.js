@@ -1,10 +1,62 @@
+var SCALE_FROM_BOX_INDEX = 0;
+var SCALE_TO_BOX_INDEX = 1;
+var SCALE_NAME_BOX_INDEX = 2;
+var counter =0;
+var callback_counter = 0;
+
+
+//Will probably end up buggy...using keypress
 function add_new_input(){
   $.editable.addInputType('example', {
     element : function(settings, original){
-      var input = $('<input type="text" style="width: 25px;">');
+      var input = $('<input type="text" style="width: 25px;" id="editor" autocomplete="off">');
       $(this).append(input);
       $(this).append("/" + original.getAttribute('points'));
       return(input);
+    },
+    plugin: function(settings, original){
+      var a = keys.fnGetCurrentPosition();
+      var table_height = oTable.fnSettings().aiDisplay.length;
+      var table_width = parseInt($('tbody').attr('cols')) - 3;
+
+      $('input', this).bind('keydown', function(event){
+        switch(event.keyCode){
+          //Up key
+          case 38:
+            if((a[1] - 1) >= 0){
+              keys.fnSetPosition(a[0], a[1] - 1);
+            }
+            break;
+
+          //Return key
+          case 13:
+          //Down key
+          case 40:
+            if((a[1] + 1) < table_height){
+              keys.fnSetPosition(a[0], a[1] + 1);
+            }
+            break;
+
+          //Left key
+          case 37:
+            if((a[0] - 1) >= 0){
+              keys.fnSetPosition(a[0]-1, a[1]);
+            }
+            break;
+
+          //Right key
+          case 39:
+            if((a[0] + 1) < table_width){
+              keys.fnSetPosition(a[0]+1, a[1]);
+            }
+            break;
+
+          //Otherwise, we don't care
+          default:
+            return;
+        }
+      });
+
     }
   });
 }
@@ -26,6 +78,8 @@ function initTable(num_students) {
     "iLeftWidth": 300
   });
 
+  /*
+  //TODO: focusing when score doesn't change and blank
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
     if(value != $(this).attr('score')){
        $.ajax({
@@ -51,11 +105,32 @@ function initTable(num_students) {
     },
     "height": "14px"
     });
-  
-  
+    */
+
   
 }//last one
 
+
+function init_keytable(){
+  keys = new KeyTable( {
+		"table": document.getElementById('gradebook_display'),
+    "datatable": oTable
+    } );
+	
+    keys.event.focus( null, null, function (nCell) {
+		keys.block = true;
+		
+		$(nCell).editable( function (sVal) {
+			return sVal;
+		}, { 
+      "type": 'example',
+			"onblur": 'submit',
+      "placeholder":""
+		} );
+		
+		setTimeout( function () { $(nCell).click(); }, 0 );
+	} );  
+}
 
 function isNumeric(value){
   if (value == null || !value.toString().match(/^[-]?\d*\.?\d*$/)) return false;
@@ -113,4 +188,21 @@ function link_to_openbox(text, url){
   return openbox_link;
 }
 
+/*
+*This function validates the user's input when editing scales. Ranges should be
+*continuous. Checks should also be made to ensure that no ranges have the same name.
+*/
 
+//TODO: add name checks
+function validate_scales_form(){
+  rows = $('.grade_detail_row');
+  row_count = rows.length-1;
+
+  while(row_count--){
+    var current_upper = $(rows[row_count+1]).children('input')[SCALE_TO_BOX_INDEX].value;
+    var new_lower = $(rows[row_count]).children('input')[SCALE_FROM_BOX_INDEX].value;
+    if(new_lower - current_upper != 1)
+      return false;
+  }
+  return true;
+}

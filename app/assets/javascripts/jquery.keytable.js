@@ -648,6 +648,7 @@ function KeyTable ( oInit )
 			case 13: /* return */
 			 	e.preventDefault();
  				e.stopPropagation();
+        console.log("enter pressed");
 				_fnEventFire( "action", _iOldX, _iOldY );
 				return true;
 				

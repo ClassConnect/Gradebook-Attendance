@@ -1,9 +1,18 @@
 :javascript
   $(document).ready(function() {
+    $('#edit_scale').prepend('<div id="notice"></div>');
     $('#edit_scale').bind('submit', function(){
-      $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
-      closeBox();
-      return false;
+      $('#notice').hide();
+      if(validate_scales_form()){
+        $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
+        closeBox();
+        return false;
+      }
+      else{
+        $('#notice').html('<h2>Grade ranges are busted.</h2>');
+        $('#notice').show();
+        return false;
+      }
     });
   }); 
 
