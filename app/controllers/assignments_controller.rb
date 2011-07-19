@@ -3,6 +3,9 @@ class AssignmentsController < ApplicationController
   def edit
     @assignment = Assignment.find(params[:assignment_id])
     @types = AssignmentType.where(:course_id => params[:course_id])
+    respond_to do |format|
+      format.html {render :layout => false}
+    end
   end
 
   def show
@@ -31,7 +34,7 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.new
     @types = AssignmentType.where(:course_id => params[:course_id])
     respond_to do |format|
-      format.html
+      format.html {render :layout => false}
     end
   end
 

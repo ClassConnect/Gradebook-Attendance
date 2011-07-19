@@ -1,16 +1,19 @@
 :javascript
-  var oTable, keys;
   $(document).ready(function() {
       //START OTHER STUFF
       add_new_input();
       var scale = #{@settings.grade_scale.grade_ranges.to_json :except => [:_id]}
-      $('.datatable tbody tr').each(function(){
-        calculateGrade(this, scale);
-      });
-      initTable(#{@students.count});
-      $('.dataTables_scroll .datatable').attr('style', "");
+      //$('.datatable tbody tr').each(function(){
+      //  calculateGrade(this, scale);
+      //});
+      //initTable(#{@students.count});
+      //$('.dataTables_scroll .datatable').attr('style', "");
 
-      init_keytable();
+      //init_keytable();
+      
+    //initTable(#{@students.count});
+
+    //init_keytable();
 
     $('#add_assignment_button').click(function(){
       openBox('/gradebooks/#{@course.id}/assignments', 350);
@@ -44,7 +47,6 @@
 
 -total_points = 0
 %h1{:id => "course_name"}#{@course.name}   
-%input{:type => "text", :id => "test_box"}
 %br
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}

@@ -1,9 +1,24 @@
 var SCALE_FROM_BOX_INDEX = 0;
 var SCALE_TO_BOX_INDEX = 1;
 var SCALE_NAME_BOX_INDEX = 2;
-var counter =0;
-var callback_counter = 0;
+var oTable;
+var keys;
 
+function get_table(){
+  return oTable;
+}
+
+function destroy_table(){
+  oTable.fnDestroy();
+}
+
+function block_keytable(){
+  keys.block = true;
+}
+
+function unblock_keytable(){
+  keys.block=false;
+}
 
 //Will probably end up buggy...using keypress
 function add_new_input(){
@@ -16,8 +31,6 @@ function add_new_input(){
     },
     plugin: function(settings, original){
       var a = keys.fnGetCurrentPosition();
-      var table_height = oTable.fnSettings().aiDisplay.length;
-      var table_width = parseInt($('tbody').attr('cols')) - 3;
 
       $('input', this).bind('keydown', function(event){
         switch(event.keyCode){
@@ -32,7 +45,7 @@ function add_new_input(){
           case 13:
           //Down key
           case 40:
-            if((a[1] + 1) < table_height){
+            if((a[1] + 1) < oTable.fnSettings().aiDisplay.length){
               keys.fnSetPosition(a[0], a[1] + 1);
             }
             break;
@@ -46,7 +59,7 @@ function add_new_input(){
 
           //Right key
           case 39:
-            if((a[0] + 1) < table_width){
+            if((a[0] + 1) < parseInt($('tbody').attr('cols')) - 3){
               keys.fnSetPosition(a[0]+1, a[1]);
             }
             break;
@@ -62,8 +75,7 @@ function add_new_input(){
 }
 
 function initTable(num_students) {
-  scale = [{"from":0,"to":59,"name":"F"}, {"from":60,"to":69,"name":"D"}, {"from":70,"to":79,"name":"C"}, {"from":80,"to":89,"name":"B"},{"from":90,"to":100,"name":"A"}];
-  oTable = $('.datatable').dataTable(
+  oTable = $('#gradebook_display').dataTable(
   {
     "iDisplayLength": num_students,
     "bDestroy": true,
