@@ -18,7 +18,8 @@ class Assignment
   field :date_due, :type => Date
 
   field :average, :type => Float
-  field :dirty_grade, :type => Boolean, :default => false
+  #All grades accessible from here
+  field :grades, :type => Hash
 
   before_destroy :destroy_grades
 
@@ -26,7 +27,6 @@ class Assignment
     course = Course.find(course_id)
     course.students.each do |student|
       unless student.is_teacher?
-        assignment_grades.create(:student_id => student.id, :course_id => course.id, :value => 0, :graded => false)
       end
     end
   end
