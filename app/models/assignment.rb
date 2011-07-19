@@ -27,6 +27,7 @@ class Assignment
     course = Course.find(course_id)
     course.students.each do |student|
       unless student.is_teacher?
+        aksjdfaksjdlf
       end
     end
   end
