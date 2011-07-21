@@ -6,3 +6,4 @@ this messes up the form. The proper way to do it is use :remote => true and in t
 include :method => "put". 
 
 Lesson learned: always push to github before bed.
+Git is acting weird.
