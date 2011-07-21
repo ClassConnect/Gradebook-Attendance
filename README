@@ -4,3 +4,5 @@ Not all browsers support PUT/DELETE with Javascript, which is why JQuery only ha
 $.post and $.get. You can pass data in with data set to {_method: 'put'}; however,
 this messes up the form. The proper way to do it is use :remote => true and in the :html hash,
 include :method => "put". 
+
+Lesson learned: always push to github before bed.
