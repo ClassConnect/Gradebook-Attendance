@@ -138,15 +138,10 @@ function init_keytable(){
       "type": 'example',
 			"onblur": 'submit',
       "placeholder":""
-		} );
+		});
 		
 		setTimeout( function () { $(nCell).click(); }, 0 );
-	} );  
-}
-
-function isNumeric(value){
-  if (value == null || !value.toString().match(/^[-]?\d*\.?\d*$/)) return false;
-  return true;
+	});  
 }
 
 function gradeMatch(value, scale){

@@ -10,7 +10,6 @@ class AssignmentsController < ApplicationController
 
   def show
     @assignment = Assignment.find(params[:id])
-    puts @assignment.calculate_average
     respond_to do |format|
       format.html {render :layout => false}
       format.json {render json: @assignment}

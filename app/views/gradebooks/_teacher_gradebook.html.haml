@@ -7,11 +7,11 @@
       //  calculateGrade(this, scale);
       //});
       //initTable(#{@students.count});
-      //$('.dataTables_scroll .datatable').attr('style', "");
+      $('.dataTables_scroll .datatable').attr('style', "");
 
       //init_keytable();
       
-    //initTable(#{@students.count});
+    initTable(#{@students.count});
 
     //init_keytable();
 
@@ -23,7 +23,7 @@
       openBox('/gradebooks/grading_scale/#{@course.id}', 200);
     });
 
-
+    /*
     var popup_content;
     $("img").tooltip({
       onBeforeShow: function(){
@@ -43,6 +43,12 @@
           $('.tooltip').html(popup_content);
         }
     });
+    */
+
+    $(".hover_button").hover(function(){
+      alert("LOL");
+    });
+
   }); 
 
 -total_points=0
@@ -51,15 +57,15 @@
 %table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
   %thead
     %tr{:class => "header_row"}
-      %th{:width => 110, :height => 35} First Name
-      %th{:width => 110, :height => 35} Last Name
-      %th{:width => 50, :height => 35} Grade
+      %th{:width => 110} First Name
+      %th{:width => 110} Last Name
+      %th{:width => 50} Grade
       -i=3
       -@assignments.each do |assignment|
         %th{:align => "left", :width => 150, :height => 35}
           %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
             =assignment.name
-            =image_tag("exclm.png", {:class => "hover_button"})
+            =image_tag("exclm.png", {:class => "hover_button", :align => "right"})
             -total_points += assignment.point_value
             -i += 1
 
@@ -69,14 +75,14 @@
       -if student.is_student?
         -id_string = student.id.to_s
         %tr{:class => "row_entry", :id => "#{student.id}"}
-          %td{:width => 100}=student.first_name.capitalize
-          %td{:width => 100}=student.last_name.capitalize
-          %td{:align => "center", :width => 100, :class => "grade"}="" 
+          %td{:width => 110}=student.first_name.capitalize
+          %td{:width => 110}=student.last_name.capitalize
+          %td{:class => "grade_entry"}="" 
           -@assignments.each do |assignment|
             -if assignment.grades[id_string][0] != :ungraded
-              %td{:class => "grade", :score => assignment.grades[id_string][0]}="WORK"
+              %td{:class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
             -else
-              %td{:class => "grade"}=""
+              %td{:class => "grade_entry"}=""
             -i+=1
 
 %div{:id => "dialogBox"}
