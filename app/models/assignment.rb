@@ -2,8 +2,8 @@ class Assignment
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  cache
   
-  has_many :assignment_grades
   belongs_to :assignment_type
 
   field :course_id, :type => Integer
@@ -19,21 +19,16 @@ class Assignment
 
   field :average, :type => Float
   #All grades accessible from here
-  field :grades, :type => Hash
+  field :grades, :type => Hash, :default => {}
 
-  before_destroy :destroy_grades
+  after_create :init_grades
 
   def init_grades
-    course = Course.find(course_id)
-    course.students.each do |student|
-      unless student.is_teacher?
-        aksjdfaksjdlf
-      end
+    students = Course.find(course_id).students
+    students.each do |student|
+      grades[student.id.to_s] = [:ungraded, :nocomment]
     end
-  end
-
-  def destroy_grades
-    assignment_grades.destroy_all
+    save
   end
 
   def calculate_average

@@ -65,6 +65,10 @@ class User < ActiveRecord::Base
     AssignmentGrade.where(student_id: id)
   end
 
+  def get_assignments(course_id)
+    Assignment.where(course_id: course_id).where(id.to_s)
+  end
+
   #Custom serializer for students, needs to be this format for datatables
   def prepare_ajax
     assignment_grades = get_grades_for_gradebook

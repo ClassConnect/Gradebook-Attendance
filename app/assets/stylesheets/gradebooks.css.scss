@@ -3,3 +3,21 @@
   They will automatically be included in application.css.
   You can use Sass (SCSS) here: http://sass-lang.com/
 */
+
+#gradebook_display{
+  cellpadding: 2;
+  cellspacing: 2;
+}
+
+.row_entry{
+  height:38px;
+}
+
+.row_entry.header_row{
+  font-weight:bold;
+}
+
+td.grade{
+  width:150px;
+  align:left;
+}
