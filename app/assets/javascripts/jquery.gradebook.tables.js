@@ -21,6 +21,7 @@ function unblock_keytable(){
 }
 
 //Will probably end up buggy...using keypress
+//Realistcally, for performance reasons, we'll have to write our own
 function add_new_input(){
   $.editable.addInputType('example', {
     element : function(settings, original){
@@ -90,14 +91,15 @@ function initTable(num_students) {
     "iLeftWidth": 300
   });
 
-  /*
+  
   //TODO: focusing when score doesn't change and blank
+  //TODO: make this restful?
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
     if(value != $(this).attr('score')){
        $.ajax({
          type: 'POST',
          url: '/submit_grade',
-         data: {"id": this.getAttribute('id'), "value": value},
+         data: {"id": $(this).parent().getAttribute('id'), "value": value},
          dataType: "html"
        });
      }
@@ -115,9 +117,8 @@ function initTable(num_students) {
       oTable.fnUpdate(grade, aPos[0], 2);
       $(this).attr('score', value);
     },
-    "height": "14px"
-    });
-    */
+  });
+    
 
   
 }//last one
@@ -155,7 +156,7 @@ function gradeMatch(value, scale){
   return scale[length-1]['name'];
 }
 
-//TODO: Use JSON parse function. I dunno what the hell it's called
+//TODO: Use JSON parse function for scale. I dunno what the hell it's called
 function calculateGrade(dom_element, scale){
   var grade=0, total_points=0, graded=false;
   //var test_scale = $('tbody').attr('grading_scale');
@@ -212,4 +213,14 @@ function validate_scales_form(){
       return false;
   }
   return true;
+}
+
+/*
+*Takes in a JQuery dom_element. Uses DataTables API.
+*/
+function get_assignment_id(dom_element){
+  var position = oTable.fnGetPosition(dom_element);    
+  var json = $('tbody').attr('assignment_data');
+  json = jQuery.parseJSON(json);
+  alert(json[0]);
 }
