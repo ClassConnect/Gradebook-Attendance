@@ -11,7 +11,9 @@
 
       //init_keytable();
       
+    init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
     initTable(#{@students.count});
+
 
     //init_keytable();
 
@@ -71,20 +73,21 @@
   %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}
     -@students.each do |student|
       -i=0
-      -id_string = student.id.to_s
-      %tr{:class => "row_entry", :id => "#{student.id}"}
-        %td{:width => 110}=student.first_name.capitalize
-        %td{:width => 110}=student.last_name.capitalize
-        %td{:class => "grade_entry"}="" 
-        -@assignments.each do |assignment|
-          -if current_assignment = assignment.grades[id_string]
-            -if assignment.grades[id_string][0] != :ungraded
-              %td{:class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
+      -if student.is_student?
+        -id_string = student.id.to_s
+        %tr{:class => "row_entry", :id => "#{student.id}"}
+          %td{:width => 110}=student.first_name.capitalize
+          %td{:width => 110}=student.last_name.capitalize
+          %td{:class => "grade_entry"}="" 
+          -@assignments.each do |assignment|
+            -if current_assignment = assignment.grades[id_string]
+              -if assignment.grades[id_string][0] != :ungraded
+                %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
+              -else
+                %td{:align => "center", :class => "grade_entry"}=""
             -else
-              %td{:class => "grade_entry"}=""
-          -else
-            %td{:class => "grade_entry"}=""
-          -i+=1
+              %td{:align => "center", :class => "grade_entry"}=""
+            -i+=1
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}

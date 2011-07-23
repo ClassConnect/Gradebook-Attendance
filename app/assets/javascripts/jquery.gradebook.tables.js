@@ -4,6 +4,12 @@ var SCALE_NAME_BOX_INDEX = 2;
 var oTable;
 var keys;
 
+var assignments_array;
+
+function init_assignments_array(json){
+  assignments_array = json;
+}
+
 function get_table(){
   return oTable;
 }
@@ -26,11 +32,10 @@ function unblock_keytable(){
 function add_new_input(){
   $.editable.addInputType('example', {
     element : function(settings, original){
-      var input = $('<input type="text" style="width: 25px;" id="editor" autocomplete="off">');
+      var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
-      var assignments = $('.assignment_head th');
       $(this).append(input);
-      $(this).append("/" + assignments[position[1]].getAttribute('value'));
+      $(this).append("/" + assignment_point_value(position[1]));
       return(input);
     }
     /*
@@ -91,6 +96,7 @@ function initTable(num_students) {
   });
 
   new FixedColumns(oTable, {
+    //look at sizing stuff
     "iLeftColumns": 3,
     "iLeftWidth": 300
   });
@@ -167,7 +173,6 @@ function gradeMatch(value, scale){
 //TODO: Use JSON parse function for scale. I dunno what the hell it's called
 function calculateGrade(dom_element, scale){
   var grade=0, total_points=0, graded=false;
-  //var test_scale = $('tbody').attr('grading_scale');
   id = "#" + $(dom_element).attr('id');
   id = id + " > .grade"
   $(dom_element).children().each(function(){
@@ -223,17 +228,10 @@ function validate_scales_form(){
   return true;
 }
 
-/*
-*Takes in a JQuery dom_element. Uses DataTables API.
-*/
-function get_assignment_id(dom_element){
-  var position = oTable.fnGetPosition(dom_element);    
-  var json = $('tbody').attr('assignment_data');
-  json = jQuery.parseJSON(json);
-  alert(json[0]);
+function assignment_id(index){
+  return assignments_array[index]._id;
 }
 
-function get_point_value(dom_element){
-  var position = oTable.fnGetPosition(dom_element);  
-
+function assignment_point_value(index){
+  return assignments_array[index].point_value;
 }

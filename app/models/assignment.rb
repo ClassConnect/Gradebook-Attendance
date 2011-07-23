@@ -31,6 +31,11 @@ class Assignment
     save
   end
 
+  def update_grade(student_id, grade)
+    grades[student_id.to_s] = grade
+    save
+  end
+
   def calculate_average
     if(dirty_grade)
       total_grade=0.0

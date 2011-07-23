@@ -59,4 +59,10 @@ class AssignmentsController < ApplicationController
     end
     @assignment.destroy
   end
+
+  #Method for updating individual grade
+  def update_assignment_grade
+    @assignment = Assignment.find(params[:id])
+  end
+
 end
