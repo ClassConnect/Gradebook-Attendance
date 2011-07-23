@@ -22,12 +22,15 @@ function unblock_keytable(){
 
 //Will probably end up buggy...using keypress
 //Realistcally, for performance reasons, we'll have to write our own
+//Cache position? DOM access is slow
 function add_new_input(){
   $.editable.addInputType('example', {
     element : function(settings, original){
       var input = $('<input type="text" style="width: 25px;" id="editor" autocomplete="off">');
+      var position = oTable.fnGetPosition(original);
+      var assignments = $('.assignment_head th');
       $(this).append(input);
-      $(this).append("/" + original.getAttribute('points'));
+      $(this).append("/" + assignments[position[1]].getAttribute('value'));
       return(input);
     }
     /*
@@ -96,6 +99,7 @@ function initTable(num_students) {
   //TODO: focusing when score doesn't change and blank
   //TODO: make this restful?
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
+    /*
     if(value != $(this).attr('score')){
        $.ajax({
          type: 'POST',
@@ -104,6 +108,7 @@ function initTable(num_students) {
          dataType: "html"
        });
      }
+     */
      return value;
     }, {
     "type": "example",
@@ -226,4 +231,9 @@ function get_assignment_id(dom_element){
   var json = $('tbody').attr('assignment_data');
   json = jQuery.parseJSON(json);
   alert(json[0]);
+}
+
+function get_point_value(dom_element){
+  var position = oTable.fnGetPosition(dom_element);  
+
 }

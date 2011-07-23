@@ -60,12 +60,13 @@
       %th{:width => 110} Last Name
       %th{:width => 50} Grade
       -i=3
-      -@assignments.each do |assignment|
-        %th{:align => "left", :width => 150, :height => 35}
-          %span{:class => "assignment", :id => "#{assignment.id}", :col => i,  :value => assignment.point_value}
-            =assignment.name
-            =image_tag("exclm.png", {:class => "hover_button", :align => "right"})
-            -i += 1
+      %span{:id => "assignment_names"}
+        -@assignments.each do |assignment|
+          %th{:align => "left", :width => 150, :col => i, :value => assignment.point_value, :id => "#{assignment.id}"}
+            %span{:class => "assignment"} 
+              =assignment.name
+              =image_tag("exclm.png", {:class => "hover_button", :align => "right"})
+              -i += 1
 
   %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}
     -@students.each do |student|
