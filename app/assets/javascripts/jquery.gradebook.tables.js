@@ -29,7 +29,8 @@ function add_new_input(){
       $(this).append(input);
       $(this).append("/" + original.getAttribute('points'));
       return(input);
-    },
+    }
+    /*
     plugin: function(settings, original){
       var a = keys.fnGetCurrentPosition();
 
@@ -71,7 +72,7 @@ function add_new_input(){
         }
       });
 
-    }
+    }*/
   });
 }
 
@@ -107,7 +108,8 @@ function initTable(num_students) {
     }, {
     "type": "example",
     "placeholder": "",
-    "onblur": "submit",
+    "onblur": "submit"
+    /*,
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
@@ -117,6 +119,7 @@ function initTable(num_students) {
       oTable.fnUpdate(grade, aPos[0], 2);
       $(this).attr('score', value);
     },
+    */
   });
     
 

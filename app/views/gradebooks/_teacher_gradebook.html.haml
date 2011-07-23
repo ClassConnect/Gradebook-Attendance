@@ -62,7 +62,7 @@
       -i=3
       -@assignments.each do |assignment|
         %th{:align => "left", :width => 150, :height => 35}
-          %span{:class => "assignment", :id => "#{assignment.id}", :col => i}
+          %span{:class => "assignment", :id => "#{assignment.id}", :col => i,  :value => assignment.point_value}
             =assignment.name
             =image_tag("exclm.png", {:class => "hover_button", :align => "right"})
             -i += 1
@@ -70,21 +70,20 @@
   %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}
     -@students.each do |student|
       -i=0
-      -if student.is_student?
-        -id_string = student.id.to_s
-        %tr{:class => "row_entry", :id => "#{student.id}"}
-          %td{:width => 110}=student.first_name.capitalize
-          %td{:width => 110}=student.last_name.capitalize
-          %td{:class => "grade_entry"}="" 
-          -@assignments.each do |assignment|
-            -if current_assignment = assignment.grades[id_string]
-              -if assignment.grades[id_string][0] != :ungraded
-                %td{:class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
-              -else
-                %td{:class => "grade_entry"}=""
+      -id_string = student.id.to_s
+      %tr{:class => "row_entry", :id => "#{student.id}"}
+        %td{:width => 110}=student.first_name.capitalize
+        %td{:width => 110}=student.last_name.capitalize
+        %td{:class => "grade_entry"}="" 
+        -@assignments.each do |assignment|
+          -if current_assignment = assignment.grades[id_string]
+            -if assignment.grades[id_string][0] != :ungraded
+              %td{:class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
             -else
               %td{:class => "grade_entry"}=""
-            -i+=1
+          -else
+            %td{:class => "grade_entry"}=""
+          -i+=1
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}
