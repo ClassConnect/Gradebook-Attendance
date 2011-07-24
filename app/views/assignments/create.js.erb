@@ -1,5 +1,3 @@
-<% broadcast "/gradebook/#{@string}" do %>
-
 destroy_table();
 
 $('.datatable').width(function(index, value){
@@ -8,15 +6,13 @@ $('.datatable').width(function(index, value){
 //this is incredibly ghetto...we'll have to read to find where this damn thing is placed
 $('.dataTables_scroll').attr('style', "");
 $("<th width='150' class='sorting' align='left'><%=@assignment.name%></th>").insertAfter('thead th:last');
-var z=0;
+var student_count=0;
 $('.datatable tbody tr').each(function(index, value){
   $(this).append("<td points=" + <%= @assignment.point_value %> + " align='center'  width='150'></td>");
-  z++;
+  student_count++;
 });
 $('tbody').attr('cols', function(i, val){
   return parseInt(val) + 1;
 });
 
-initTable(z);
-
-<% end %>
+initTable(student_count);
