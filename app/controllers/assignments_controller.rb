@@ -63,6 +63,26 @@ class AssignmentsController < ApplicationController
   #Method for updating individual grade
   def update_assignment_grade
     @assignment = Assignment.find(params[:id])
+    puts params[:value]
+    id = params[:student_id]
+    if !@assignment.grades[id.to_s]
+      @assignment.grades[id.to_s] = [:ungraded, :nocomment]
+      @assignment.save
+    end
+    
+    @assignment.grades[id.to_s][0] = params[:value]
+
+    #This is unfortunately necessary due to a Mongoid bug
+    array = @assignment.grades[id.to_s]
+    @assignment.grades[id.to_s] = nil
+    @assignment.save :validate => false
+    @assignment.grades[id.to_s] = array
+    @assignment.save :validate => false
+
+    @returned = params[:value]
+    respond_to do |format|
+      format.html {render :layout => false}
+    end
   end
 
 end

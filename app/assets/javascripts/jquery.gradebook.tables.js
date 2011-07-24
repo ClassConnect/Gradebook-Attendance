@@ -3,6 +3,7 @@ var SCALE_TO_BOX_INDEX = 1;
 var SCALE_NAME_BOX_INDEX = 2;
 var oTable;
 var keys;
+var COLUMN_NUMBER_INDEX = 1;
 
 var assignments_array;
 
@@ -105,16 +106,17 @@ function initTable(num_students) {
   //TODO: focusing when score doesn't change and blank
   //TODO: make this restful?
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
-    /*
+    var position = oTable.fnGetPosition(this);
+    
     if(value != $(this).attr('score')){
        $.ajax({
          type: 'POST',
-         url: '/submit_grade',
-         data: {"id": $(this).parent().getAttribute('id'), "value": value},
+         url: update_grade_url(this), 
+         data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": value},
          dataType: "html"
        });
      }
-     */
+   
      return value;
     }, {
     "type": "example",
@@ -220,4 +222,9 @@ function assignment_id(index){
 
 function assignment_point_value(index){
   return assignments_array[index].point_value;
+}
+
+function update_grade_url(object){
+  var position = oTable.fnGetPosition(object);
+  return '/gradebooks/assignments/' + assignment_id(position[COLUMN_NUMBER_INDEX]) + '/update';
 }
