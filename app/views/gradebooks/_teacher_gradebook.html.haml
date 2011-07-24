@@ -25,6 +25,7 @@
       openBox('/gradebooks/grading_scale/#{@course.id}', 200);
     });
 
+    
     /*
     var popup_content;
     $("img").tooltip({
@@ -47,13 +48,13 @@
     });
     */
 
-    $(".hover_button").hover(function(){
-      alert("LOL");
-    });
+    $(".hover_button").not('.tt_init').tooltip();
+    $(".hover_button").not('.tt_init').addClass('tt_init');
+
 
   }); 
 
-  
+%h1="DES"
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
 %table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
@@ -68,7 +69,7 @@
           %th{:align => "left", :width => 150, :col => i, :value => assignment.point_value, :id => "#{assignment.id}"}
             %span{:class => "assignment"} 
               =assignment.name
-              =image_tag("exclm.png", {:class => "hover_button", :align => "right"})
+              =image_tag("exclm.png", {:class => "hover_button", :align => "right", :title => "hi"})
               -i += 1
 
   %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}

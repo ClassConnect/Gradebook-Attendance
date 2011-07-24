@@ -143,20 +143,6 @@ function init_keytable(){
 		"table": document.getElementById('gradebook_display'),
     "datatable": oTable
     } );
-	
-    keys.event.focus( null, null, function (nCell) {
-		keys.block = true;
-		
-		$(nCell).editable( function (sVal) {
-			return sVal;
-		}, { 
-      "type": 'example',
-			"onblur": 'submit',
-      "placeholder":""
-		});
-		
-		setTimeout( function () { $(nCell).click(); }, 0 );
-	});  
 }
 
 function gradeMatch(value, scale){
