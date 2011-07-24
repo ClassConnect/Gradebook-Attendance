@@ -42,7 +42,6 @@ class AssignmentsController < ApplicationController
     @string = @assignment.course_id.to_s
     respond_to do |format|
       if @assignment.save
-        @assignment.init_grades
         format.html
         format.js
       else

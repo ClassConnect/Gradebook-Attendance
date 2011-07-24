@@ -21,15 +21,6 @@ class Assignment
   #All grades accessible from here
   field :grades, :type => Hash, :default => {}
 
-  after_create :init_grades
-
-  def init_grades
-    students = Course.find(course_id).students
-    students.each do |student|
-      grades[student.id.to_s] = [:ungraded, :nocomment]
-    end
-    save
-  end
 
   def update_grade(student_id, grade)
     grades[student_id.to_s] = grade
