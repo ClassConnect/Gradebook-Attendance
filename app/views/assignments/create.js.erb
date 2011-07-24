@@ -1,7 +1,4 @@
-grade_array = [];
-<% @assignment.assignment_grades.each do |grade| %>
-  grade_array.unshift('<%= grade.id %>');
-<% end %>
+<% broadcast "/gradebook/#{@string}" do %>
 
 destroy_table();
 
@@ -10,16 +7,13 @@ $('.datatable').width(function(index, value){
 })
 //this is incredibly ghetto...we'll have to read to find where this damn thing is placed
 $('.dataTables_scroll').attr('style', "");
-$('tbody').attr('total_points', function(i, value){
-  return parseInt(value) + <%= @assignment.point_value %>
-});
-$("<th width='150' class='sorting' align='left'><span class='assignment' col='14' id='4e23c9cd80f6e318990000fc'><%= @assignment.name %><img align='right' src='/assets/exclm.png'/></span></th>").insertAfter('thead th:last');
+$("<th width='150' class='sorting' align='left'><%=@assignment.name%></th>").insertAfter('thead th:last');
 $('.datatable tbody tr').each(function(index, value){
-  $(this).append("<td points=" + <%= @assignment.point_value %> + " align='center' id=" + grade_array.pop() + " width='150'></td>");
+  $(this).append("<td points=" + <%= @assignment.point_value %> + " align='center'  width='150'></td>");
 });
 $('tbody').attr('cols', function(i, val){
   return parseInt(val) + 1;
 });
-initTable(<%= @assignment.assignment_grades.count %>);
-add_new_input();
-init_keytable();
+initTable(<%= @assignment.grades.count %>);
+
+<% end %>

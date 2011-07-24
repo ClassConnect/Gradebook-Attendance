@@ -1,5 +1,9 @@
 :javascript
   $(document).ready(function() {
+    var faye = new Faye.Client('http://localhost:9292/faye');
+    var subscription = faye.subscribe('/gradebook/#{@course.id}', function(message){
+      eval(message);
+    });
       //START OTHER STUFF
       add_new_input();
       var scale = #{@settings.grade_scale.grade_ranges.to_json :except => [:_id]}

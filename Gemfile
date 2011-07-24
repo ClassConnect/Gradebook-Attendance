@@ -9,6 +9,8 @@ gem 'mysql2'
 gem 'mongoid'
 gem 'bson_ext'
 
+gem 'faye'
+gem 'eventmachine'
 
 # Asset template engines
 gem 'haml'

@@ -39,6 +39,7 @@ class AssignmentsController < ApplicationController
 
   def create
     @assignment = Assignment.new(params[:assignment])
+    @string = @assignment.course_id.to_s
     respond_to do |format|
       if @assignment.save
         @assignment.init_grades

@@ -15,4 +15,11 @@ module ApplicationHelper
     s = '<input type="button" onclick="closeBox();" class="button" value="Cancel" />'
     s.html_safe
   end
+
+  def broadcast(channel, &block)
+    message = {:channel => channel, :data => capture(&block)}
+    uri = URI.parse("http://localhost:9292/faye")
+    Net::HTTP.post_form(uri, :message => message.to_json)
+  end
+  
 end
