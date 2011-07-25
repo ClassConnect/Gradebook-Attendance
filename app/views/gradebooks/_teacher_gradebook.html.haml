@@ -7,13 +7,12 @@
       //  calculateGrade(this, scale);
       //});
       //initTable(#{@students.count});
-      $('.dataTables_scroll .datatable').attr('style', "");
 
       //init_keytable();
       
     init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
     initTable(#{@students.count});
-
+      $('.dataTables_scrollBody .datatable').attr('style', "");
 
     //init_keytable();
 
