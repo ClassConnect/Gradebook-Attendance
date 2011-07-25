@@ -1,0 +1,10 @@
+%p
+  %span{:class => "grade_detail_row"}
+    =f.label :from
+    =f.text_field :from, {:size => "1", :maxlength => "3"}
+    =f.label :to
+    =f.text_field :to, {:size => "1", :maxlength => "3"}
+    =f.label "="
+    =f.text_field :name, {:size => "2", :maxlength => "3"} 
+    =f.hidden_field :_destroy
+    =link_to_function "remove", "remove_fields(this)"
