@@ -65,8 +65,6 @@ class GradeScalesController < ApplicationController
     respond_to do |format|
       if @grade_scale.update_attributes(params[:grade_scale])
         format.js
-      else
-        format.js
       end
     end
   end

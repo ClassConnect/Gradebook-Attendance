@@ -1,30 +1,19 @@
 :javascript
   $(document).ready(function() {
-    scale_mode_validate($('input[checked=checked]'));
+    scale_type();
     $('#edit_scale').prepend('<div id="notice"></div>');
     $('#edit_scale').bind('submit', function(){
       $('#notice').hide();
-      if($("input[type=radio]:checked").attr('value') === "scale"){
-        if(validate_scales_form()){
-          $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
-          closeBox();
-          return false;
-        }
-        else{
-          $('#notice').html('<h2>Grade ranges are busted.</h2>');
-          $('#notice').show();
-          return false;
-        }
+      if(validate_scales_form()){
+        $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
+        closeBox();
+        return false;
       }
       else{
-       $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
-       closeBox();
-       return false; 
+        $('#notice').html('<h2>Grade ranges are busted.</h2>');
+        $('#notice').show();
+        return false;
       }
-    });
-
-    $("input[type=radio]").click(function(){
-      scale_mode_validate(this);
     });
   }); 
 
@@ -42,7 +31,6 @@
     -#Nested models ignore scope, so you need to do it as the second arg
     =s.fields_for :grade_ranges, @scale.grade_ranges.desc(:from) do |builder|  
       =render "grade_range_fields", :f => builder
+  =s.submit
   =link_to_add_fields "Add Range", s, :grade_ranges
-  %div{:id => "scale_submission"}
-    =s.submit
-    =close_openBox_input
+  =close_openBox_input

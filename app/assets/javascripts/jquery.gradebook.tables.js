@@ -40,6 +40,7 @@ function add_new_input(){
       $(this).append("/" + assignment_point_value(position[1]));
       return(input);
     }
+    
     /*
     plugin: function(settings, original){
       var a = keys.fnGetCurrentPosition();
@@ -206,7 +207,7 @@ function link_to_openbox(text, url){
 //TODO: add support for floats?
 //TODO: add 
 function validate_scales_form(){
-  rows = $('.grade_detail_row');
+  rows = $('.grade_detail_row:visible');
   row_count = rows.length-1;
   var min, max, current_upper, new_lower;
   var name_array = new Array();
@@ -237,6 +238,7 @@ function validate_scales_form(){
 
 function remove_fields(link){
   $(link).prev("input[type=hidden]").val("1");
+  $(link).closest(".grade_detail_row input[type=text]").attr("disabled", true);
   $(link).closest(".grade_detail_row").hide();
 }
 
@@ -244,7 +246,6 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g");
   $(link).parent().children("#range_fields").append(content.replace(regexp, new_id));
-  console.log($(link).parent());
 }
 
 function assignment_id(index){
@@ -258,4 +259,19 @@ function assignment_point_value(index){
 function update_grade_url(object){
   var position = oTable.fnGetPosition(object);
   return '/gradebooks/assignments/' + assignment_id(position[COLUMN_NUMBER_INDEX]) + '/update';
+}
+
+function scale_mode_validate(object){
+  if($(object).attr('value') === "scale"){
+    $("#range_fields").show();
+    $("#add_range_button").show();
+    $("#range_fields input").removeAttr("disabled");
+    $("#range_fields").removeAttr("disabled");
+  }
+  else{
+    $("#range_fields").hide();
+    $("#add_range_button").hide();
+    $("#range_fields input").attr("disabled", true);
+    $("#range_fields").attr("disabled", true);
+  }
 }

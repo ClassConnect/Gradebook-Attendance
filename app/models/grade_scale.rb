@@ -5,9 +5,9 @@ class GradeScale
   
   DEFAULT_SCALE = [{:from => 0,:to => 59, :name =>"F"}, {:from=>60,:to=>69,:name=>"D"}, {:from=>70,:to =>79,:name =>"C"}, {:from =>80,:to=>89,:name=>"B"},{:from=>90,:to=>100,:name=>"A"}]
 
-  field :option, :type => String, :default => "scale"
   field :course_id, :type => Integer
-  
+  field :scale_type, :type => String, :default => "scale"
+
   belongs_to :gradebook_settings, :class_name => "GradebookSettings"
   embeds_many :grade_ranges
   after_create :init_default_scale
