@@ -20,8 +20,11 @@ class Assignment
   field :average, :type => Float
   #All grades accessible from here
   field :grades, :type => Hash, :default => {}
+  field :dirty_grade, :type => Boolean, :default => false
 
-
+  #Mongoid won't give me changes to arrays?
+  #It sucks because I'm going to have to store a bool
+  
   def update_grade(student_id, grade)
     grades[student_id.to_s] = grade
     save
@@ -39,5 +42,6 @@ class Assignment
       self.save
     end
   end
+
 
 end

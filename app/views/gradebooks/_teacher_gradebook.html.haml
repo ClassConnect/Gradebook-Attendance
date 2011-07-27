@@ -24,6 +24,10 @@
       openBox('/gradebooks/grading_scale/#{@course.id}', 350);
     });
 
+    $('.testclass').mouseover(function(){
+      console.log("hi");
+    });
+
     
     /*
     var popup_content;
@@ -47,7 +51,7 @@
     });
     */
 
-    $(".hover_button").not('.tt_init').tooltip();
+    $(".hover_button").not('.tt_init').tooltip(jeditable_dictionary);
     $(".hover_button").not('.tt_init').addClass('tt_init');
 
 
@@ -56,39 +60,39 @@
 %h1="DES"
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
-%table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
-  %thead
-    %tr{:class => "header_row"}
-      %th{:width => 110} First Name
-      %th{:width => 110} Last Name
-      %th{:width => 50} Grade
-      -i=3
-      %span{:id => "assignment_names"}
-        -@assignments.each do |assignment|
-          %th{:align => "left", :width => 150, :col => i, :value => assignment.point_value, :id => "#{assignment.id}"}
-            %span{:class => "assignment"} 
+%div{:id => "gradebook_div"}
+  %table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
+    %thead
+      %tr{:class => "header_row"}
+        %th{:width => 110} First Name
+        %th{:width => 110} Last Name
+        %th{:width => 50} Grade
+        -i=3
+        %span{:id => "assignment_names"}
+          -@assignments.each do |assignment|
+            %th{:class => "assignment_header", :col => i, :value => assignment.point_value, :id => "#{assignment.id}"}
               =assignment.name
               =image_tag("exclm.png", {:class => "hover_button", :align => "right", :title => "hi"})
               -i += 1
 
-  %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}
-    -@students.each do |student|
-      -i=0
-      -if student.is_student?
-        -id_string = student.id.to_s
-        %tr{:class => "row_entry", :id => "#{student.id}"}
-          %td{:width => 110}=student.first_name.capitalize
-          %td{:width => 110}=student.last_name.capitalize
-          %td{:class => "grade_entry"}="" 
-          -@assignments.each do |assignment|
-            -if current_assignment = assignment.grades[id_string]
-              -if assignment.grades[id_string][0] != :ungraded
-                %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
+    %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}
+      -@students.each do |student|
+        -i=0
+        -if student.is_student?
+          -id_string = student.id.to_s
+          %tr{:class => "row_entry", :id => "#{student.id}"}
+            %td{:width => 110}=student.first_name.capitalize
+            %td{:width => 110}=student.last_name.capitalize
+            %td{:width => 50}="" 
+            -@assignments.each do |assignment|
+              -if current_assignment = assignment.grades[id_string]
+                -if assignment.grades[id_string][0] != :ungraded
+                  %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
+                -else
+                  %td{:align => "center", :class => "grade_entry"}=""
               -else
                 %td{:align => "center", :class => "grade_entry"}=""
-            -else
-              %td{:align => "center", :class => "grade_entry"}=""
-            -i+=1
+              -i+=1
 
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}

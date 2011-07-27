@@ -5,11 +5,36 @@ var oTable;
 var keys;
 var COLUMN_NUMBER_INDEX = 1;
 
-var assignments_array;
+assignments_array = [];
+visible_columns = 0;
 var grading_type;
+jeditable_dictionary = {
+      onBeforeShow: function(){
+        var assignment_id = this.getTrigger().parent().attr('id');
+        var url_string = '/assignments/' + assignment_id; 
+        $.ajax({
+          type: 'GET',
+          async: false,
+          url: url_string,
+          dataType: "html",
+          success: function(data){
+            popup_content = data;
+          }
+        });
+      },
+      onShow: function(){
+          $('.tooltip').html(popup_content);
+        }
+    };
+
+function new_assignment(id, point_value){
+  return {_id : id, 
+  point_value : point_value};
+}
 
 function init_assignments_array(json){
   assignments_array = json;
+  visible_columns = assignments_array.length
 }
 
 function get_table(){
@@ -32,7 +57,7 @@ function unblock_keytable(){
 //Realistcally, for performance reasons, we'll have to write our own
 //Cache position? DOM access is slow
 function add_new_input(){
-  $.editable.addInputType('example', {
+  $.editable.addInputType('edit_grade', {
     element : function(settings, original){
       var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
@@ -93,7 +118,8 @@ function initTable(num_students) {
     "iDisplayLength": num_students,
     "bDestroy": true,
     "bAutoWidth": false,
-    "sScrollX": "100%",
+    "sScrollX": "550px",
+    "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
     "bRetrieve": true
   });
@@ -101,7 +127,7 @@ function initTable(num_students) {
   new FixedColumns(oTable, {
     //look at sizing stuff
     "iLeftColumns": 3,
-    "iLeftWidth": 300
+    "sHeightMatch": "none"
   });
 
   
@@ -121,7 +147,10 @@ function initTable(num_students) {
    
      return value;
     }, {
-    "type": "example",
+    "type": "edit_grade",
+    "cssclass": "testclass",
+    "width": "20px",
+    "height": "",
     "placeholder": "",
     "onblur": "submit"
     /*,

@@ -70,13 +70,18 @@ class AssignmentsController < ApplicationController
       @assignment.save
     end
     
-    @assignment.grades[id.to_s][0] = params[:value]
+    if params[:value] != ""
+      @assignment.grades[id.to_s][0] = params[:value].to_i
+    else
+      @assignment.grades[id.to_s][0] = :ungraded
+    end
 
     #This is unfortunately necessary due to a Mongoid bug
     array = @assignment.grades[id.to_s]
     @assignment.grades[id.to_s] = nil
     @assignment.save :validate => false
     @assignment.grades[id.to_s] = array
+    @assignment.dirty_grade = true
     @assignment.save :validate => false
 
     @returned = params[:value]

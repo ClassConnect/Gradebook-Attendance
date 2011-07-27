@@ -155,12 +155,14 @@
                     settings.height = savedheight;
                 } else {
                     if (settings.width != 'none') {
+                    //TED IS CHANGING RIGHT HERE
                         settings.width = 
-                            settings.autowidth ? $(self).width()  : settings.width;
+                            settings.autowidth ? savedwidth  : settings.width;
                     }
                     if (settings.height != 'none') {
+                    //TED IS CHANGING RIGHT HERE
                         settings.height = 
-                            settings.autoheight ? $(self).height() : settings.height;
+                            settings.autoheight ? savedheight : settings.height;
                     }
                 }
                 
