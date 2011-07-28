@@ -1,0 +1,16 @@
+:javascript
+  $(document).ready(function(){
+  });
+
+=@assignment.name
+%br
+=@assignment.assignment_type.name
+%br
+-unless @assignment.average == "no_grades"
+  ="Average: " + @assignment.average.to_s
+%br
+
+%div{:align => "right"}
+  =close_openBox_input
+
+=render :partial => "graph"

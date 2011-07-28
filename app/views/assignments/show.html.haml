@@ -1,5 +1,13 @@
+:javascript
+  $(function(){
+    console.log("TEST");
+  });
 =@assignment.name
 %br
 =@assignment.assignment_type.name
 %br
+-unless @assignment.average == "no_grades"
+  ="Average: " + @assignment.average.to_s
+%br
 =link_to_openBox("Edit", id_to_link)
+=link_to_openBox("Visual", "/gradebooks/assignments/#{@assignment.id}/report")

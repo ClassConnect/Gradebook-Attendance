@@ -4,7 +4,7 @@ var SCALE_NAME_BOX_INDEX = 2;
 var oTable;
 var keys;
 var COLUMN_NUMBER_INDEX = 1;
-
+student_names = [];
 assignments_array = [];
 visible_columns = 0;
 var grading_type;
@@ -113,6 +113,7 @@ function add_new_input(){
 }
 
 function initTable(num_students) {
+  init_student_names();
   oTable = $('#gradebook_display').dataTable(
   {
     "iDisplayLength": num_students,
@@ -127,6 +128,7 @@ function initTable(num_students) {
   new FixedColumns(oTable, {
     //look at sizing stuff
     "iLeftColumns": 3,
+    "iLeftWidth": 300,
     "sHeightMatch": "none"
   });
 
@@ -303,4 +305,17 @@ function scale_mode_validate(object){
     $("#range_fields input").attr("disabled", true);
     $("#range_fields").attr("disabled", true);
   }
+}
+
+function init_student_names(){
+  student_names = jQuery.parseJSON($('#gradebook_display tbody ').attr('students'));
+}
+
+function series_comparator(a, b){
+  if (a['data'] < b['data'])
+    return -1;
+  if (a['data'] > b['data'])
+    return 1;
+  if (a['data'] === b['data'])
+    return 0;
 }

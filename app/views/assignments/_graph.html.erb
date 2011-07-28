@@ -1,0 +1,60 @@
+<script type="text/javascript" charset="utf-8">
+  var length = student_names.length;
+  var series_array = [];
+  var point_value = <%= @assignment.point_value %>
+  <% @assignment.grades.each_key do |student_id| %>
+    <% current_grade = @assignment.grades[student_id][0] %>
+    <% if current_grade != :ungraded %>
+      <% calculated_grade = (current_grade.to_f / @assignment.point_value) * 100 %> 
+      var grade_value = (<%= calculated_grade %>);
+      series_array.push({name: student_names["<%= student_id %>"] + ",<%= current_grade %>", data: <%= '%.2f' % calculated_grade %>});
+    <% end %>
+  <% end %>
+  series_array.sort(series_comparator);
+  chart1 = new Highcharts.Chart({
+         chart: {
+            renderTo: 'container',
+            type: 'column',
+            borderRadius: 0
+         },
+         tooltip: {
+           formatter: function(){
+              var name = this.series.name.split(',');
+              return name[0] + '<br/>' + this.y + 
+              "% (" + name[1] + "/" + point_value + ")";
+           }
+         },
+         credits: {
+           enabled: false
+         },
+         legend: {
+           enabled: false
+         },
+         title: {
+            text: '<%= @assignment.name %> Grades'
+         },
+         xAxis: {
+          allowDecimals: false,
+          labels:{
+            enabled: false
+          }
+         },
+         yAxis: {
+            title: {
+               text: 'Grade'
+            },
+            labels:{
+              formatter: function(){
+                return "" + this.value + "%";
+              }
+            }
+         },
+         plotOptions: {
+           series: {
+             color: '#FF0000'
+           }
+         },
+         series: series_array
+      });
+</script>
+<div id="container"></div>

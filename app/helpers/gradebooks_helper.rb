@@ -1,31 +1,19 @@
 module GradebooksHelper
   include RailsDatatables
 
-#I made this shit for ajax'd datatables
-#Don't have the heart to delete it now
-  def prepare_for_datatables
-    prepared_students = "["
-    @students.each do |student|
-      prepared_students << student.prepare_ajax
-      unless student == @students.last
-        prepared_students << ","
+  def students_to_attr(student_array)
+    returned_hash = "{"
+    student_array.each do |student|
+      returned_hash += "\"" + student.id.to_s + "\"" + ":" + "\"" +
+      student.first_name.capitalize + " " + student.last_name.capitalize +
+      "\""
+      unless student == student_array.last
+        returned_hash += ","
       end
     end
-    prepared_students << "]"
-  end
-
-  def generate_columns
-    columns = "[\"Name\""
-    if @assignments.count > 0
-      columns << ", "
-      @assignments.each do |assignment|
-        columns << "\"" << assignment.name << "\""
-        unless assignment == @assignments.last
-          columns << ", "
-        end
-      end
-    end
-    columns << "]"
+    returned_hash += "}"
+    puts returned_hash
+    return returned_hash
   end
 
 

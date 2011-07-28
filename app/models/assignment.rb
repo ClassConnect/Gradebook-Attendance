@@ -1,6 +1,7 @@
 class Assignment
   include Mongoid::Document
   include Mongoid::Timestamps
+  include ActionView::Helpers::NumberHelper
 
   cache
   
@@ -20,7 +21,9 @@ class Assignment
   field :average, :type => Float
   #All grades accessible from here
   field :grades, :type => Hash, :default => {}
-  field :dirty_grade, :type => Boolean, :default => false
+  field :dirty_grade, :type => Boolean
+
+  default_scope asc(:created_at)
 
   #Mongoid won't give me changes to arrays?
   #It sucks because I'm going to have to store a bool
@@ -31,17 +34,29 @@ class Assignment
   end
 
   def calculate_average
+    puts dirty_grade
     if(dirty_grade)
       total_grade=0.0
-      to_grade = assignment_grades.where(:graded => true)
-      to_grade.each do |grade|
-        total_grade += grade.value
+      valid_grades=0
+      self.grades.each_key do |student_id|
+        if(grades[student_id][0] != :ungraded)
+          total_grade += grades[student_id][0]
+          valid_grades += 1
+        end
       end
-      self.average = ((total_grade / point_value) / to_grade.count) * 100
+      if valid_grades != 0
+        self.average = percentage(((total_grade / point_value) / valid_grades) * 100)
+      else
+        self.average = "no_grades"
+      end
       self.dirty_grade = false
       self.save
     end
   end
 
+  private
+  def percentage(number)
+    return number_to_percentage(number, :precision => 2, :strip_insignificant_zeros => true)
+  end
 
 end

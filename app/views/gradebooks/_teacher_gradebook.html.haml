@@ -13,6 +13,8 @@
     init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
     initTable(#{@students.count});
       $('.dataTables_scrollBody .datatable').attr('style', "");
+      $('.assignment_head .datatable').attr('style', "");
+      $('.datatable .DTFC_Cloned').attr('style', "");
 
     //init_keytable();
 
@@ -75,7 +77,7 @@
               =image_tag("exclm.png", {:class => "hover_button", :align => "right", :title => "hi"})
               -i += 1
 
-    %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i}
+    %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i, :students => (students_to_attr(@students))}
       -@students.each do |student|
         -i=0
         -if student.is_student?

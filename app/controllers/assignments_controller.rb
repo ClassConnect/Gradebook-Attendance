@@ -10,6 +10,7 @@ class AssignmentsController < ApplicationController
 
   def show
     @assignment = Assignment.find(params[:id])
+    @assignment.calculate_average
     respond_to do |format|
       format.html {render :layout => false}
       format.json {render json: @assignment}
@@ -60,7 +61,7 @@ class AssignmentsController < ApplicationController
     @assignment.destroy
   end
 
-  #Method for updating individual grade
+  #Updating individual grade
   def update_assignment_grade
     @assignment = Assignment.find(params[:id])
     puts params[:value]
@@ -81,10 +82,18 @@ class AssignmentsController < ApplicationController
     @assignment.grades[id.to_s] = nil
     @assignment.save :validate => false
     @assignment.grades[id.to_s] = array
-    @assignment.dirty_grade = true
+    @assignment.update_attributes!(dirty_grade: true)
     @assignment.save :validate => false
+    puts @assignment.dirty_grade
 
     @returned = params[:value]
+    respond_to do |format|
+      format.html {render :layout => false}
+    end
+  end
+
+  def grade_report
+    @assignment = Assignment.find(params[:id])
     respond_to do |format|
       format.html {render :layout => false}
     end
