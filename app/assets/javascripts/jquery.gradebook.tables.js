@@ -1,11 +1,13 @@
 var SCALE_FROM_BOX_INDEX = 0;
 var SCALE_TO_BOX_INDEX = 1;
 var SCALE_NAME_BOX_INDEX = 2;
+var grading_scale;
 var oTable;
 var keys;
 var COLUMN_NUMBER_INDEX = 1;
 student_names = [];
 assignments_array = [];
+assignments_hash = new Object();
 visible_columns = 0;
 var grading_type;
 jeditable_dictionary = {
@@ -30,6 +32,10 @@ jeditable_dictionary = {
 function new_assignment(id, point_value){
   return {_id : id, 
   point_value : point_value};
+}
+
+function init_gradescale(scale){
+  grading_scale = scale;
 }
 
 function init_assignments_array(json){
@@ -59,10 +65,9 @@ function unblock_keytable(){
 function add_new_input(){
   $.editable.addInputType('edit_grade', {
     element : function(settings, original){
-      var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
+      var input = $('<input type="text" style="width: 25px;" autocomplete="off">hi');
       var position = oTable.fnGetPosition(original);
-      $(this).append(input);
-      $(this).append("/" + assignment_point_value(position[1]));
+      $(this).append(input).append("/" + assignment_point_value(position[1]));
       return(input);
     }
     
@@ -150,22 +155,23 @@ function initTable(num_students) {
      return value;
     }, {
     "type": "edit_grade",
-    "cssclass": "testclass",
-    "width": "20px",
     "height": "",
     "placeholder": "",
     "onblur": "submit"
-    /*,
+    ,
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
       //So the 4th column has index 0
       oTable.fnUpdate(value, aPos[0], aPos[1] + 3);
-      var grade = calculateGrade($(this).parent(), scale);
-      oTable.fnUpdate(grade, aPos[0], 2);
-      $(this).attr('score', value);
+      //var grade = calculateGrade($(this).parent(), scale);
+      //oTable.fnUpdate(grade, aPos[0], 2);
+      if(value != "")
+        $(this).attr('score', value);
+      else
+        $(this).removeAttr('score');
     },
-    */
+    
   });
     
 
@@ -191,27 +197,28 @@ function gradeMatch(value, scale){
   return scale[length-1]['name'];
 }
 
-//TODO: Use JSON parse function for scale. I dunno what the hell it's called
-function calculateGrade(dom_element, scale){
+function calculateGrade(dom_element){
   var grade=0, total_points=0, graded=false;
   id = "#" + $(dom_element).attr('id');
   id = id + " > .grade"
-  $(dom_element).children().each(function(){
-    var points_value = $(this).attr('points');
-    if(points_value != undefined){
-      var contents = $(this).html();
-      if(contents != ""){
-        graded = true;
-        grade += parseInt(contents);
-        total_points += parseInt(points_value);
-      }
-    }
+  //console.log(id);
+  //console.log($(dom_element).children(['score']));
+  $(dom_element).children('[score]').each(function(){
+    var position = oTable.fnGetPosition(this);
+    var score = parseInt($(this).attr('score'));
+    var point_value = assignment_point_value(position[1]);
+    var contents = $(this).html();
+    graded = true;
+    grade += parseInt(contents);
+    total_points += point_value;
   });
+
   if(graded){
     grade = grade / total_points;
     grade *= 100;
-    grade = (gradeMatch(grade, scale));
+    grade = (gradeMatch(grade, grading_scale));
     $(id).html(grade);
+    console.log(grade);
     return grade;
   }
   return "";
@@ -318,4 +325,8 @@ function series_comparator(a, b){
     return 1;
   if (a['data'] === b['data'])
     return 0;
+}
+
+function initial_grade(){
+
 }

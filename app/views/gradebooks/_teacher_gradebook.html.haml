@@ -2,21 +2,28 @@
   $(document).ready(function() {
       //START OTHER STUFF
       add_new_input();
-      var scale = #{@settings.grade_scale.grade_ranges.to_json :except => [:_id]}
-      //$('.datatable tbody tr').each(function(){
-      //  calculateGrade(this, scale);
-      //});
+      init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
+      init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]});
+      
+      /*
+      $('.datatable tbody tr').each(function(){
+        calculateGrade(this);
+      });
+      */
+      
       //initTable(#{@students.count});
 
       //init_keytable();
       
-    init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
     initTable(#{@students.count});
-      $('.dataTables_scrollBody .datatable').attr('style', "");
-      $('.assignment_head .datatable').attr('style', "");
-      $('.datatable .DTFC_Cloned').attr('style', "");
+    $('.dataTables_scrollBody .datatable').attr('style', "");
+    $('.assignment_head .datatable').attr('style', "");
+    $('.datatable .DTFC_Cloned').attr('style', "");
+    //This is a dumb way to do it, but when we go back for performance, we can fix it
 
-    //init_keytable();
+    $('.dataTables_scrollBody .datatable tbody tr').each(function(){
+      calculateGrade(this);
+    });
 
     $('#add_assignment_button').click(function(){
       openBox('/gradebooks/#{@course.id}/assignments', 350);
