@@ -151,13 +151,22 @@ function initTable(num_students) {
          dataType: "html"
        });
      }
-     return percentage_format((value / assignment_point_value(position[1]) * 100));
+    if(value != ""){
+      $(this).attr('score', value);
+      return percentage_format((value / assignment_point_value(position[1]) * 100));
+    }
+    else{
+      $(this).removeAttr('score');
+      return "";
+    }
     }, {
     "type": "edit_grade",
     "height": "",
     "placeholder": "",
     "onblur": "submit" ,
-    "data": $(this).attr('score'),
+    "data": function(){
+      return $(this).attr('score');
+    },
     
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
@@ -165,11 +174,7 @@ function initTable(num_students) {
       //So the 4th column has index 0
       //var grade = calculateGrade($(this).parent(), scale);
       //oTable.fnUpdate(grade, aPos[0], 2);
-      if(value != "")
-        $(this).attr('score', value);
-      else
-        $(this).removeAttr('score');
-    },
+          },
   });
     
 
