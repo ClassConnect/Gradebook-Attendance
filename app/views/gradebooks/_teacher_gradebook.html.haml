@@ -3,16 +3,9 @@
       //START OTHER STUFF
       add_new_input();
       init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
-      init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]});
-      
-      /*
-      $('.datatable tbody tr').each(function(){
-        calculateGrade(this);
-      });
-      */
+      init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}");
       
       //initTable(#{@students.count});
-
       //init_keytable();
       
     initTable(#{@students.count});
@@ -22,7 +15,8 @@
     //This is a dumb way to do it, but when we go back for performance, we can fix it
 
     $('.dataTables_scrollBody .datatable tbody tr').each(function(){
-      calculateGrade(this);
+      var grade = calculateGrade(this);
+      apply_grade(this, grade);
     });
 
     $('#add_assignment_button').click(function(){
@@ -92,7 +86,7 @@
           %tr{:class => "row_entry", :id => "#{student.id}"}
             %td{:width => 110}=student.first_name.capitalize
             %td{:width => 110}=student.last_name.capitalize
-            %td{:width => 50}="" 
+            %td{:width => 50, :class => "grade"}="" 
             -@assignments.each do |assignment|
               -if current_assignment = assignment.grades[id_string]
                 -if assignment.grades[id_string][0] != :ungraded

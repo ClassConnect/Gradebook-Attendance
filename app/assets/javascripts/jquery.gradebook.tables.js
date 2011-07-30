@@ -5,11 +5,12 @@ var grading_scale;
 var oTable;
 var keys;
 var COLUMN_NUMBER_INDEX = 1;
+var grading_scale_type; 
 student_names = [];
 assignments_array = [];
 assignments_hash = new Object();
 visible_columns = 0;
-var grading_type;
+var grading_scale_method;
 jeditable_dictionary = {
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().attr('id');
@@ -34,8 +35,9 @@ function new_assignment(id, point_value){
   point_value : point_value};
 }
 
-function init_gradescale(scale){
+function init_gradescale(scale, type){
   grading_scale = scale;
+  grading_scale_method = type;
 }
 
 function init_assignments_array(json){
@@ -159,11 +161,11 @@ function initTable(num_students) {
     "placeholder": "",
     "onblur": "submit"
     ,
+    
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
       //FixedCol resets indices 
       //So the 4th column has index 0
-      oTable.fnUpdate(value, aPos[0], aPos[1] + 3);
       //var grade = calculateGrade($(this).parent(), scale);
       //oTable.fnUpdate(grade, aPos[0], 2);
       if(value != "")
@@ -171,6 +173,7 @@ function initTable(num_students) {
       else
         $(this).removeAttr('score');
     },
+    
     
   });
     
@@ -186,43 +189,85 @@ function init_keytable(){
     } );
 }
 
-function gradeMatch(value, scale){
-  //Note: reverse while loop is faster
-  length = scale.length;
+/*
+*
+*/
+function gradeMatch(value){
+  length = grading_scale.length;
   for(var i=0; i<length; i++){
-    if(value <= scale[i]['to']){
-      return scale[i]['name'];
+    if(value <= grading_scale[i]['to']){
+      return grading_scale[i]['name'];
     }
   }
-  return scale[length-1]['name'];
+  return grading_scale[length-1]['name'];
 }
 
+/*
+* Takes in a TR and calculates the grade based on the scores entered. 
+* The score is taken from attr "score", NOT the HTML of the TD. Further, only 
+* assignments that have an entry are factored into the score.
+*
+* Returns the grade to be displayed as a string.
+*/
 function calculateGrade(dom_element){
   var grade=0, total_points=0, graded=false;
-  id = "#" + $(dom_element).attr('id');
-  id = id + " > .grade"
-  //console.log(id);
-  //console.log($(dom_element).children(['score']));
-  $(dom_element).children('[score]').each(function(){
-    var position = oTable.fnGetPosition(this);
-    var score = parseInt($(this).attr('score'));
-    var point_value = assignment_point_value(position[1]);
-    var contents = $(this).html();
-    graded = true;
-    grade += parseInt(contents);
-    total_points += point_value;
-  });
-
-  if(graded){
-    grade = grade / total_points;
-    grade *= 100;
-    grade = (gradeMatch(grade, grading_scale));
-    $(id).html(grade);
-    console.log(grade);
-    return grade;
+  if(grading_scale_method !== "manual"){
+    //Iterate over every cell and calculate score
+    $(dom_element).children('[score]').each(function(){
+      var position = oTable.fnGetPosition(this);
+      graded = true;
+      //We only factor in grades that have been graded
+      //(Blank - "" - is "ungraded")
+      grade += parseInt($(this).attr('score'));
+      total_points += assignment_point_value(position[1]);
+    });
+    if(graded){
+      grade = grade / total_points;
+      grade *= 100;
+      if(grading_scale_method === "scale"){
+        grade = (gradeMatch(grade));
+      }
+      else{
+        grade = percentage_format(grade);
+      }
+      return grade;
+    }
+    return "";
   }
-  return "";
+  return "MANUAL";
 }
+
+/*
+* Takes a TR and updates the grades column. THIS FUNCTION HAS SIDE-EFFECTS. 
+* The grade is applied to the "Grades" column, and DataTables is updated, but
+* the table is NOT redrawn for speed and positioning.
+*/ 
+function apply_grade(dom_element, grade){
+  var row_id = "#" + $(dom_element).attr('id');
+  $(row_id + "> .grade").html(grade);
+  var position = oTable.fnGetPosition(dom_element);
+  console.log(position);
+  oTable.fnUpdate(grade, position, 2, false);
+}
+
+function percentage_format(number){
+  var string_number = "" + number;
+  var decimal_position;
+  if((decimal_position = string_number.indexOf(".")) != -1){
+    string_number = number.toFixed(2);
+    //next, need to check to make sure that there aren't double zeroes
+    if(string_number[decimal_position+2] === "0"){
+      string_number = string_number.slice(0, string_number.length - 1);
+      //If there are two insignifcant zeroes, we need to remove them AND the decimal
+      if(string_number[decimal_position+1] === "0"){
+        string_number = string_number.slice(0, string_number.length - 2);
+      }
+    }
+  }
+  return string_number + "%";
+}
+
+
 
 function _openbox_helper(text, content_url){
   var string ='<a class="button" href="#" onclick="openBox(content_url, 350); return false;">'+ text +'</a>'
@@ -328,5 +373,4 @@ function series_comparator(a, b){
 }
 
 function initial_grade(){
-
 }
