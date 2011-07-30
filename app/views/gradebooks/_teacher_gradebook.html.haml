@@ -91,7 +91,7 @@
             -@assignments.each do |assignment|
               -if current_assignment = assignment.grades[id_string]
                 -if assignment.grades[id_string][0] != :ungraded
-                  %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=assignment.grades[id_string][0]
+                  %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=number_to_percentage((assignment.grades[id_string][0].to_f / assignment.point_value) * 100, :precision => 2, :strip_insignificant_zeros => true)
                 -else
                   %td{:align => "center", :class => "grade_entry"}=""
               -else
