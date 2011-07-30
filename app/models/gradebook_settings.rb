@@ -3,8 +3,7 @@ class GradebookSettings
 
   
   field :course_id, :type => Integer
-  #Change away from integer? It'll be smaller...maybe symbols?
-  field :grading_method, :type => Integer
   has_one :grade_scale
+  field :percent_display, :type => Boolean, :default => true
 
 end

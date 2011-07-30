@@ -4,6 +4,7 @@
       add_new_input();
       init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
       init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}");
+
       
       //initTable(#{@students.count});
       //init_keytable();

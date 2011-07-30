@@ -67,12 +67,11 @@ function unblock_keytable(){
 function add_new_input(){
   $.editable.addInputType('edit_grade', {
     element : function(settings, original){
-      var input = $('<input type="text" style="width: 25px;" autocomplete="off">hi');
+      var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
       $(this).append(input).append("/" + assignment_point_value(position[1]));
       return(input);
     }
-    
     /*
     plugin: function(settings, original){
       var a = keys.fnGetCurrentPosition();
@@ -144,7 +143,6 @@ function initTable(num_students) {
   //TODO: make this restful?
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
     var position = oTable.fnGetPosition(this);
-    
     if(value != $(this).attr('score')){
        $.ajax({
          type: 'POST',
@@ -153,14 +151,13 @@ function initTable(num_students) {
          dataType: "html"
        });
      }
-   
-     return value;
+     return percentage_format((value / assignment_point_value(position[1]) * 100));
     }, {
     "type": "edit_grade",
     "height": "",
     "placeholder": "",
-    "onblur": "submit"
-    ,
+    "onblur": "submit" ,
+    "data": $(this).attr('score'),
     
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
@@ -173,8 +170,6 @@ function initTable(num_students) {
       else
         $(this).removeAttr('score');
     },
-    
-    
   });
     
 
@@ -246,7 +241,6 @@ function apply_grade(dom_element, grade){
   var row_id = "#" + $(dom_element).attr('id');
   $(row_id + "> .grade").html(grade);
   var position = oTable.fnGetPosition(dom_element);
-  console.log(position);
   oTable.fnUpdate(grade, position, 2, false);
 }
 
