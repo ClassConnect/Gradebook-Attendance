@@ -170,11 +170,11 @@ function initTable(num_students) {
     
     "callback" : function(value, settings) {
       var aPos = oTable.fnGetPosition(this);
-      //FixedCol resets indices 
-      //So the 4th column has index 0
-      //var grade = calculateGrade($(this).parent(), scale);
-      //oTable.fnUpdate(grade, aPos[0], 2);
-          },
+      oTable.fnUpdate(value, aPos[0], aPos[2], false);
+      console.log("Wrote to " + aPos[0] + ", " + aPos[2]);
+      var grade = calculateGrade($(this).parent());
+      apply_grade_by_column($(this).parent(), aPos[0], grade);
+    },
   });
     
 
@@ -247,6 +247,12 @@ function apply_grade(dom_element, grade){
   $(row_id + "> .grade").html(grade);
   var position = oTable.fnGetPosition(dom_element);
   oTable.fnUpdate(grade, position, 2, false);
+}
+
+function apply_grade_by_column(dom_element, column, grade){
+  var row_id = "#" + $(dom_element).attr('id');
+  $(row_id + "> .grade").html(grade);
+  oTable.fnUpdate(grade, column, 2, false);
 }
 
 function percentage_format(number){
