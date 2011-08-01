@@ -1,7 +1,7 @@
 var SCALE_FROM_BOX_INDEX = 0;
 var SCALE_TO_BOX_INDEX = 1;
 var SCALE_NAME_BOX_INDEX = 2;
-var grading_scale;
+grading_scale = [];
 var oTable;
 var keys;
 var COLUMN_NUMBER_INDEX = 1;
@@ -10,6 +10,7 @@ var TOTAL_INDEX = 2;
 var student_count;
 student_names = [];
 assignments_array = [];
+_columns_to_destroy = [];
 assignments_hash = new Object();
 visible_columns = 0;
 var grading_scale_method;
@@ -140,6 +141,18 @@ function add_new_input(){
 }
 
 function initTable(num_students) {
+  if(_columns_to_destroy.length != 0){
+    $('.datatable tr').each(function(){
+      var destroy_length = _columns_to_destroy.length;
+      while(destroy_length--){
+        $($(this).children()[_columns_to_destroy[destroy_length]]).remove();
+        console.log("I'm working...");
+      }
+    });
+    _columns_to_destroy.length = 0;
+  }
+
+  
   init_student_names();
   oTable = $('#gradebook_display').dataTable(
   {
@@ -413,7 +426,6 @@ function assignment_column_from_id(assignment_id){
 
 */
 function get_true_position(position){
-  console.log(position);
   var true_position=-1;
   if(position >= 0){
     var grade_listing = $('.dataTables_scrollBody .row_entry');

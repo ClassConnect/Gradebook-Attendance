@@ -2,12 +2,17 @@ var position = find_assignment_by_id("<%= @grade_id %>");
 var true_position =  get_true_position(position);
 assignments_array.splice(position, 1);
 oTable.fnSetColumnVis(true_position, false);
+$('.datatable').width(function(index, value){
+  return assignments_array.length * 150;
+})
+//this is incredibly ghetto...we'll have to read to find where this damn thing is placed
+$('.dataTables_scroll').attr('style', "");
+_columns_to_destroy.push(true_position);
 if(true_position > 0){
   $('.dataTables_scrollBody .datatable tbody tr').each(function(){
-    $(this).children()[position].remove();
+    $(this).children()[position].html("");
     var grade = calculateGrade(this);
     apply_grade(this, grade);
   }); 
-  $('.dataTables_scrollHead .datatable #' + "<%= @grade_id %>").remove();
 }
 //fnUpdate can be made faster. Look into this later

@@ -1,0 +1,7 @@
+console.log("HI");
+grading_scale = <%= @grade_scale.grade_ranges.asc(:from).to_json(:except => [:_id]).html_safe %>;
+grading_scale_method = "<%= @grade_scale.scale_type %>";
+$('.dataTables_scrollBody .datatable tbody tr').each(function(){
+  var grade = calculateGrade(this);
+  apply_grade(this, grade);
+});
