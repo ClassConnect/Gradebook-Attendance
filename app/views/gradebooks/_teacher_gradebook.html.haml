@@ -70,7 +70,7 @@
       %tr{:class => "header_row"}
         %th{:width => 110} First Name
         %th{:width => 110} Last Name
-        %th{:width => 50} Grade
+        %th{:width => 100} Grade
         -i=3
         %span{:id => "assignment_names"}
           -@assignments.each do |assignment|
@@ -87,7 +87,7 @@
           %tr{:class => "row_entry", :id => "#{student.id}"}
             %td{:width => 110}=student.first_name.capitalize
             %td{:width => 110}=student.last_name.capitalize
-            %td{:width => 50, :class => "grade"}="" 
+            %td{:width => 100, :class => "grade"}="" 
             -@assignments.each do |assignment|
               -if current_assignment = assignment.grades[id_string]
                 -if assignment.grades[id_string][0] != :ungraded

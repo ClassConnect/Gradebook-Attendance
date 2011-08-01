@@ -1,18 +1,13 @@
-var id = "#" + "<%= @assignment.id %>";
-var column = $(id).attr('col');
-var new_grade;
-i=0;
-<% @assignment.assignment_grades.each do |grade|%>
-  grade_id = "#" + "<%= grade.id %>";
-  $(grade_id).html("");
-  new_grade = calculateGrade($(grade_id).parent(), scale);
-  if(new_grade){
-    oTable.fnUpdate(new_grade, i, 2, false, false);
-  }
-  else{
-    oTable.fnUpdate("", i, 2, false, false);
-  }
-  i++;
-<% end %>  
+var position = find_assignment_by_id("<%= @grade_id %>");
+var true_position =  get_true_position(position);
+assignments_array.splice(position, 1);
+oTable.fnSetColumnVis(true_position, false);
+if(true_position > 0){
+  $('.dataTables_scrollBody .datatable tbody tr').each(function(){
+    $(this).children()[position].remove();
+    var grade = calculateGrade(this);
+    apply_grade(this, grade);
+  }); 
+  $('.dataTables_scrollHead .datatable #' + "<%= @grade_id %>").remove();
+}
 //fnUpdate can be made faster. Look into this later
-oTable.fnSetColumnVis(column, false);

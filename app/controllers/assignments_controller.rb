@@ -20,8 +20,9 @@ class AssignmentsController < ApplicationController
     def update
     puts params
     @assignment = Assignment.find(params[:assignment][:id])
+    @assignment.dirty_grade = true;
     respond_to do |format|
-      if @assignment.update_attributes(params[:assignment])
+      if @assignment.update_attributes!(params[:assignment])
         format.js
       else
         format.js
@@ -54,7 +55,7 @@ class AssignmentsController < ApplicationController
 
   def destroy
     @assignment = Assignment.find(params[:id])
-    @grade_id = @assignment.assignment_grades[0].id;
+    @grade_id = @assignment.id
     respond_to do |format|
       format.js
     end

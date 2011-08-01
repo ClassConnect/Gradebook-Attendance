@@ -3,6 +3,7 @@ destroy_table();
 visible_columns++;
 created_assignment = new_assignment("<%= @assignment.id %>", <%= @assignment.point_value %>);
 assignments_array.push(created_assignment);
+console.log(assignments_array);
 
 $('.datatable').width(function(index, value){
   return value + 150;

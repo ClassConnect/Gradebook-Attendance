@@ -5,12 +5,15 @@ var grading_scale;
 var oTable;
 var keys;
 var COLUMN_NUMBER_INDEX = 1;
-var grading_scale_type; 
+var VISIBLE_INDEX = 1;
+var TOTAL_INDEX = 2;
+var student_count;
 student_names = [];
 assignments_array = [];
 assignments_hash = new Object();
 visible_columns = 0;
 var grading_scale_method;
+
 jeditable_dictionary = {
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().attr('id');
@@ -35,9 +38,26 @@ function new_assignment(id, point_value){
   point_value : point_value};
 }
 
+/*
+* This is necessary because of me having shitty datastructures. 
+* DataTables won't give me the position of a TH. Fuck.
+* Linear search it is.
+* Returns -1 when it can't find, which it never should.
+*/
+function find_assignment_by_id(id){
+  var assignment_count = assignments_array.length;
+  while(assignment_count--){
+    if(assignments_array[assignment_count]._id === id){
+      return assignment_count;
+    }
+  }
+  return -1;
+}
+
 function init_gradescale(scale, type){
   grading_scale = scale;
   grading_scale_method = type;
+  student_count = $('.row_entry').length;
 }
 
 function init_assignments_array(json){
@@ -69,6 +89,7 @@ function add_new_input(){
     element : function(settings, original){
       var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
+      console.log(position);
       $(this).append(input).append("/" + assignment_point_value(position[1]));
       return(input);
     }
@@ -134,7 +155,7 @@ function initTable(num_students) {
   new FixedColumns(oTable, {
     //look at sizing stuff
     "iLeftColumns": 3,
-    "iLeftWidth": 300,
+    "iLeftWidth": 320,
     "sHeightMatch": "none"
   });
 
@@ -167,13 +188,14 @@ function initTable(num_students) {
     "data": function(){
       return $(this).attr('score');
     },
-    
     "callback" : function(value, settings) {
-      var aPos = oTable.fnGetPosition(this);
-      oTable.fnUpdate(value, aPos[0], aPos[2], false);
-      console.log("Wrote to " + aPos[0] + ", " + aPos[2]);
-      var grade = calculateGrade($(this).parent());
-      apply_grade_by_column($(this).parent(), aPos[0], grade);
+      var position = oTable.fnGetPosition(this);
+      oTable.fnUpdate(value, position[0], position[2], false);
+      console.log("Wrote to " + position[0] + ", " + position[2]);
+      if(grading_scale_method !== "manual"){
+        var grade = calculateGrade($(this).parent());
+        apply_grade_by_column($(this).parent(), position[0], grade);
+      }
     },
   });
     
@@ -225,7 +247,7 @@ function calculateGrade(dom_element){
       grade = grade / total_points;
       grade *= 100;
       if(grading_scale_method === "scale"){
-        grade = (gradeMatch(grade));
+        grade = "" + percentage_format(grade) + " " +  (gradeMatch(grade));
       }
       else{
         grade = percentage_format(grade);
@@ -270,6 +292,10 @@ function percentage_format(number){
     }
   }
   return string_number + "%";
+}
+
+function redraw_percentages(index){
+  
 }
 
 
@@ -377,5 +403,65 @@ function series_comparator(a, b){
     return 0;
 }
 
-function initial_grade(){
+function assignment_column_from_id(assignment_id){
+  console.log($('.dataTables_scrollHead .header_row' + " #" + assignment_id));
+  console.log(oTable.fnGetPosition($('.dataTables_scrollHead .header_row' + " #" + assignment_id)));
+}
+
+/*
+* DataTables keeps track of positions internally. We are hiding columns to delete.
+
+*/
+function get_true_position(position){
+  console.log(position);
+  var true_position=-1;
+  if(position >= 0){
+    var grade_listing = $('.dataTables_scrollBody .row_entry');
+      if(grade_listing.length > 0){
+        true_position = oTable.fnGetPosition($(grade_listing[0]).children()[position])[2];
+      } 
+  }
+  return true_position;
+}
+
+/*
+* After updating an assignment's point value, all of the displays
+* must be re-calculated. In addition, we need to actually store the new value
+* to the array, but only if it's different.
+* Due to using an internal array and DataTable's internal track of columns,
+* we need to check twice. This sucks but I can't think of another way to do it 
+* for now.
+*/
+function update_assignment(assignment_id, assignment_points){
+  var position = find_assignment_by_id(assignment_id);
+  if(position >= 0){
+    if(assignments_array[position].point_value !== assignment_points){
+      assignments_array[position].point_value = assignment_points;
+      $('.dataTables_scrollBody .datatable tbody tr').each(function(){
+        var grade = calculateGrade(this);
+        apply_grade(this, grade);
+      });
+      var grade_listing = $('.dataTables_scrollBody .row_entry');
+      var true_position;
+      if(grade_listing.length > 0){
+        true_position = oTable.fnGetPosition($(grade_listing[0]).children()[position])[2];
+      }
+      var entry_count = grade_listing.length;
+      var cache_point_value = assignments_array[position].point_value;
+      while(entry_count--){
+        var td = $(grade_listing[entry_count]).children()[position];
+        var score = parseInt(td.getAttribute('score'));
+        if(score){
+          console.log(score);
+          var formatted_num = percentage_format((score / cache_point_value) * 100);
+          $(td).html(formatted_num);
+          oTable.fnUpdate(formatted_num, entry_count, true_position, false);
+          console.log("Just updated " + entry_count + ", " + true_position);
+        }
+      }
+    }
+  }
+  else{
+    console.log("Could not find assignment");
+  }
 }
