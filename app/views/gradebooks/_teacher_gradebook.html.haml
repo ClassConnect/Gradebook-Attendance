@@ -4,11 +4,9 @@
       add_new_input();
       init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
       init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}");
-
       
       //initTable(#{@students.count});
       //init_keytable();
-      
     initTable(#{@students.count});
     $('.dataTables_scrollBody .datatable').attr('style', "");
     $('.assignment_head .datatable').attr('style', "");
@@ -32,7 +30,7 @@
       console.log("hi");
     });
 
-    
+
     /*
     var popup_content;
     $("img").tooltip({
@@ -55,8 +53,14 @@
     });
     */
 
-    $(".hover_button").not('.tt_init').tooltip(jeditable_dictionary);
-    $(".hover_button").not('.tt_init').addClass('tt_init');
+    $(".ui-icon-info").tooltip(jeditable_dictionary);
+    $(".ui-icon-info").not('.tt_init').addClass('tt_init');
+    
+
+    $(".ui-icon-info").removeClass("ui-icon-carat-2-n-s");
+    $(".assignment-name").attr("margin-top", 0);
+    $(".ui-icon-info").attr("style", "float: right; display: inline;");
+    $(".DataTables_sort_icon").attr("style", "float: right;");
 
 
   }); 
@@ -64,7 +68,7 @@
 %h1="DES"
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
-%div{:id => "gradebook_div"}
+%div{:id => "gradebook_div", :width => "300px"}
   %table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
     %thead
       %tr{:class => "header_row"}
@@ -74,9 +78,9 @@
         -i=3
         %span{:id => "assignment_names"}
           -@assignments.each do |assignment|
-            %th{:class => "assignment_header", :col => i, :value => assignment.point_value, :id => "#{assignment.id}"}
-              =assignment.name
-              =image_tag("exclm.png", {:class => "hover_button", :align => "right", :title => "hi"})
+            %th{:class => "assignment_header", :col => i, :value => assignment.point_value, :id => "#{assignment.id}", :align => "left"}
+              %span{:class => "ui-icon-info hover_button", :float => "right", :title => "info"}
+              %p{:class => "assignment-name", :padding => 0, :display => "inline"}=assignment.name
               -i += 1
 
     %tbody{:grading_scale => GradebooksController::DEFAULT_SCALE.to_json, :assignment_data => (@assignments.to_json :only => [:_id, :assignment_type_id]), :cols => i, :students => (students_to_attr(@students))}
@@ -97,7 +101,6 @@
               -else
                 %td{:align => "center", :class => "grade_entry"}=""
               -i+=1
-
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}
 %div{:id => "clearbox"}

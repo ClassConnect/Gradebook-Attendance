@@ -14,10 +14,11 @@ _columns_to_destroy = [];
 assignments_hash = new Object();
 visible_columns = 0;
 var grading_scale_method;
+focused_cell = null;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
-        var assignment_id = this.getTrigger().parent().attr('id');
+        var assignment_id = this.getTrigger().parent().parent().attr('id');
         var url_string = '/assignments/' + assignment_id; 
         $.ajax({
           type: 'GET',
@@ -34,6 +35,10 @@ jeditable_dictionary = {
         }
     };
 
+//Global click event handler
+function click_block(e){
+}
+    
 function new_assignment(id, point_value){
   return {_id : id, 
   point_value : point_value};
@@ -82,6 +87,7 @@ function unblock_keytable(){
   keys.block=false;
 }
 
+//JEDITABLE
 //Will probably end up buggy...using keypress
 //Realistcally, for performance reasons, we'll have to write our own
 //Cache position? DOM access is slow
@@ -89,9 +95,10 @@ function add_new_input(){
   $.editable.addInputType('edit_grade', {
     element : function(settings, original){
       var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
+      var button = $('<input type="button" style="width:25px;"');
       var position = oTable.fnGetPosition(original);
       console.log(position);
-      $(this).append(input).append("/" + assignment_point_value(position[1]));
+      $(this).append(input).append("/" + assignment_point_value(position[1])).append(button);
       return(input);
     }
     /*
@@ -162,7 +169,8 @@ function initTable(num_students) {
     "sScrollX": "550px",
     "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
-    "bRetrieve": true
+    "bProcessing": true,
+    "bJQueryUI": true
   });
 
   new FixedColumns(oTable, {
@@ -175,6 +183,7 @@ function initTable(num_students) {
   
   //TODO: focusing when score doesn't change and blank
   //TODO: make this restful?
+    
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
     var position = oTable.fnGetPosition(this);
     if(value != $(this).attr('score')){
@@ -211,8 +220,6 @@ function initTable(num_students) {
       }
     },
   });
-    
-
   
 }//last one
 
@@ -306,12 +313,6 @@ function percentage_format(number){
   }
   return string_number + "%";
 }
-
-function redraw_percentages(index){
-  
-}
-
-
 
 function _openbox_helper(text, content_url){
   var string ='<a class="button" href="#" onclick="openBox(content_url, 350); return false;">'+ text +'</a>'

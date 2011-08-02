@@ -95,6 +95,8 @@
         var onsubmit = settings.onsubmit || function() { };
         var onreset  = settings.onreset  || function() { };
         var onerror  = settings.onerror  || reset;
+
+        var _focused_cell = null;
           
         /* Show tooltip. */
         if (settings.tooltip) {
@@ -124,6 +126,7 @@
             
             $(this).bind(settings.event, function(e) {
                 
+                console.log(e);
                 /* Abort if element is disabled. */
                 if (true === $(this).data('disabled.editable')) {
                     return;
