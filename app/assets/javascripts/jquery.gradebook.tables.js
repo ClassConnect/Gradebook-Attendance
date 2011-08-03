@@ -95,12 +95,13 @@ function add_new_input(){
   $.editable.addInputType('edit_grade', {
     element : function(settings, original){
       var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
-      var button = $('<input type="button" style="width:25px;"');
+      var button = $('<button type="button" style="width:25px;" class="test_button">');
       var position = oTable.fnGetPosition(original);
-      console.log(position);
-      $(this).append(input).append("/" + assignment_point_value(position[1])).append(button);
+      $(this).append(input).append("/" + assignment_point_value(position[1]));
+      console.log(settings);
       return(input);
     }
+
     /*
     plugin: function(settings, original){
       var a = keys.fnGetCurrentPosition();

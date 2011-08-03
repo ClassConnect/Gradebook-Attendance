@@ -126,7 +126,10 @@
             
             $(this).bind(settings.event, function(e) {
                 
-                console.log(e);
+                console.log(e.target);
+                if(e.target == focused_cell){
+                  console.log("caught");
+                }
                 /* Abort if element is disabled. */
                 if (true === $(this).data('disabled.editable')) {
                     return;
@@ -203,6 +206,7 @@
 
                 /* Add main input element to form and store it in input. */
                 var input = element.apply(form, [settings, self]);
+
 
                 /* Set input content via POST, GET, given data or existing value. */
                 var input_content;
@@ -380,6 +384,7 @@
             
             /* Privileged methods */
             this.reset = function(form) {
+              console.log("reset");
                 /* Prevent calling reset twice when blurring. */
                 if (this.editing) {
                     /* Before reset hook, if it returns false abort reseting. */

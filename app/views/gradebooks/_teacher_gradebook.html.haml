@@ -59,13 +59,25 @@
     $(".ui-icon-info").tooltip(jeditable_dictionary);
     $(".ui-icon-info").not('.tt_init').addClass('tt_init');
     
+    $(".dataTables_scrollBody td").click(function(){
+      focused_cell = this;
+      console.log_focused_cell;
+      var button = $('<button type="button" style="width:25px;" class="test_button">');
+      $(this).append(button);
+    });
+
+    $(".test_button").live("click", function(){
+      console.log("this is gay");
+    });
 
     $(".ui-icon-info").removeClass("ui-icon-carat-2-n-s");
     $(".assignment-name").attr("margin-top", 0);
     $(".ui-icon-info").attr("style", "float: right; display: inline;");
     $(".DataTables_sort_icon").attr("style", "float: right;");
 
+    $(".test_button").live("click", function(){
 
+    });
   }); 
 
 %h1="DES"
