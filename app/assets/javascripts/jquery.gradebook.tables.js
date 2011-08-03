@@ -170,7 +170,9 @@ function initTable(num_students) {
     "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
     "bProcessing": true,
-    "bJQueryUI": true
+    "bJQueryUI": true,
+    "sDom": '<"H"rf>t<"F">',
+    "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true}]
   });
 
   new FixedColumns(oTable, {

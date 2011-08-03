@@ -13,6 +13,7 @@
     $('.datatable .DTFC_Cloned').attr('style', "");
     //This is a dumb way to do it, but when we go back for performance, we can fix it
 
+
     $('.dataTables_scrollBody .datatable tbody tr').each(function(){
       var grade = calculateGrade(this);
       apply_grade(this, grade);
@@ -29,6 +30,8 @@
     $('.testclass').mouseover(function(){
       console.log("hi");
     });
+
+    $('#gradebook_display_filter').after($('#add_assignment_button')).after($('#edit_scale_button'));
 
 
     /*
@@ -68,7 +71,7 @@
 %h1="DES"
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
 %input{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
-%div{:id => "gradebook_div", :width => "300px"}
+%div{:id => "gradebook_div"}
   %table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
     %thead
       %tr{:class => "header_row"}
