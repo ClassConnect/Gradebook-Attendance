@@ -77,3 +77,22 @@ ul {
 .testclass{
   width:50px;
 }
+
+.comment-tip {
+  display:none;
+  background:transparent url(/images/white_arrow.png);
+  font-size:12px;
+  height:70px;
+  width:160px;
+  padding:25px;
+  color:black;
+}
+.options-tip {
+  display:none;
+  background:transparent url(/images/white_arrow.png);
+  font-size:12px;
+  height:70px;
+  width:160px;
+  padding:25px;
+  color:black;
+}

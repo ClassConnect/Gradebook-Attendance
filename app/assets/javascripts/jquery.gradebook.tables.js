@@ -14,7 +14,11 @@ _columns_to_destroy = [];
 assignments_hash = new Object();
 visible_columns = 0;
 var grading_scale_method;
-focused_cell = null;
+_focused_cell = null;
+_focused_cell_pos = null;
+_current_tooltip = null;
+_current_assignment_id = null;
+_current_student_id = null;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
@@ -35,8 +39,71 @@ jeditable_dictionary = {
         }
     };
 
+
+comment_tooltip_dictionary = {
+  onBeforeShow: function(){
+    if(_current_tooltip != null){
+      _current_tooltip.hide();
+    }
+    _current_tooltip = this;
+    _current_assignment_id = assignment_id(_focused_cell_pos[1]);
+    _current_student_id = $(_focused_cell).parents("tr").attr("id");
+  },
+  onShow: function(){
+    var cached_comment = $(this.getTrigger()).parents("td").attr('comment');
+    if(cached_comment)
+      $('.comment-tip').children("textarea").val(cached_comment);
+    $('.comment-tip').children("textarea").focus();
+  },
+  onHide: function(){
+    var entered_text = $('.comment-tip').children("textarea").val();
+    $('.comment-tip').children("textarea").val("");
+    $(this.getTrigger()).parents("td").attr("comment", entered_text);
+  },
+  tip: ".comment-tip",
+  events: {def: "click, blur"}
+}
+
+options_tooltip_dictionary = {
+  onBeforeShow: function(){
+    if(_current_tooltip != null){
+      _current_tooltip.hide();
+    }
+    _current_tooltip = this;
+  },
+  onShow: function(){
+  },
+  onHide: function(){
+  },
+  tip: ".options-tip",
+  events: {def: "click, blur"}
+}
+
+
 //Global click event handler
 function click_block(e){
+  if(_focused_cell != null){
+    if($(e.target).is(".entry-container")){
+      console.log("container");
+      return;
+    }
+    if($(e.target).is(".dataTables_scrollBody tr td")){
+      if(e.target == _focused_cell){
+        return;
+      }
+    }
+    //otherwise, we need to turn off editing
+    else{
+      if($(e.target).is("input[type=text]")){
+        return;
+      }
+      else{
+        $(_focused_cell).children("form").submit();
+        return;
+      }
+    }
+  }
+  console.log("nothing done");
 }
     
 function new_assignment(id, point_value){
@@ -94,12 +161,47 @@ function unblock_keytable(){
 function add_new_input(){
   $.editable.addInputType('edit_grade', {
     element : function(settings, original){
-      var input = $('<input type="text" style="width: 25px;" autocomplete="off">');
-      var button = $('<button type="button" style="width:25px;" class="test_button">');
+      var input = $('<input type="text" class="grade_field" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
-      $(this).append(input).append("/" + assignment_point_value(position[1]));
-      console.log(settings);
+      var points = $('<span class="assignment-value">' + '/' + assignment_point_value(position[1]) + '</span>');
+      var container_span = $('<div class="entry-container"></span>');
+      container_span.append(input).append(points);
+      $(this).append(container_span);
       return(input);
+    },
+    buttons: function(settings, original){
+      var button_div = $('<div id="choice-buttons"></div>');
+      var comment_button = $('<ul id="micons"><li class="ui-state-default ui-corner-all"><span class="ui-mini ui-icon-comment"></span></li></ul>');
+      var option_button = $('<ul id="micons"><li class="ui-state-default ui-corner-all"><span class="ui-mini ui-icon-pencil"></span></li></ul>');
+      $(comment_button).append('<br/>').append(option_button);
+      $(button_div).append(comment_button).append(option_button);
+      $(this).append(button_div);
+
+      $(option_button).hover(
+        function() { $(this).children().addClass('ui-state-hover'); }, 
+        function() { $(this).children().removeClass('ui-state-hover'); }
+      );
+
+      $(comment_button).hover(
+        function() { $(this).children().addClass('ui-state-hover'); }, 
+        function() { $(this).children().removeClass('ui-state-hover'); }
+      )
+      
+      $(comment_button).tooltip(comment_tooltip_dictionary);
+
+      $(comment_button).click(function(event){
+        console.log($(this).tooltip().isShown());
+        event.stopPropagation();
+        //$(this).parent().focus();
+      });
+
+      $(option_button).tooltip(options_tooltip_dictionary);
+
+      $(option_button).click(function(event){
+        console.log($(this).tooltip().isShown());
+        event.stopPropagation();
+        //$(this).parent().focus();
+      });
     }
 
     /*
@@ -154,7 +256,6 @@ function initTable(num_students) {
       var destroy_length = _columns_to_destroy.length;
       while(destroy_length--){
         $($(this).children()[_columns_to_destroy[destroy_length]]).remove();
-        console.log("I'm working...");
       }
     });
     _columns_to_destroy.length = 0;
@@ -198,8 +299,14 @@ function initTable(num_students) {
        });
      }
     if(value != ""){
-      $(this).attr('score', value);
-      return percentage_format((value / assignment_point_value(position[1]) * 100));
+      if(isNaN(value)){
+        console.log(value);
+        return value;
+      }
+      else{
+        $(this).attr('score', value);
+        return percentage_format((value / assignment_point_value(position[1]) * 100));
+      }
     }
     else{
       $(this).removeAttr('score');
@@ -210,7 +317,10 @@ function initTable(num_students) {
     "height": "",
     "placeholder": "",
     "onblur": "submit" ,
+    "onedit": function(e){
+    },
     "data": function(){
+      console.log($(this).attr('score'));
       return $(this).attr('score');
     },
     "callback" : function(value, settings) {
@@ -279,7 +389,7 @@ function calculateGrade(dom_element){
     }
     return "";
   }
-  return "MANUAL";
+  return "";
 }
 
 /*
@@ -392,6 +502,10 @@ function update_grade_url(object){
   return '/gradebooks/assignments/' + assignment_id(position[COLUMN_NUMBER_INDEX]) + '/update';
 }
 
+function comment_url(assignment_id){
+  return '/gradebooks/assignments/' + assignment_id + '/comment';
+}
+
 function scale_mode_validate(object){
   if($(object).attr('value') === "scale"){
     $("#range_fields").show();
@@ -481,3 +595,27 @@ function update_assignment(assignment_id, assignment_points){
     console.log("Could not find assignment");
   }
 }
+
+function misc_grades(code){
+  var input_field = $(_current_tooltip.getTrigger().parents("td").children()[0]).children(".entry-container").children("input")[0];
+  input_field.value = code;
+  _td = $(input_field).parents("td");
+  if(code === "EX" || code === "DR"){
+    $(_td).removeAttr('score');
+  }
+  else{
+    $(_td).attr('score', 0);
+  }
+  $(_td).children("form").submit();
+  _current_tooltip.hide();
+}
+
+
+function submit_comment(){
+  $.ajax({
+    type: 'POST',
+    url: comment_url(_current_assignment_id),
+    data: {"_method": 'put', "student_id": _current_student_id, "value": $('.comment-tip').children("textarea").val()}
+  });
+}
+

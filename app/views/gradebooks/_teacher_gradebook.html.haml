@@ -5,6 +5,7 @@
       init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
       init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}");
       
+    _grading_options = ["DR", "EX", "IN"];
       //initTable(#{@students.count});
       //init_keytable();
     initTable(#{@students.count});
@@ -27,56 +28,47 @@
       openBox('/gradebooks/grading_scale/#{@course.id}', 350);
     });
 
-    $('.testclass').mouseover(function(){
-      console.log("hi");
-    });
-
     $('#gradebook_display_filter').after($('#add_assignment_button')).after($('#edit_scale_button'));
+    
+    _focused_cell = null;
 
-
-    /*
-    var popup_content;
-    $("img").tooltip({
-      onBeforeShow: function(){
-        var assignment_id = this.getTrigger().parent().attr('id');
-        var url_string = '/assignments/' + assignment_id; 
-        $.ajax({
-          type: 'GET',
-          async: false,
-          url: url_string,
-          dataType: "html",
-          success: function(data){
-            popup_content = data;
-          }
-        });
-      },
-      onShow: function(){
-          $('.tooltip').html(popup_content);
-        }
-    });
-    */
-
+    //document.addEventListener('click', click_block, true);
+    
     $(".ui-icon-info").tooltip(jeditable_dictionary);
     $(".ui-icon-info").not('.tt_init').addClass('tt_init');
     
-    $(".dataTables_scrollBody td").click(function(){
-      focused_cell = this;
-      console.log_focused_cell;
-      var button = $('<button type="button" style="width:25px;" class="test_button">');
-      $(this).append(button);
-    });
-
-    $(".test_button").live("click", function(){
-      console.log("this is gay");
-    });
-
     $(".ui-icon-info").removeClass("ui-icon-carat-2-n-s");
     $(".assignment-name").attr("margin-top", 0);
     $(".ui-icon-info").attr("style", "float: right; display: inline;");
     $(".DataTables_sort_icon").attr("style", "float: right;");
 
-    $(".test_button").live("click", function(){
+    $(".dataTables_scrollBody td").click(function(e){
+      if(_focused_cell == this){
+        //console.log(e.target);
+      }
+      else{
+        _focused_cell && $(_focused_cell).children("form").submit();
+        _current_tooltip && _current_tooltip.hide();
+        _focused_cell = this;
+        _focused_cell_pos = oTable.fnGetPosition(_focused_cell);
+        $($(this).children("form").children()[0]).children()[0].focus();
+      }
+    });
 
+    $("#ex_button").click(function(){
+      misc_grades("EX");
+    });
+
+    $("#dr_button").click(function(){
+      misc_grades("DR");
+    });
+
+    $("#in_button").click(function(){
+      misc_grades("IN");
+    });
+
+    $("#submit-comment").click(function(){
+      submit_comment();
     });
   }); 
 
@@ -109,13 +101,26 @@
             %td{:width => 100, :class => "grade"}="" 
             -@assignments.each do |assignment|
               -if current_assignment = assignment.grades[id_string]
-                -if assignment.grades[id_string][0] != :ungraded
+                -if assignment.grades[id_string][0].is_a?(Numeric)
                   %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=number_to_percentage((assignment.grades[id_string][0].to_f / assignment.point_value) * 100, :precision => 2, :strip_insignificant_zeros => true)
                 -else
-                  %td{:align => "center", :class => "grade_entry"}=""
+                  -if assignment.grades[id_string][0] == :ungraded
+                    %td{:align => "center", :class => "grade_entry"}=""
+                  -else
+                    %td{:align => "center", :class => "grade_entry"}=assignment.grades[id_string][0]
               -else
                 %td{:align => "center", :class => "grade_entry"}=""
               -i+=1
 %div{:id => "dialogBox"}
 %div{:id => "blackbox"}
 %div{:id => "clearbox"}
+%div{:class => "comment-tip"}
+  %div{:id => "comment-box-text"}="Enter a comment"
+  %textarea{:id => "comment-entry", :rows => 2}
+  %button{:id => "submit-comment"}="Submit"
+%div{:class => "options-tip"}
+  %button{:id => "ex_button"}="Excused" 
+  %br
+  %button{:id => "dr_button"}="Dropped"
+  %br
+  %button{:id => "in_button"}="Incomplete"

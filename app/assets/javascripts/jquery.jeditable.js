@@ -96,7 +96,6 @@
         var onreset  = settings.onreset  || function() { };
         var onerror  = settings.onerror  || reset;
 
-        var _focused_cell = null;
           
         /* Show tooltip. */
         if (settings.tooltip) {
@@ -126,10 +125,6 @@
             
             $(this).bind(settings.event, function(e) {
                 
-                console.log(e.target);
-                if(e.target == focused_cell){
-                  console.log("caught");
-                }
                 /* Abort if element is disabled. */
                 if (true === $(this).data('disabled.editable')) {
                     return;
@@ -257,7 +252,7 @@
                 plugin.apply(form, [settings, self]);
 
                 /* Focus to first visible form element. */
-                $(':input:visible:enabled:first', form).focus();
+                //$(':input:visible:enabled:first', form).focus();
 
                 /* Highlight input contents when requested. */
                 if (settings.select) {
@@ -274,7 +269,7 @@
 
                 /* Discard, submit or nothing with changes when clicking outside. */
                 /* Do nothing is usable when navigating with tab. */
-                /* CC note: lowered the timeouts below to speed up animation*/
+                /* CC note: changed submit blur function to NOTHING so it works properly*/ 
                 var t;
                 if ('cancel' == settings.onblur) {
                     input.blur(function(e) {
@@ -286,9 +281,14 @@
                 } else if ('submit' == settings.onblur) {
                     input.blur(function(e) {
                         /* Prevent double submit if submit was clicked. */
+                        
+                        /*
                         t = setTimeout(function() {
                             form.submit();
                         }, 50);
+                        */
+
+                        _blurred_cell = this;
                     });
                 } else if ($.isFunction(settings.onblur)) {
                     input.blur(function(e) {
@@ -384,7 +384,6 @@
             
             /* Privileged methods */
             this.reset = function(form) {
-              console.log("reset");
                 /* Prevent calling reset twice when blurring. */
                 if (this.editing) {
                     /* Before reset hook, if it returns false abort reseting. */
