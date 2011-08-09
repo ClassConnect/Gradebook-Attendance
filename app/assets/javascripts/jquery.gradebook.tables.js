@@ -19,6 +19,7 @@ _focused_cell_pos = null;
 _current_tooltip = null;
 _current_assignment_id = null;
 _current_student_id = null;
+_grade_scale_id = null;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
@@ -80,7 +81,34 @@ options_tooltip_dictionary = {
 }
 
 
+function enable_editing(){
+  $(".grade").editable(function(value, settings){
+     $.ajax({
+       type: 'POST',
+       url: update_manual_grade(this),
+       data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": value},
+       dataType: "html"
+     });
+     var row_num = $(this).parent().attr('num');
+     oTable.fnUpdate(value, parseInt(row_num), 2, false);
+    return value;
+  }, 
+  {
+  "width": "",
+  "height": "",
+  "placeholder": "",
+  "onblur": "submit",
+  "type": "manual"
+  });
+}
+
+function disable_editing(){
+  $('.grade').editable("disable");
+}
+
+
 //Global click event handler
+/* TODO: BE CAREFUL */
 function click_block(e){
   if(_focused_cell != null){
     if($(e.target).is(".entry-container")){
@@ -127,10 +155,11 @@ function find_assignment_by_id(id){
   return -1;
 }
 
-function init_gradescale(scale, type){
+function init_gradescale(scale, type, id){
   grading_scale = scale;
   grading_scale_method = type;
   student_count = $('.row_entry').length;
+  _grade_scale_id = id;
 }
 
 function init_assignments_array(json){
@@ -158,6 +187,17 @@ function unblock_keytable(){
 //Will probably end up buggy...using keypress
 //Realistcally, for performance reasons, we'll have to write our own
 //Cache position? DOM access is slow
+function add_manual_input(){
+  $.editable.addInputType('manual', {
+    element: function(settings, original){
+      var input = $('<input type="text" class ="manual_field" autocomplete="off">');
+      $(this).append(input);
+      return(input);
+    }
+  });
+}
+
+
 function add_new_input(){
   $.editable.addInputType('edit_grade', {
     element : function(settings, original){
@@ -298,20 +338,20 @@ function initTable(num_students) {
          dataType: "html"
        });
      }
-    if(value != ""){
-      if(isNaN(value)){
-        console.log(value);
-        return value;
+      if(value != ""){
+        if(isNaN(value)){
+          console.log(value);
+          return value;
+        }
+        else{
+          $(this).attr('score', value);
+          return percentage_format((value / assignment_point_value(position[1]) * 100));
+        }
       }
       else{
-        $(this).attr('score', value);
-        return percentage_format((value / assignment_point_value(position[1]) * 100));
+        $(this).removeAttr('score');
+        return "";
       }
-    }
-    else{
-      $(this).removeAttr('score');
-      return "";
-    }
     }, {
     "type": "edit_grade",
     "height": "",
@@ -334,8 +374,10 @@ function initTable(num_students) {
     },
   });
   
-}//last one
+  if(grading_scale_method == "manual")
+    enable_editing();
 
+}//last one
 
 function init_keytable(){
   keys = new KeyTable( {
@@ -502,6 +544,10 @@ function update_grade_url(object){
   return '/gradebooks/assignments/' + assignment_id(position[COLUMN_NUMBER_INDEX]) + '/update';
 }
 
+function update_manual_grade(){
+  return '/gradebooks/assignments/' + _grade_scale_id + '/manual_grade';
+}
+
 function comment_url(assignment_id){
   return '/gradebooks/assignments/' + assignment_id + '/comment';
 }
@@ -612,10 +658,48 @@ function misc_grades(code){
 
 
 function submit_comment(){
+  _current_tooltip.hide();
   $.ajax({
     type: 'POST',
     url: comment_url(_current_assignment_id),
     data: {"_method": 'put', "student_id": _current_student_id, "value": $('.comment-tip').children("textarea").val()}
   });
+  $($(_focused_cell).children("form").children()[0]).children()[0].focus();
 }
 
+function init_headers(){
+    
+    $(".ui-icon-info").removeClass("ui-icon-carat-2-n-s");
+    $(".assignment-name").attr("margin-top", 0);
+    $(".ui-icon-info").attr("style", "float: right; display: inline;");
+    $(".DataTables_sort_icon").attr("style", "float: right;");
+
+    $(".dataTables_scrollBody td").click(function(e){
+      if(_focused_cell == this){
+        $($(this).children("form").children()[0]).children()[0].focus();
+      }
+      else{
+        _focused_cell && $(_focused_cell).children("form").submit();
+        _current_tooltip && _current_tooltip.hide();
+        _focused_cell = this;
+        _focused_cell_pos = oTable.fnGetPosition(_focused_cell);
+        $($(this).children("form").children()[0]).children()[0].focus();
+      }
+    });
+    
+    $(".grade").click(function(e){
+      _focused_cell && $(_focused_cell).children("form").submit();
+      _current_tooltip && _current_tooltip.hide();
+      _focused_cell = this;
+      $(this).children("form").children()[0].focus();
+    });
+
+    $('#gradebook_display_filter').after($('#add_assignment_button')).after($('#edit_scale_button'));
+}
+
+function tooltip_init(object){
+  if(!$(object).data("tooltip")){
+    $(object).tooltip(jeditable_dictionary);
+    $(object).trigger("mouseover");
+  }
+}

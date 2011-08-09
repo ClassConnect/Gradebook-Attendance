@@ -7,6 +7,7 @@ class GradeScale
 
   field :course_id, :type => Integer
   field :scale_type, :type => String, :default => "scale"
+  field :manual_grades, :type => Hash, :default => {}
 
   belongs_to :gradebook_settings, :class_name => "GradebookSettings"
   embeds_many :grade_ranges
@@ -17,6 +18,11 @@ class GradeScale
     DEFAULT_SCALE.each do |range|
       grade_ranges.create!(from: range[:from], to: range[:to], name: range[:name])
     end
+  end
+
+  def update_manual_grade(student_id, grade)
+    manual_grades[student_id.to_s] = grade
+    save :validate => false
   end
 
 end

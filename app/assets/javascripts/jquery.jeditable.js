@@ -67,7 +67,7 @@
         }
         if ('enable' == target) {
             $(this).data('disabled.editable', false);
-            return;
+            //commented out a return here; seemed to fix my problems
         }
         if ('destroy' == target) {
             $(this)
@@ -97,6 +97,8 @@
         var onerror  = settings.onerror  || reset;
 
           
+        $(this).data('disabled.editable', false);
+
         /* Show tooltip. */
         if (settings.tooltip) {
             $(this).attr('title', settings.tooltip);
@@ -122,6 +124,7 @@
             if (!$.trim($(this).html())) {
                 $(this).html(settings.placeholder);
             }
+           
             
             $(this).bind(settings.event, function(e) {
                 

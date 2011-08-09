@@ -63,6 +63,9 @@ class GradeScalesController < ApplicationController
   def update
     @grade_scale = GradeScale.find(params[:id])
     respond_to do |format|
+      if(params[:grade_scale][:scale_type] != "manual")
+          @grade_scale.manual_grades.clear
+      end
       if @grade_scale.update_attributes(params[:grade_scale])
         format.js
       end
@@ -78,6 +81,19 @@ class GradeScalesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to grade_scales_url }
       format.json { head :ok }
+    end
+  end
+
+  def grade
+    @grade_scale = GradeScale.find(params[:id])
+    @student_id = params[:student_id].to_s
+    _grade = params[:value]
+
+    @grade_scale.manual_grades[@student_id] = _grade
+    @grade_scale.save
+
+    respond_to  do |format|
+      format.html {render text: ""}
     end
   end
 end

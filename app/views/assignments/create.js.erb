@@ -5,18 +5,24 @@ assignments_array.push(created_assignment);
 
 $('.datatable').width(function(index, value){
   return assignments_array.length * 150;
-})
+});
 //this is incredibly ghetto...we'll have to read to find where this damn thing is placed
 $('.dataTables_scroll').attr('style', "");
-$("<th class='assignment_header' id=<%=@assignment.id%>><%=@assignment.name%><img class='hover_button' align='right' src='/assets/exclm.png' title='hi' /></th>").insertAfter('thead th:last');
+//$("<th class='assignment_header' id=<%=@assignment.id%>><%=@assignment.name%><img class='hover_button' align='right' src='/assets/exclm.png' title='hi' /></th>").insertAfter('thead th:last');
+
+var header_html = "<th class='assignment_header' align='left' id=<%=@assignment.id%>>";
+header_html += "<span class='ui-icon-info hover_button' float='right' title='info'></span>";
+header_html += "<p class='assignment-name' display='inline' padding='0'>" + "<%=@assignment.name%>" + "</p></th>"
+
+$(header_html).insertAfter('thead th:last');
 
 var student_count=0;
 $('.datatable tbody tr').each(function(index, value){
-  $(this).append("<td align='center'  width='150'></td>");
+  $(this).append("<td align='center' width='150'></td>");
   student_count++;
 });
 
-$(".hover_button").not('.tt_init').tooltip(jeditable_dictionary);
-$(".hover_button").not('.tt_init').addClass('tt_init');
 
 initTable(student_count);
+
+init_headers();

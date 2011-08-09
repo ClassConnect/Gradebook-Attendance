@@ -22,6 +22,7 @@ Gradebook::Application.routes.draw do
   match 'gradebooks/assignments/:id/update' => 'assignments#update_assignment_grade', :via => :put
   match 'gradebooks/assignments/:id/report' => 'assignments#grade_report'
   match 'gradebooks/assignments/:id/comment' => 'assignments#comment_submit', :via => :put
+  match 'gradebooks/assignments/:id/manual_grade' => 'grade_scales#grade', :via => :put
 
 
   # The priority is based upon order of creation:
