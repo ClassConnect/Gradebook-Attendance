@@ -15,7 +15,7 @@ class GradeScale
 
   def init_default_scale
     DEFAULT_SCALE.each do |range|
-      grade_ranges.create!(from: range[:from], to: range[:to], name: range[:name])
+      grade_ranges.create!(:from => range[:from], :to => range[:to], :name => range[:name])
     end
   end
 

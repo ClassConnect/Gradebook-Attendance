@@ -6,7 +6,7 @@ class GradeScalesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @grade_scales }
+      format.json { render :json => @grade_scales }
     end
   end
 
@@ -24,7 +24,7 @@ class GradeScalesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @grade_scale }
+      format.json { render :json => @grade_scale }
     end
   end
 
@@ -35,7 +35,7 @@ class GradeScalesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @grade_scale }
+      format.json { render :json => @grade_scale }
     end
   end
 
@@ -51,9 +51,9 @@ class GradeScalesController < ApplicationController
 
     respond_to do |format|
       if @grade_scale.save
-        format.json { render json: @grade_scale, status: :created, location: @grade_scale }
+        format.json { render :json => @grade_scale, :status => :created, :location => @grade_scale }
       else
-        format.json { render json: @grade_scale.errors, status: :unprocessable_entity }
+        format.json { render :json => @grade_scale.errors, :status => :unprocessable_entity }
       end
     end
   end

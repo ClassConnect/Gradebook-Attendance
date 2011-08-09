@@ -1,0 +1,145 @@
+$absent: #F05044;
+$tardy: #FEE660;
+$table-color: #FFFFFF;
+
+.ui-datepicker {
+	margin-left:-119px;
+}
+
+.datatable {
+	width:100%;
+	border-spacing:0px;
+	
+	td.sorting_1 {
+		background-color:inherit !important;
+	}
+
+	thead {
+		font-size: 14px;
+		font-family: arial,sans-serif;
+	}
+	
+	.absent {
+		background-color:$absent !important;
+		color:white;
+	}
+
+	.absent .hoverable:hover {
+		background-color:darken($absent,5%) !important;
+	}
+
+	.tardy {
+		background-color:$tardy !important;
+	}
+
+	.tardy .hoverable:hover {
+		background-color:darken($tardy,10%) !important;
+	}
+
+	tr.odd {
+		background-color:$table-color;
+	}
+
+	tr.even {
+		background-color:darken($table-color,5%);
+	}
+	
+	.hoverable:hover {
+		background-color:darken($table-color,7.5%) !important;
+	}
+}
+
+.overview {
+	width:100%;
+	border-spacing:0px;
+	text-align:center;
+	margin:0px;
+	border:1px solid black;
+	border-right:0px;
+	
+	td {
+		border-right:1px solid black;
+	}
+	
+	thead {
+		.absent {
+			background-color:$absent;
+			color:white;
+		}
+		
+		.tardy {
+			background-color:$tardy;
+		}
+		
+		.last {
+			background-color:darken(white,10%);
+		}
+	}
+	
+	tbody {
+		td {	
+			height:50px;
+			font-size:24px;
+			font-weight:bold;
+			vertical-align:middle;
+			
+			.days {
+				font-size:16px;
+				color:#666;
+				font-weight:normal;
+			}
+		}
+	}
+}
+
+.overview-info {
+	top:0px;
+	left:0px;
+	padding:10px;
+	font-size:16px;
+	text-align:center;
+}
+
+.log {
+	width:100%;
+	border:1px solid black;
+	border-bottom:0px solid black;
+	border-spacing:0px;
+	
+	td {
+		padding:10px;
+		font-weight:bold;
+		font-size:medium;
+		border-bottom:1px solid black;
+	}
+	
+	.initial {
+		width:30px;
+		text-align:center;
+	}
+	
+	.date:hover {
+		background-color:darken(white,5%)
+	}
+	
+	.absent {
+		.initial {
+			background-color:$absent;
+			color:white;
+		}
+	}
+	
+	.tardy {
+		.initial {
+			background-color:$tardy;
+		}
+	}
+}
+
+.student_wrapper {
+	margin:5px;
+}
+
+.action {
+	float:right;
+}

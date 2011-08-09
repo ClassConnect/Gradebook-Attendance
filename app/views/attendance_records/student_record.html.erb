@@ -1,0 +1,40 @@
+<div class="overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"><%= @student.capitalized_name %></div>
+<div class="student_wrapper">
+	<table class="overview">
+		<thead>
+			<tr>
+				<td class="absent">absent</td>
+				<td class="tardy">tardy</td>
+				<td class="last">last</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><%= @student.days_absent_for_course(@course).count %></td>
+				<td><%= @student.days_tardy_for_course(@course).count %></td>
+				<% last = @records.first %>
+				<% number = (last.nil? ? 0 : (Date.today-last.date).to_i)%>
+				<td><%= last.nil? ? "never" : number %><span class="days"> day<%= (number != 1) ? "s" : "" %></span></td>
+			</tr>
+		</tbody>
+	</table>
+	<h4>Attendance Log</h4>
+	<% if @records.count > 0 %>
+		<table class="log">
+			<tbody>
+				<% @records.each do |record| %>
+					<tr class="<%= record.cases[@student.id_s] == :absent ? "absent" : "tardy" %>">
+						<td class="initial" style="width:30px"><%= record.cases[@student.id_s] == :absent ? "A" : "T" %></td>
+						<td class="date" onclick="gotodate('<%= record.date.strftime("%Y-%m-%d") %>')"><%= record.date.strftime("%m-%d-%Y") %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% else %>
+		<p><%= @student.first_name.capitalize %> has never missed a class</p>
+	<% end %>
+	<div style="margin-top:10px; margin-bottom:20px;">
+		<!--<button class="action" onclick="print();">Print</button>-->
+		<button class="action lawsuit" onclick="closeBox();">Close</button>
+	</div>
+</div>
