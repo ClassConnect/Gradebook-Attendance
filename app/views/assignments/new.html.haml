@@ -9,20 +9,25 @@
     });
 
   }); 
-
+%div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="New Assignment"
+%br
 =form_for @assignment, :html => {:id => "new_assignment"} do |f|
   =f.hidden_field :course_id, :value => params[:course_id]
   %div{:class => "field"}
     =f.label :name
+    %br
     =f.text_field :name
   %div{:class => "field"}
-    =f.label :assignment_type_id
+    =f.label :assignment_type_id, "Assignment Type"
+    %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
   %div{:class => "field"}
-    =f.label :point_value
+    =f.label :point_value, "Point Value"
+    %br
     =f.text_field :point_value
   %div{:class => "field"}
-    =f.label :date_due
+    =f.label :date_due, "Date Due"
+    %br
     =f.text_field :date_due 
   %div{:class => "button"}
     =f.submit "Submit"

@@ -65,9 +65,9 @@ ul#icons span.ui-icon {float: left; margin: 0 4px;}
 
 .ui-mini { width: 9px; height: 9px; background-image: url(/images/ui-icons_222222_256x240.png); }
 
-ul#micons {margin: 0; padding: 0;}
-ul#micons li {margin: 1px; position: relative; padding: 1px 0; cursor: pointer; float: right;   list-style: none;}
-ul#micons span.ui-mini {float: right; margin: 0 4px;}
+ul.micons {margin: 0; padding: 0;}
+ul.micons li {margin: 1px; position: relative; padding: 1px 0; cursor: pointer; float: right;   list-style: none;}
+ul.micons span.ui-mini {float: right; margin: 0 4px;}
 
 #choice-buttons{
   margin-top: -28px;

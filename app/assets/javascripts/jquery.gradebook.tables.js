@@ -197,8 +197,8 @@ function add_new_input(){
     },
     buttons: function(settings, original){
       var button_div = $('<div id="choice-buttons"></div>');
-      var comment_button = $('<ul id="micons"><li class="ui-state-default ui-corner-all"><span class="ui-mini ui-icon-comment"></span></li></ul>');
-      var option_button = $('<ul id="micons"><li class="ui-state-default ui-corner-all"><span class="ui-mini ui-icon-pencil"></span></li></ul>');
+      var comment_button = $('<ul class="micons"><li class="ui-state-default ui-corner-all"><span class="ui-mini ui-icon-comment"></span></li></ul>');
+      var option_button = $('<ul class="micons"><li class="ui-state-default ui-corner-all"><span class="ui-mini ui-icon-pencil"></span></li></ul>');
       $(comment_button).append('<br/>').append(option_button);
       $(button_div).append(comment_button).append(option_button);
       $(this).append(button_div);
@@ -628,20 +628,18 @@ function update_assignment(assignment_id, assignment_points){
 }
 
 function misc_grades(code){
-  var input_field = $(_current_tooltip.getTrigger().parents("td").children()[0]).children(".entry-container").children("input")[0];
-  console.log(input_field);
-  input_field.value = code;
-  _td = $(input_field).parents("td");
+  var input_field = $(_current_tooltip.getTrigger().parents("form").children()[0]).children("input");
+  $(".grade_field").val(code);
+
   if(code === "EX" || code === "DR"){
-    $(_td).removeAttr('score');
+    $(_focused_cell).removeAttr('score');
   }
   else{
-    $(_td).attr('score', 0);
+    $(_focused_cell).attr('score', 0);
   }
-  $(_td).children("form").submit();
+  $(_focused_cell).children("form").submit();
   _current_tooltip.hide();
 }
-
 
 function submit_comment(){
   _current_tooltip.hide();
