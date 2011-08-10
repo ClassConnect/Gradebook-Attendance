@@ -7,14 +7,14 @@ class GradebooksController < ApplicationController
     @course = Course.find(params[:course_id])
     @students = @course.students.order
     @assignments = @course.assignments.asc(:created_at).cache
-    @settings = GradebookSettings.where(course_id: params[:course_id])
+    @settings = GradebookSettings.where(:course_id => params[:course_id])
     @settings &&= @settings.first
     if !@settings
-      @settings = GradebookSettings.create!(course_id: params[:course_id])
+      @settings = GradebookSettings.create!(:course_id => params[:course_id])
       for type in AssignmentType::DEFAULT_ASSIGNMENTS  
-        AssignmentType.create!(course_id: params[:course_id], name: type)
+        AssignmentType.create!(:course_id => params[:course_id], :name => type)
       end
-      @settings.create_grade_scale(course_id: params[:course_id])
+      @settings.create_grade_scale(:course_id => params[:course_id])
       @settings.save
     end
   end
@@ -32,6 +32,6 @@ class GradebooksController < ApplicationController
   end
 
   def scale
-    @scale = GradeScale.where(course_id: params[:course_id]).first
+    @scale = GradeScale.where(:course_id => params[:course_id]).first
   end
 end

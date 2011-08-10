@@ -13,7 +13,7 @@ class AssignmentsController < ApplicationController
     @assignment.calculate_average
     respond_to do |format|
       format.html {render :layout => false}
-      format.json {render json: @assignment}
+      format.json {render :json => @assignment}
     end
   end
 
@@ -86,7 +86,7 @@ class AssignmentsController < ApplicationController
     @assignment.grades[id.to_s] = nil
     @assignment.save :validate => false
     @assignment.grades[id.to_s] = array
-    @assignment.update_attributes!(dirty_grade: true)
+    @assignment.update_attributes!(:dirty_grade => true)
     @assignment.save :validate => false
     puts @assignment.dirty_grade
 

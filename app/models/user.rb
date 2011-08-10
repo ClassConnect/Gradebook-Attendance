@@ -54,19 +54,19 @@ class User < ActiveRecord::Base
   end
 
   def get_grades
-    AssignmentGrade.where(student_id: id, graded: false).ascending(:updated_at)
+    AssignmentGrade.where(:student_id => id, :graded => false).ascending(:updated_at)
   end
 
   def get_grades_for_course(course_id)
-    AssignmentGrade.where(student_id: id, course_id: course_id).ascending(:id)
+    AssignmentGrade.where(:student_id => id, :course_id => course_id).ascending(:id)
   end
 
   def get_grades_for_gradebook
-    AssignmentGrade.where(student_id: id)
+    AssignmentGrade.where(:student_id => id)
   end
 
   def get_assignments(course_id)
-    Assignment.where(course_id: course_id).where(id.to_s)
+    Assignment.where(:course_id => course_id).where(id.to_s)
   end
 
   #Custom serializer for students, needs to be this format for datatables
@@ -85,5 +85,45 @@ class User < ActiveRecord::Base
     name << (assignment_grades.count != 0 ? (grade_json << "]") : "]")
   end
 
+  def capitalized_name
+    first_name.capitalize + " " + last_name.capitalize
+  end
 
+  def id_s
+    @id_s ||= id.to_s
+  end
+
+  def days_absent_for_course(course)
+    if is_student?
+      return AttendanceRecord.where(:course_id => course.id, "cases."+id_s => :absent)
+    else
+      return [ ]
+    end
+  end
+
+  def days_tardy_for_course(course)
+    if is_student?
+      return AttendanceRecord.where(:course_id => course.id, "cases."+id_s => :tardy)
+    else
+      return [ ]
+    end
+  end
+  
+  def last_day_absent_or_tardy(course)
+    record = AttendanceRecord.where(:course_id => course.id).any_in("cases."+id_s => [:absent,:tardy]).order_by([:date,:desc]).first
+    if record
+      return record.date
+    else
+      return nil
+    end
+  end
+  
+  def second_to_last_day_absent_or_tardy(course)
+    record = AttendanceRecord.where(:course_id => course.id).any_in("cases."+id_s => [:absent,:tardy]).order_by([:date,:desc])
+    if record && record.count > 1
+      return record[1].date.strftime("%m-%d-%Y")
+    else
+      return "none"
+    end
+  end
 end

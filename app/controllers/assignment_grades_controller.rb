@@ -6,7 +6,7 @@ class AssignmentGradesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @grades }
+      format.json { render :json => @grades }
     end
   end
 
@@ -17,7 +17,7 @@ class AssignmentGradesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @grade }
+      format.json { render :json => @grade }
     end
   end
 
@@ -28,7 +28,7 @@ class AssignmentGradesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render json: @grade }
+      format.json { render :json => @grade }
     end
   end
 
@@ -45,10 +45,10 @@ class AssignmentGradesController < ApplicationController
     respond_to do |format|
       if @grade.save
         format.html { redirect_to @grade, notice: 'Grade was successfully created.' }
-        format.json { render json: @grade, status: :created, location: @grade }
+        format.json { render :json => @grade, :status => :created, :location => @grade }
       else
-        format.html { render action: "new" }
-        format.json { render json: @grade.errors, status: :unprocessable_entity }
+        format.html { render :action: "new" }
+        format.json { render :json => @grade.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -60,11 +60,11 @@ class AssignmentGradesController < ApplicationController
 
     respond_to do |format|
       if @grade.update_attributes(params[:grade])
-        format.html { redirect_to @grade, notice: 'Grade was successfully updated.' }
+        format.html { redirect_to @grade, :notice => 'Grade was successfully updated.' }
         format.json { head :ok }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @grade.errors, status: :unprocessable_entity }
+        format.html { render :action => "edit" }
+        format.json { render :json => @grade.errors, :status => :unprocessable_entity }
       end
     end
   end

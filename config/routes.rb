@@ -24,6 +24,9 @@ Gradebook::Application.routes.draw do
   match 'gradebooks/assignments/:id/comment' => 'assignments#comment_submit', :via => :put
   match 'gradebooks/assignments/:id/manual_grade' => 'grade_scales#grade', :via => :put
 
+  match 'attendance/:course_id/student/:student_id/:date', :to => "attendance_records#update_student", :via => :post, :as => "update_student_attendance"
+  match 'attendance/:course_id/student/:student_id/', :to => "attendance_records#student_record", :via => :get, :as => "student_attendance"
+  match 'attendance/:course_id(/:date)', :to => "attendance_records#show", :as => "course_attendance"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

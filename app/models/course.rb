@@ -28,11 +28,11 @@ class Course < ActiveRecord::Base
 #As of today's date, there is no support for referencing Mongoid from AR
 #TODO: Fix this when that patch is released
   def assignments
-    Assignment.where(course_id: id)
+    Assignment.where(:course_id => id)
   end
 
   def get_assignment_by_type(type)
-    Assignment.where(type: type)
+    Assignment.where(:type => type)
   end
 
   def active_assignments
@@ -40,7 +40,7 @@ class Course < ActiveRecord::Base
   end
 
   def ungraded_assignments
-    Assignment.where(course_id: id, graded: false)
+    Assignment.where(:course_id => id, :graded => false)
   end
 
   def legacy?
