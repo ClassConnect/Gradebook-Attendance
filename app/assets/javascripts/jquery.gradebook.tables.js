@@ -40,7 +40,6 @@ jeditable_dictionary = {
         }
     };
 
-
 comment_tooltip_dictionary = {
   onBeforeShow: function(){
     if(_current_tooltip != null){
@@ -80,7 +79,6 @@ options_tooltip_dictionary = {
   events: {def: "click, blur"}
 }
 
-
 function enable_editing(){
   $(".grade").editable(function(value, settings){
      $.ajax({
@@ -106,32 +104,20 @@ function disable_editing(){
   $('.grade').editable("disable");
 }
 
-
 //Global click event handler
 /* TODO: BE CAREFUL */
 function click_block(e){
   if(_focused_cell != null){
-    if($(e.target).is(".entry-container")){
-      console.log("container");
-      return;
-    }
-    if($(e.target).is(".dataTables_scrollBody tr td")){
-      if(e.target == _focused_cell){
-        return;
-      }
-    }
-    //otherwise, we need to turn off editing
-    else{
-      if($(e.target).is("input[type=text]")){
-        return;
+    if(_focused_cell != $(e.target).parents("td")[0]){
+      var target_id = e.target.getAttribute("id");
+      if(target_id === "in_button" || target_id === "submit-comment"){
       }
       else{
-        $(_focused_cell).children("form").submit();
-        return;
+        _focused_cell && $(_focused_cell).children("form").submit();
+        _current_tooltip && _current_tooltip.hide();
       }
     }
   }
-  console.log("nothing done");
 }
     
 function new_assignment(id, point_value){
@@ -632,7 +618,6 @@ function update_assignment(assignment_id, assignment_points){
           var formatted_num = percentage_format((score / cache_point_value) * 100);
           $(td).html(formatted_num);
           oTable.fnUpdate(formatted_num, entry_count, true_position, false);
-          console.log("Just updated " + entry_count + ", " + true_position);
         }
       }
     }
@@ -644,6 +629,7 @@ function update_assignment(assignment_id, assignment_points){
 
 function misc_grades(code){
   var input_field = $(_current_tooltip.getTrigger().parents("td").children()[0]).children(".entry-container").children("input")[0];
+  console.log(input_field);
   input_field.value = code;
   _td = $(input_field).parents("td");
   if(code === "EX" || code === "DR"){
@@ -677,6 +663,7 @@ function init_headers(){
     $(".dataTables_scrollBody td").click(function(e){
       if(_focused_cell == this){
         $($(this).children("form").children()[0]).children()[0].focus();
+        _current_tooltip && _current_tooltip.hide();
       }
       else{
         _focused_cell && $(_focused_cell).children("form").submit();
@@ -702,4 +689,14 @@ function tooltip_init(object){
     $(object).tooltip(jeditable_dictionary);
     $(object).trigger("mouseover");
   }
+}
+
+function jeditable_validator(string){
+  if(string === "")
+    return true;
+  var num_string = Number(string);
+  if(num_string < 0 || isNaN(num_string))
+    return false;
+  else
+    return true;
 }

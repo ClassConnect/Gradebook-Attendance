@@ -5,6 +5,13 @@ module ApplicationHelper
     s = ('<a '+(options[:button] ? 'class="button"' : "")+' href="#" onclick="openBox(\''+content_url+'\','+options[:width].to_s+','+shadow+'); return false;">'+text+'</a>')
     s.html_safe
   end
+
+  def button_to_openBox(text, content_url)
+    options.reverse_merge! :width => 350, :button => true, :shadow => false
+    shadow = (options[:shadow] ? "1" : "0")
+    s = ('<button onclick="openBox(\''+content_url+'\','+options[:width].to_s+','+shadow+'); return false;">'+text+'</button>')
+    s.html_safe
+  end
   
   def close_openBox_button
     s = '<a href="#" onclick="closeBox();" class="button"><img src="/images/cross.png" />Cancel</a>'

@@ -32,7 +32,6 @@ class GradeScalesController < ApplicationController
   # GET /grade_scales/new.json
   def new
     @grade_scale = GradeScale.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @grade_scale }

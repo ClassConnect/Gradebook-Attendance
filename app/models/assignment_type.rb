@@ -4,6 +4,8 @@ class AssignmentType
 
   has_many :assignments
 
+  validates_presence_of :course_id
+
   field :course_id, :type => Integer
   field :name, :type => String
   #perhaps future functionality?

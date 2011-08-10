@@ -1,5 +1,7 @@
 :javascript
   $(document).ready(function() {
+    $("assignment_date_due").datepicker();
+  
     $('#new_assignment').bind('submit', function(){
     $.post($(this).attr("action") + '.js', $(this).serialize(), null, "script");
     closeBox();
@@ -17,14 +19,11 @@
     =f.label :assignment_type_id
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
   %div{:class => "field"}
-    =f.label :description
-    =f.text_area :description
-  %div{:class => "field"}
     =f.label :point_value
     =f.text_field :point_value
   %div{:class => "field"}
     =f.label :date_due
-    =f.text_field :date_due
+    =f.text_field :date_due 
   %div{:class => "button"}
     =f.submit "Submit"
     =close_openBox_input

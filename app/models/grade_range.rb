@@ -6,4 +6,6 @@ class GradeRange
   field :to, :type => Integer
   field :name, :type => String
 
+  validates_presence_of :from, :to, :name
+
 end
