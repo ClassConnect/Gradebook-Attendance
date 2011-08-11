@@ -1,1 +1,6 @@
-= render :partial => "teacher_gradebook"
+-if @students.count > 0
+  = render :partial => "teacher_gradebook"
+-else
+  ="Sorry, no students found. Would you like to add some?"
+  ="You can't do it with the rails app :3"
+

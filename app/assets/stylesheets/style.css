@@ -96,3 +96,9 @@ ul {
   padding:25px;
   color:black;
 }
+
+#assignment-stats{
+  float:left;
+  align:left;
+  margin-top:-40px;
+}

@@ -5,22 +5,10 @@
       add_manual_input();
       init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
       init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}", "#{@settings.grade_scale.id}");
+    console.log(#{@students.count});
+    var num_students = #{@students.count};
       
     _grading_options = ["DR", "EX", "IN"];
-    initTable(#{@students.count});
-    $('.dataTables_scrollBody .datatable').attr('style', "");
-    $('.assignment_head .datatable').attr('style', "");
-    $('.datatable .DTFC_Cloned').attr('style', "");
-    //This is a dumb way to do it, but when we go back for performance, we can fix it
-
-
-    if(grading_scale_method != "manual"){
-      $('.dataTables_scrollBody .datatable tbody tr').each(function(){
-        var grade = calculateGrade(this);
-        apply_grade(this, grade);
-      });
-    }
-
     $('#add_assignment_button').click(function(){
       openBox('/gradebooks/#{@course.id}/assignments', 350);
     });
@@ -29,29 +17,42 @@
       openBox('/gradebooks/grading_scale/#{@course.id}', 350);
     });
 
+      initTable(#{@students.count});
+      $('.dataTables_scroll .datatable').attr('style', "");
+      $('.assignment_head .datatable').attr('style', "");
+      $('.datatable .DTFC_Cloned').attr('style', "");
+    //This is a dumb way to do it, but when we go back for performance, we can fix it
+
+
+      if(grading_scale_method != "manual"){
+        $('.dataTables_scrollBody .datatable tbody tr').each(function(){
+          var grade = calculateGrade(this);
+          apply_grade(this, grade);
+        });
+      }
+
+      _focused_cell = null;
+
+      document.addEventListener('click', click_block, true);
     
-    _focused_cell = null;
 
-    document.addEventListener('click', click_block, true);
-    
+      init_headers();
 
-    init_headers();
+      $("#ex_button").click(function(){
+        misc_grades("EX");
+      });
 
-    $("#ex_button").click(function(){
-      misc_grades("EX");
-    });
+      $("#dr_button").click(function(){
+        misc_grades("DR");
+      });
 
-    $("#dr_button").click(function(){
-      misc_grades("DR");
-    });
+      $("#in_button").click(function(){
+        misc_grades("IN");
+      });
 
-    $("#in_button").click(function(){
-      misc_grades("IN");
-    });
-
-    $("#submit-comment").click(function(){
-      submit_comment();
-    });
+      $("#submit-comment").click(function(){
+        submit_comment();
+      });
 
   }); 
 
@@ -67,7 +68,6 @@
       $(this).val("");
     }
   });
-
 
 %h1=@course.name
 %input{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}

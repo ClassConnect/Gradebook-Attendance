@@ -158,6 +158,7 @@ function get_table(){
 }
 
 function destroy_table(){
+  $("h1").after($("#add_assignment_button")).after($("#edit_scale_button"));
   oTable.fnDestroy();
 }
 
