@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   TEACHER = 3
   ADMIN = 4
   
-  default_scope order('last_name, first_name')
+  scope :order_names, order('last_name, first_name')
   #Authentication
   #It's a many-to-one relationship because we're allowing logins on multiple IPs
   has_many :users_keys, :foreign_key => "uid"

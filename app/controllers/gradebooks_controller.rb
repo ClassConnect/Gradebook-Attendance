@@ -5,7 +5,7 @@ class GradebooksController < ApplicationController
   
   def show
     @course = Course.find(params[:course_id])
-    @students = @course.students.order
+    @students = @course.students.order_names
     @assignments = @course.assignments.asc(:created_at).cache
     @settings = GradebookSettings.where(:course_id => params[:course_id])
     @settings &&= @settings.first

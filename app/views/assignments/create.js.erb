@@ -4,11 +4,10 @@ created_assignment = new_assignment("<%= @assignment.id %>", <%= @assignment.poi
 assignments_array.push(created_assignment);
 
 $('.datatable').width(function(index, value){
+  console.log(assignments_array.length * 150);
   return assignments_array.length * 150;
 });
 //this is incredibly ghetto...we'll have to read to find where this damn thing is placed
-$('.dataTables_scroll').attr('style', "");
-//$("<th class='assignment_header' id=<%=@assignment.id%>><%=@assignment.name%><img class='hover_button' align='right' src='/assets/exclm.png' title='hi' /></th>").insertAfter('thead th:last');
 
 var header_html = "<th class='assignment_header' align='left' id=<%=@assignment.id%>>";
 header_html += "<span class='ui-icon-info hover_button' float='right' title='info'></span>";
@@ -25,4 +24,5 @@ $('.datatable tbody tr').each(function(index, value){
 
 initTable(student_count);
 
+$('.dataTables_scroll .scrollHeadInner').attr('style', "");
 init_headers();

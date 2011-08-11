@@ -38,7 +38,7 @@ class Assignment
       puts self.grades.keys.any?
       puts self.grades.keys
       self.grades.each_key do |student_id|
-        if(grades[student_id][0] != :ungraded)
+        if(grades[student_id][0].is_a?(Numeric) )
           total_grade += grades[student_id][0]
           valid_grades += 1
         end
