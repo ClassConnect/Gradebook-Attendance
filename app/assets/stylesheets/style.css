@@ -44,6 +44,7 @@ p {
 	padding: 7px 0;
 }
 
+/*
 a {
 	outline: none;
 }
@@ -64,6 +65,7 @@ ul {
 	padding-left: 30px;
 }
 
+*/
 .tooltip {
   display:none;
   background:transparent url(/images/white_arrow.png);
