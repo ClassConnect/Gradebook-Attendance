@@ -9,6 +9,7 @@ gem 'mysql2'
 gem 'mongoid'
 gem 'bson_ext'
 
+gem 'therubyracer'
 gem 'faye'
 gem 'eventmachine'
 
