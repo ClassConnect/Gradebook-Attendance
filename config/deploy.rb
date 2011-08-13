@@ -1,3 +1,7 @@
+set :stages, %w(production staging dev)
+set :default_stage, "dev"
+require 'capistrano/ext/multistage'
+
 default_run_options[:pty] = true
 
 set :application, "gradebook-attendance"
@@ -6,8 +10,6 @@ set :user, "deploy"
 set :repository, "git@github.com:ClassConnect/Gradebook-Attendance.git" 
 set :branch, "master"
 set :scm, :git
-
-set :deploy_to, "/cap/staging"
 
 role :web, "50.57.126.198"
 role :app, "50.57.126.198"                          
