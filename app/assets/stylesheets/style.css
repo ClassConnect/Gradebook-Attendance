@@ -3,11 +3,6 @@ html, body, div, ul {
 	padding: 0;
 }
 
-body {
-    color: #262626;
-	background: #f4f4f4;
-	font: normal 12px/18px Verdana, sans-serif;
-}
 
 #content {
 	width: 400px;

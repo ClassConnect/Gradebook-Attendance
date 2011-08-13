@@ -7,7 +7,7 @@ set :repository, "git@github.com:ClassConnect/Gradebook-Attendance.git"
 set :branch, "master"
 set :scm, :git
 
-set :deploy_to, "/Capistrano/staging"
+set :deploy_to, "/cap/staging"
 
 role :web, "50.57.126.198"
 role :app, "50.57.126.198"                          
