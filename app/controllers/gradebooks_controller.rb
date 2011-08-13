@@ -41,6 +41,7 @@ class GradebooksController < ApplicationController
   private
   def teaches_class?()
     selected_courses = @current_user.courses.select("id");
+    logger.debug("HI")
     logger.debug(@current_user.id)
     logger.debug(selected_courses)
   end
