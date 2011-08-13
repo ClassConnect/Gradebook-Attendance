@@ -1,6 +1,7 @@
 class GradebooksController < ApplicationController
 
   before_filter :authenticate_session!
+  before_filter :teaches_class?
 
   #Standard 10-point scale
   DEFAULT_SCALE = [{:from => 0,:to => 59, :name =>"F"}, {:from=>60,:to=>69,:name=>"D"}, {:from=>70,:to =>79,:name =>"C"}, {:from =>80,:to=>89,:name=>"B"},{:from=>90,:to=>100,:name=>"A"}]
@@ -39,7 +40,8 @@ class GradebooksController < ApplicationController
 
   private
   def teaches_class?()
-    #selected_courses = @current_user.courses.select("id");
+    selected_courses = @current_user.courses.select("id");
     logger.debug(@current_user.id)
+    logger.debug(selected_courses)
   end
 end
