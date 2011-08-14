@@ -20,20 +20,33 @@ _current_tooltip = null;
 _current_assignment_id = null;
 _current_student_id = null;
 _grade_scale_id = null;
+active = false;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().parent().attr('id');
         var url_string = '/assignments/' + assignment_id; 
-        $.ajax({
-          type: 'GET',
-          async: false,
-          url: url_string,
-          dataType: "html",
-          success: function(data){
-            popup_content = data;
-          }
-        });
+        if(active){
+          $.ajax({
+            type: 'GET',
+            url: url_string,
+            dataType: "html",
+            success: function(data){
+              popup_content = data;
+            }
+          });
+        }
+        else{
+          $.ajax({
+            type: 'GET',
+            url: url_string,
+            async: false,
+            dataType: "html",
+            success: function(data){
+              popup_content = data;
+            }
+          });
+        }
       },
       onShow: function(){
           $('.tooltip').html(popup_content);
@@ -275,6 +288,11 @@ function add_new_input(){
 
     }*/
   });
+}
+
+function hide_filter_label(){
+  $(".dataTables_filter label").val("");
+  $("#filter_text").val("enter name to filter");
 }
 
 function initTable(num_students) {

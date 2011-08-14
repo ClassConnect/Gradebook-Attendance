@@ -61,6 +61,10 @@ ul {
 }
 
 */
+
+#new_assignment{
+  margin-top:-10px;
+}
 .tooltip {
   display:none;
   background:transparent url(/rapps/images/white_arrow.png);
@@ -92,6 +96,11 @@ ul {
   width:160px;
   padding:25px;
   color:black;
+}
+
+.filter_placeholder_text{
+  font-style:italic;
+  color:grey;
 }
 
 #assignment-stats{

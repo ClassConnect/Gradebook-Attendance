@@ -1,5 +1,6 @@
 :javascript
   $(document).ready(function() {
+    $('#assignment_date_due').datepicker({ dateFormat: 'yy-mm-dd' });
     $('#edit_assignment').bind('submit', function(){
       $.post('/assignments/update.js', $(this).serialize(), null, "script");
       closeBox();
@@ -12,24 +13,34 @@
       return false;
     });
 
+    $("#submit_edit_assignment").click(function(){
+      $("#edit_assignment").submit();
+    });
+
   }); 
 
+%div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="Edit Assignment"
+%br
 =form_for @assignment, :remote => true, :html => {:method => :post, :id => "edit_assignment"} do |f|
   =f.hidden_field :id, :value => params[:assignment_id] 
   =f.hidden_field :course_id, :value => params[:course_id]
   %div{:class => "field"}
     =f.label :name
+    %br
     =f.text_field :name, :value => @assignment.name
   %div{:class => "field"}
-    =f.label :assignment_type_id
+    =f.label :assignment_type_id, "Assignment Type"
+    %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {:selected => @assignment.assignment_type.id});
   %div{:class => "field"}
-    =f.label :point_value
+    =f.label :point_value, "Point Value"
+    %br
     =f.text_field :point_value, :value => @assignment.point_value
   %div{:class => "field"}
-    =f.label :date_due
+    =f.label :date_due, "Date Due"
+    %br
     =f.text_field :date_due, :value => @assignment.date_due
   %div{:class => "button"}
-    =f.submit "Submit"
-    =close_openBox_input
-    %input{:id => "delete_assignment", :type => "button", :value => "Delete Assignment"}
+    %button{:type => "button", :class => "button", :id => "submit_edit_assignment"}="Submit"
+    =close_openBox_button
+    %button{:id => "delete_assignment", :class => "button", :value => "Delete Assignment"}="Delete"
