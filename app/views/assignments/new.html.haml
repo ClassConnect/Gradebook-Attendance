@@ -10,9 +10,8 @@
     $("#submit_new_assignment").click(function(){
       $("#new_assignment").submit();
     });
-
-
   }); 
+
 %div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="New Assignment"
 %br
 =form_for @assignment, :html => {:id => "new_assignment"} do |f|
