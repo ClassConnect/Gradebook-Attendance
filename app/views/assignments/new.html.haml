@@ -26,11 +26,9 @@
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
   %div{:class => "field"}
     =f.label :point_value, "Point Value"
-    %br
     =f.text_field :point_value
-  %div{:class => "field"}
+  %div{:class => "field", :display => "inline"}
     =f.label :date_due, "Date Due"
-    %br
     =f.text_field :date_due 
   %div{:class => "new_assignment_buttons"}
     %button{:type => "button", :class => "button", :id => "submit_new_assignment"}="Submit"
