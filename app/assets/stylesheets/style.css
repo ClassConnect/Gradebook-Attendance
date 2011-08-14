@@ -63,7 +63,7 @@ ul {
 */
 .tooltip {
   display:none;
-  background:transparent url(/images/white_arrow.png);
+  background:transparent url(/rapps/images/white_arrow.png);
   font-size:12px;
   height:70px;
   width:160px;
@@ -77,7 +77,7 @@ ul {
 
 .comment-tip {
   display:none;
-  background:transparent url(/images/white_arrow.png);
+  background:transparent url(/rapps/images/white_arrow.png);
   font-size:12px;
   height:70px;
   width:160px;
@@ -86,7 +86,7 @@ ul {
 }
 .options-tip {
   display:none;
-  background:transparent url(/images/white_arrow.png);
+  background:transparent url(/rapps/images/white_arrow.png);
   font-size:12px;
   height:70px;
   width:160px;

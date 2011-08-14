@@ -10,8 +10,6 @@
           return false;
         }
         else{
-          $('#cert_alert').html('<h2>Grade ranges are busted.</h2>');
-          $('#cert_alert').slideDown();
           return false;
         }
       }
@@ -34,6 +32,11 @@
         scale_mode_validate(radio);
       });
     });
+
+    $("#submit_scale").click(function(){
+      $("#edit_scale").submit();
+    });
+
   }); 
 
 %div{ :class => "scale-header fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix" }= "Change Grade Scale"
@@ -57,5 +60,5 @@
       %tr{:class => "add_button_row"}
         %td{ :colspan => 6 }=link_to_add_fields "+ Add Range", s, :grade_ranges
   %div{:id => "scale_submission", :class => "scale-footer fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}
-    =s.submit
-    =close_openBox_input
+    %button{:type => "button", :class => "button", :id => "submit_scale"}="Submit"
+    =close_openBox_button

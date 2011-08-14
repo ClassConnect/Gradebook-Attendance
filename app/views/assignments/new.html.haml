@@ -8,6 +8,10 @@
     return false;
     });
 
+    $("#submit_new_assignment").click(function(){
+      $("#new_assignment").submit();
+    });
+
   }); 
 %div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="New Assignment"
 %br
@@ -30,6 +34,6 @@
     %br
     =f.text_field :date_due 
   %div{:class => "button"}
-    =f.submit "Submit"
-    =close_openBox_input
+    %button{:type => "button", :class => "button", :id => "submit_new_assignment"}="Submit"
+    =close_openBox_button
     
