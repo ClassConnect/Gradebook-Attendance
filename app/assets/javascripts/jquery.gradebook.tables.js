@@ -26,6 +26,7 @@ jeditable_dictionary = {
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().parent().attr('id');
         var url_string = '/assignments/' + assignment_id; 
+        $('.tooltip').html("");
           $.ajax({
             type: 'GET',
             url: url_string,
@@ -36,8 +37,7 @@ jeditable_dictionary = {
           });
       },
       onShow: function(){
-      },
-      predelay: 70
+      }
     };
 
 comment_tooltip_dictionary = {
@@ -300,7 +300,7 @@ function initTable(num_students) {
     "iDisplayLength": num_students,
     "bDestroy": true,
     "bAutoWidth": false,
-    "sScrollX": "600px",
+    "sScrollX": "575px",
     "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
     "bProcessing": true,
