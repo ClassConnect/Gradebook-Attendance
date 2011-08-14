@@ -40,12 +40,10 @@ class GradebooksController < ApplicationController
 
   private
   def teaches_class?(viewed_id)
-    logger.info(current_user)
-    selected_courses = current_user.taught_courses.find_by_id(viewed_id)
-    if(selected_courses == nil)
-      logger.info("successfully didn't work")
-    else
-      logger.info(selected_courses.name)
+    selected_course = current_user.taught_courses.find_by_id(viewed_id)
+    if(selected_course == nil)
+      return redirect_to "/app/home.cc"
     end
   end
+
 end
