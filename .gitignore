@@ -6,6 +6,7 @@ log/*.log
 config/mongoid.yml
 config/database.yml
 tmp/
+vender/cache/*
 .sass-cache/
 .DS_Store
 *.tmproj
