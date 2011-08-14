@@ -11,6 +11,7 @@
       $("#new_assignment").submit();
     });
 
+
   }); 
 %div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="New Assignment"
 %br
@@ -25,9 +26,8 @@
     %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
   %div{:class => "field"}
-    =f.label :point_value, "Point Value"
+    =f.label :point_value, "Point Value: "
     =f.text_field :point_value
-  %div{:class => "field", :display => "inline"}
     =f.label :date_due, "Date Due"
     =f.text_field :date_due 
   %div{:class => "new_assignment_buttons"}

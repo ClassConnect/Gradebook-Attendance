@@ -114,3 +114,7 @@ ul {
   float:right;
   margin-top:10px;
 }
+
+#assignment_point_value{
+  width: 50px;
+}
