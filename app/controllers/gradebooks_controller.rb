@@ -42,7 +42,10 @@ class GradebooksController < ApplicationController
   def teaches_class?(viewed_id)
     logger.info(current_user)
     selected_courses = current_user.taught_courses.find(viewed_id)
-    logger.info(selected_courses)
-    logger.info(selected_courses.name)
+    if(selected_courses == nil)
+      logger.info("successfully didn't work")
+    else
+      logger.info(selected_courses.name)
+    end
   end
 end
