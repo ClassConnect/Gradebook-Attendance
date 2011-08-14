@@ -26,7 +26,6 @@ jeditable_dictionary = {
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().parent().attr('id');
         var url_string = '/assignments/' + assignment_id; 
-        if(active){
           $.ajax({
             type: 'GET',
             url: url_string,
@@ -36,7 +35,6 @@ jeditable_dictionary = {
             }
           });
           $('.tooltip').html(popup_content);
-        }
       },
       onShow: function(){
       }
