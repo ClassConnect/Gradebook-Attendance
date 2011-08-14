@@ -35,22 +35,11 @@ jeditable_dictionary = {
               popup_content = data;
             }
           });
-        }
-        else{
-          $.ajax({
-            type: 'GET',
-            url: url_string,
-            async: false,
-            dataType: "html",
-            success: function(data){
-              popup_content = data;
-            }
-          });
+          $('.tooltip').html(popup_content);
         }
       },
       onShow: function(){
-          $('.tooltip').html(popup_content);
-        }
+      }
     };
 
 comment_tooltip_dictionary = {
