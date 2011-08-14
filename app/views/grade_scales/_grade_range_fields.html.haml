@@ -5,4 +5,4 @@
   %td{ :class => "operator" }=f.label "="
   %td=f.text_field :name, {:size => "2", :maxlength => "3"} 
   =f.hidden_field :_destroy, {:id => "range_destroy_field"}
-  %td{ :class => "remove_button" }=button_to_function "X", "remove_fields(this)"
+  %td{ :class => "remove_button button" }=button_to_function "X", "remove_fields(this)"
