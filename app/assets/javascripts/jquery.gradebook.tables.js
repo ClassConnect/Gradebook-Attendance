@@ -158,7 +158,7 @@ function get_table(){
 }
 
 function destroy_table(){
-  $("h1").after($("#add_assignment_button")).after($("#edit_scale_button"));
+  $("#gradebook_div").after($("#add_assignment_button")).after($("#edit_scale_button"));
   oTable.fnDestroy();
 }
 
@@ -301,13 +301,14 @@ function initTable(num_students) {
     "bProcessing": true,
     "bJQueryUI": true,
     "sDom": '<"H"rf>t<"F">',
-    "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true}]
+    "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true, "sWidth":"140px"}],
+    "bScrollCollapse": true
   });
 
   new FixedColumns(oTable, {
     //look at sizing stuff
     "iLeftColumns": 3,
-    "iLeftWidth": 320,
+    "iLeftWidth":320,
     "sHeightMatch": "none"
   });
 
