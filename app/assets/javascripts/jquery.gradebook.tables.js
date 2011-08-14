@@ -278,7 +278,7 @@ function add_new_input(){
 
 function hide_filter_label(){
   $(".dataTables_filter label").val("");
-  $("#filter_text").val("Enter name to filter");
+  $("#filter_text").val("enter name to filter");
 }
 
 function initTable(num_students) {

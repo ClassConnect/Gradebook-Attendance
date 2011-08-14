@@ -94,6 +94,11 @@ ul {
   color:black;
 }
 
+.filter_placeholder_text{
+  font-style:italic;
+  color:grey;
+}
+
 #assignment-stats{
   float:left;
   align:left;

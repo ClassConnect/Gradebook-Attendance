@@ -72,7 +72,8 @@
 
   $(document).delegate("#filter_text", "focus", function(){
     var text = $("#filter_text").value;
-    if($("#filter_text").val() === "Enter name to filter"){
+    if($("#filter_text").val() === "enter name to filter"){
+      $("#filter_text").removeClass("filter_placeholder_text");
       $("#filter_text").val("");
     }
 
@@ -80,7 +81,8 @@
 
   $(document).delegate("#filter_text", "blur", function(){
     if($("#filter_text").val() == ""){
-      $("#filter_text").val("Enter name to filter");
+      $("#filter_text").addClass("filter_placeholder_text");
+      $("#filter_text").val("enter name to filter");
     }
   });
 
