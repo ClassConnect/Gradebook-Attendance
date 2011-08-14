@@ -27,7 +27,6 @@ jeditable_dictionary = {
         var url_string = '/assignments/' + assignment_id; 
         $.ajax({
           type: 'GET',
-          async: false,
           url: url_string,
           dataType: "html",
           success: function(data){
@@ -275,6 +274,11 @@ function add_new_input(){
 
     }*/
   });
+}
+
+function hide_filter_label(){
+  $(".dataTables_filter label").val("");
+  $("#filter_text").val("Enter name to filter");
 }
 
 function initTable(num_students) {
