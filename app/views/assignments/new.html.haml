@@ -1,6 +1,6 @@
 :javascript
   $(document).ready(function() {
-    $("assignment_date_due").datepicker();
+    $("#assignment_date_due").datepicker();
   
     $('#new_assignment').bind('submit', function(){
     $.post($(this).attr("action") + '.js', $(this).serialize(), null, "script");
