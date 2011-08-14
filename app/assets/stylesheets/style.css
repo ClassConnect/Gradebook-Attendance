@@ -63,7 +63,7 @@ ul {
 */
 
 #new_assignment{
-  margin-top:-10px;
+  margin-top:-5px;
   margin-left:15px;
 }
 .tooltip {
@@ -120,5 +120,5 @@ ul {
 }
 
 #assignment_date_due{
-  width: 110px;
+  width: 100px;
 }
