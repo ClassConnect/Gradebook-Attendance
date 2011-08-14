@@ -61,6 +61,10 @@ ul {
 }
 
 */
+
+#new_assignment{
+  margin-top:-10px;
+}
 .tooltip {
   display:none;
   background:transparent url(/rapps/images/white_arrow.png);
