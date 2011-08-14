@@ -65,7 +65,6 @@ class AssignmentsController < ApplicationController
   #Updating individual grade
   def update_assignment_grade
     @assignment = Assignment.find(params[:id])
-    puts params[:value]
     id = params[:student_id]
     if !@assignment.grades[id.to_s]
       @assignment.grades[id.to_s] = [:ungraded, :nocomment]
@@ -73,7 +72,11 @@ class AssignmentsController < ApplicationController
     end
     
     if params[:value] != ""
-      @assignment.grades[id.to_s][0] = params[:value].to_i
+      if params[:value] == "EX" || params[:value] == "IN" || params[:value] == "DR"
+        @assignment.grades[id.to_s][0] = params[:value]
+      else
+        @assignment.grades[id.to_s][0] = params[:value].to_i
+      end
     else
       @assignment.grades[id.to_s][0] = :ungraded
     end
@@ -97,6 +100,32 @@ class AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     respond_to do |format|
       format.html {render :layout => false}
+    end
+  end
+
+  def comment_submit
+    @assignment = Assignment.find(params[:id])
+    id = params[:student_id]
+    if !@assignment.grades[id.to_s]
+      @assignment.grades[id.to_s] = [:ungraded, :nocomment]
+      @assignment.save
+    end
+
+    if params[:value] != ""
+      @assignment.grades[id.to_s][1] = params[:value]
+    else
+      @assignment.grades[id.to_s][1] = :nocomment
+    end
+
+    #Unfortunately necessary due to a mongoid bug
+    array = @assignment.grades[id.to_s]
+    @assignment.grades[id.to_s] = nil
+    @assignment.save :validate => false
+    @assignment.grades[id.to_s] = array
+    @assignment.save :validate => false
+
+    respond_to do |format|
+      format.html {render :text => ""}
     end
   end
 

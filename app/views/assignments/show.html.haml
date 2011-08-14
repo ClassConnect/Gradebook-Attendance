@@ -1,9 +1,22 @@
-=@assignment.name
-%br
-=@assignment.assignment_type.name
-%br
--unless @assignment.average == "no_grades"
-  ="Average: " + @assignment.average.to_s
-%br
-=link_to_openBox("Edit", id_to_link)
-=link_to_openBox("Visual", "/gradebooks/assignments/#{@assignment.id}/report")
+:javascript
+  $(document).ready(function(){
+    $(".edit_assignment").click(function(){
+      console.log("#{id_to_link}");
+      openBox("#{id_to_link}", 350);
+    });
+
+    $(".visualize").click(function(){
+      openBox("/gradebooks/assignments/#{@assignment.id}/report", 350);
+    });
+  });
+%div{:id => "show_buttons", :float => "right", :align => "right"}
+  %button{:class => "visualize"}="Graph"
+  %br
+  %button{:class => "edit_assignment"}="Edit"
+%div{:id => "assignment-stats"}
+  =@assignment.name
+  %br
+  =@assignment.assignment_type.name
+  %br
+  -unless @assignment.average == "no_grades"
+    ="Average: " + @assignment.average.to_s

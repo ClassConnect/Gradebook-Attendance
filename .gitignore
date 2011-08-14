@@ -1,6 +1,10 @@
 .bundle
 db/*.sqlite3
+config/mongoid.yml
+config/database.yml
 log/*.log
+config/mongoid.yml
+config/database.yml
 tmp/
 .sass-cache/
 .DS_Store

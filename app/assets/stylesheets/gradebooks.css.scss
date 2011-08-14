@@ -17,23 +17,98 @@
   font-weight:bold;
 }
 
-td.grade_entry{
+.grade_entry{
   width:140px;
   align:center;
 }
 
-td.grade_display{
+.grade_display{
   width:50px;
   align:center;
 }
 
-td.assignment_header{
+.assignment_header{
   width:140px;
   align:center;
+  height:38px;
 }
 
 .assignment-name{
   padding-top:0px;
   padding-bottom:0px;
+}
 
+.grade_field{
+  width: 25px; 
+  background: transparent; 
+  border:0px;
+  text-align:right;
+  font-size:13px;
+}
+
+#comment-button{
+  float: left;
+  margin-left: 5px;
+}
+
+#option-button{
+  float: right;
+  margin-right: 5px;
+}
+
+#comment_button{
+
+}
+ul#icons {margin: 0; padding: 0;}
+ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+ul#icons span.ui-icon {float: left; margin: 0 4px;}
+
+.ui-mini { width: 9px; height: 9px; background-image: url(/images/ui-icons_222222_256x240.png); }
+
+ul.micons {margin: 0; padding: 0;}
+ul.micons li {margin: 1px; position: relative; padding: 1px 0; cursor: pointer; float: right;   list-style: none;}
+ul.micons span.ui-mini {float: right; margin: 0 4px;}
+
+#choice-buttons{
+  margin-top: -28px;
+  margin-right: 3px;
+  width: 20px;
+  float: right;
+}
+
+.assignment-value{
+
+}
+
+.entry-container{
+  margin-top: 8px;
+}
+
+#comment-entry{
+}
+
+#comment-box-text{
+  margin-top: -10px;
+}
+
+.manual_field{
+  align: right;
+  width: 60px; 
+  height: 34px;
+  border:0px;
+  background: transparent;
+  text-align:center;
+  font-size:13px;
+  font-family:verdana, arial, helvetica, sans-serif;
+  line-height:18px;
+  float:center;
+  padding-left:-5px;
+}
+
+.grade{
+  align:center;
+}
+
+.header_row{
+  height:42px;
 }

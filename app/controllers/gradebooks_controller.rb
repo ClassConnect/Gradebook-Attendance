@@ -1,11 +1,12 @@
 class GradebooksController < ApplicationController
 
+
   #Standard 10-point scale
   DEFAULT_SCALE = [{:from => 0,:to => 59, :name =>"F"}, {:from=>60,:to=>69,:name=>"D"}, {:from=>70,:to =>79,:name =>"C"}, {:from =>80,:to=>89,:name=>"B"},{:from=>90,:to=>100,:name=>"A"}]
   
   def show
     @course = Course.find(params[:course_id])
-    @students = @course.students.order
+    @students = @course.students.order_names
     @assignments = @course.assignments.asc(:created_at).cache
     @settings = GradebookSettings.where(:course_id => params[:course_id])
     @settings &&= @settings.first
@@ -33,5 +34,14 @@ class GradebooksController < ApplicationController
 
   def scale
     @scale = GradeScale.where(:course_id => params[:course_id]).first
+  end
+
+  private
+  def teaches_class?()
+    selected_courses = @current_user.courses.select("id");
+    puts "HI"
+    logger.debug(@current_user.id)
+
+    logger.debug(selected_courses)
   end
 end

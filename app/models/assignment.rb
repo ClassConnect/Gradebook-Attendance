@@ -10,11 +10,7 @@ class Assignment
   field :course_id, :type => Integer
   index :course_id
 
-  field :teacher_id, :type => Integer
-  field :created_by, :type => Integer
-
   field :name, :type => String
-  field :description, :type => String
   field :point_value, :type => Integer
   field :date_due, :type => Date
 
@@ -22,6 +18,8 @@ class Assignment
   #All grades accessible from here
   field :grades, :type => Hash, :default => {}
   field :dirty_grade, :type => Boolean
+
+  validates_presence_of :course_id, :name, :point_value
 
   default_scope asc(:created_at)
 
@@ -34,12 +32,13 @@ class Assignment
   end
 
   def calculate_average
-    puts dirty_grade
     if(dirty_grade)
       total_grade=0.0
       valid_grades=0
+      puts self.grades.keys.any?
+      puts self.grades.keys
       self.grades.each_key do |student_id|
-        if(grades[student_id][0] != :ungraded)
+        if(grades[student_id][0].is_a?(Numeric) )
           total_grade += grades[student_id][0]
           valid_grades += 1
         end
