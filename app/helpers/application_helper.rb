@@ -14,7 +14,7 @@ module ApplicationHelper
   end
   
   def close_openBox_button
-    s = '<a href="#" onclick="closeBox();" class="button"><img src="/images/cross.png" />Cancel</a>'
+    s = '<a href="#" onclick="closeBox();" class="button"><img src="/rapps/images/cross.png" />Cancel</a>'
     s.html_safe
   end
   
