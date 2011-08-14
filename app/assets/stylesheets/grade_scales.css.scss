@@ -9,6 +9,24 @@ $add-button-text-color:#FFFFFF;
 $grade-range-border-color:#AAAAAA;
 $remove-grade-range-button-color:#CCCCCC;
 
+@mixin rounded-rect($radius:5px) {
+  -moz-border-radius-bottomleft: $radius;
+  -khtml-border-radius-bottomleft: $radius;
+  -webkit-border-bottom-left-radius: $radius;
+  
+  -moz-border-radius-topleft: $radius;
+  -khtml-border-radius-topleft: $radius;
+  -webkit-border-top-left-radius: $radius;
+  
+  -moz-border-radius-bottomright: $radius;
+  -khtml-border-radius-bottomright: $radius;
+  -webkit-border-bottom-right-radius: $radius;
+  
+  -moz-border-radius-topright: $radius;
+  -khtml-border-radius-topright: $radius;
+  -webkit-border-top-right-radius: $radius;
+}
+
 .scale-header, .edit_grade_scale {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -127,6 +145,7 @@ $remove-grade-range-button-color:#CCCCCC;
 		    background-color:$remove-grade-range-button-color;
 		    border-top:3px solid $remove-grade-range-button-color;
 		    border-bottom:2px solid $remove-grade-range-button-color;
+		    @include rounded-rect(0);
 		  }
 		}
 	}
@@ -150,6 +169,7 @@ $remove-grade-range-button-color:#CCCCCC;
   color: #FFD700;
   background-color:#4D4D4D;
   border-top:1px solid #4D4D4D;
+  @include rounded-rect(0);
 }
 
 #cert_alert {
