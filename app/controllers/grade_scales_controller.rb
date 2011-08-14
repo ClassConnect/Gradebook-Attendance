@@ -92,7 +92,7 @@ class GradeScalesController < ApplicationController
     @grade_scale.save
 
     respond_to  do |format|
-      format.html {render text: ""}
+      format.html {render :text => ""}
     end
   end
 end
