@@ -41,7 +41,9 @@ class GradebooksController < ApplicationController
   private
   def teaches_class?()
     logger.info(current_user)
-    selected_courses = current_user.courses;
+    selected_courses = current_user.taught_courses;
+    _selected_courses = current_user.taught_courses.select("id")
     logger.info(selected_courses)
+    logger.info(_selected_courses)
   end
 end
