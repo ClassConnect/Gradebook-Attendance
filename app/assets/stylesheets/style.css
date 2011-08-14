@@ -131,3 +131,11 @@ ul {
 tbody{
   font-size:12px;
 }
+
+thead{
+  font-size:12px;
+}
+
+.row_entry td{
+  padding:3px;
+}
