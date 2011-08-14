@@ -300,7 +300,7 @@ function initTable(num_students) {
     "iDisplayLength": num_students,
     "bDestroy": true,
     "bAutoWidth": false,
-    "sScrollX": "575px",
+    "sScrollX": "550px",
     "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
     "bProcessing": true,
