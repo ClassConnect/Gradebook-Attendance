@@ -489,7 +489,7 @@ function validate_scales_form(){
   var min, max, current_upper, new_lower;
   var name_array = new Array();
   min = $(rows[row_count]).children("td").children('input')[SCALE_FROM_BOX_INDEX].value;
-  if (min != 0)
+  if (min != 0){
     display_error("Ranges must start at 0 and end at 100");
     return false;
   }
