@@ -40,6 +40,7 @@ class GradebooksController < ApplicationController
 
   private
   def teaches_class?()
+    logger.info(current_user)
     selected_courses = current_user.courses;
     logger.info(selected_courses)
   end
