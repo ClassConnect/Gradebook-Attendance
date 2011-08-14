@@ -24,17 +24,21 @@
   =f.hidden_field :course_id, :value => params[:course_id]
   %div{:class => "field"}
     =f.label :name
+    %br
     =f.text_field :name, :value => @assignment.name
   %div{:class => "field"}
-    =f.label :assignment_type_id
+    =f.label :assignment_type_id, "Assignment Type"
+    %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {:selected => @assignment.assignment_type.id});
   %div{:class => "field"}
-    =f.label :point_value
+    =f.label :point_value, "Point Value"
+    %br
     =f.text_field :point_value, :value => @assignment.point_value
   %div{:class => "field"}
-    =f.label :date_due
+    =f.label :date_due, "Date Due"
+    %br
     =f.text_field :date_due, :value => @assignment.date_due
   %div{:class => "button"}
     %button{:type => "button", :class => "button", :id => "submit_edit_assignment"}="Submit"
-    =close_openBox_input
-    %button{:id => "delete_assignment", :class => "button", :value => "Delete Assignment"}
+    =close_openBox_button
+    %button{:id => "delete_assignment", :class => "button", :value => "Delete Assignment"}="Delete"
