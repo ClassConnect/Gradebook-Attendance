@@ -41,7 +41,7 @@ class GradebooksController < ApplicationController
   private
   def teaches_class?(viewed_id)
     logger.info(current_user)
-    selected_courses = current_user.taught_courses.find(viewed_id)
+    selected_courses = current_user.taught_courses.where(:id => viewed_id)
     if(selected_courses == nil)
       logger.info("successfully didn't work")
     else
