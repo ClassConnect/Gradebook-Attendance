@@ -6,7 +6,7 @@ class GradebooksController < ApplicationController
   DEFAULT_SCALE = [{:from => 0,:to => 59, :name =>"F"}, {:from=>60,:to=>69,:name=>"D"}, {:from=>70,:to =>79,:name =>"C"}, {:from =>80,:to=>89,:name=>"B"},{:from=>90,:to=>100,:name=>"A"}]
   
   def show
-    teaches_class?()
+    teaches_class?(params[:course_id])
     @course = Course.find(params[:course_id])
     @students = @course.students.order_names
     @assignments = @course.assignments.asc(:created_at).cache
@@ -39,9 +39,9 @@ class GradebooksController < ApplicationController
   end
 
   private
-  def teaches_class?()
+  def teaches_class?(viewed_id)
     logger.info(current_user)
-    selected_courses = current_user.taught_courses.find(103)
+    selected_courses = current_user.taught_courses.find(viewed_id)
     logger.info(selected_courses)
     logger.info(selected_courses.name)
   end
