@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_session!
+		if Rails.env.development?
+			return @current_user = User.find(8)
+		end
     if !params[:session_id].nil?
       session[:session_key] = params[:session_id]
     end

@@ -9,6 +9,10 @@ $add-button-text-color:#FFFFFF;
 $grade-range-border-color:#AAAAAA;
 $remove-grade-range-button-color:#CCCCCC;
 
+.scale-header, .edit_grade_scale {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .scale-header {
 	height:30px;
 	font-size:18px;
@@ -48,6 +52,7 @@ $remove-grade-range-button-color:#CCCCCC;
 		text-align:center;
 		border-right:1px solid black;
 		display:inline-block;
+		font-size:14px;
 		
 		label {
 			cursor:pointer;
