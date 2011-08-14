@@ -31,8 +31,7 @@ jeditable_dictionary = {
             url: url_string,
             dataType: "html",
             success: function(data){
-              popup_content = data;
-              $('.tooltip').html(popup_content);
+              $('.tooltip').html(data);
             }
           });
       },
