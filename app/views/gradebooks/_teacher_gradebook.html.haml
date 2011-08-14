@@ -70,8 +70,8 @@
     }
   });
 
-%button{:type => "button", :value => "Add Assignment", :class => "button", :id => "add_assignment_button"}
-%button{:type => "button", :value => "Edit Scale", :class => "button", :id => "edit_scale_button"}
+%button{:type => "button", :class => "button", :id => "add_assignment_button"}="Add Assignment"
+%button{:type => "button", :class => "button", :id => "edit_scale_button"}="Edit Scale"
 %div{:id => "gradebook_div"}
   =render "students_table"
 %div{:id => "dialogBox"}
