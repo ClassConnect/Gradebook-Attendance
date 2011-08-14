@@ -118,3 +118,7 @@ ul {
 #assignment_point_value{
   width: 50px;
 }
+
+#assignment_date_due{
+  width: 110px;
+}

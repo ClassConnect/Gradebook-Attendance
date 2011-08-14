@@ -25,7 +25,7 @@
     =f.label :assignment_type_id, "Assignment Type"
     %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
-  %div{:class => "field"}
+  %div{:class => "field", :style => "margin-top:10px;"}
     =f.label :point_value, "Point Value: "
     =f.text_field :point_value
     =f.label :date_due, "Date Due"
