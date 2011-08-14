@@ -32,9 +32,9 @@ jeditable_dictionary = {
             dataType: "html",
             success: function(data){
               popup_content = data;
+              $('.tooltip').html(popup_content);
             }
           });
-          $('.tooltip').html(popup_content);
       },
       onShow: function(){
       }
