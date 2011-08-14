@@ -1,6 +1,6 @@
 // cc lightbox
-loading_image_path = '/images/loading.gif'
-cancel_image_path = '/images/cross.png'
+loading_image_path = '/rapps/images/loading.gif'
+cancel_image_path = '/rapps/images/cross.png'
 
 function openBox(boxURL, boxWidth, shadow) {
 	var boxMargin = boxWidth/2 + 6;
