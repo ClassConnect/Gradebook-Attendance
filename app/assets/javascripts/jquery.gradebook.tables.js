@@ -470,6 +470,12 @@ function link_to_openbox(text, url){
   return openbox_link;
 }
 
+
+function display_error(string){
+  $('#cert_alert').html('<h2>' + string + '</h2>');
+  $('#cert_alert').slideDown();
+}
+
 /*
 *This function validates the user's input when editing scales. Ranges should be
 *continuous, and range from 0(%) to 100(%). No grades can have the same "name." 
@@ -483,7 +489,10 @@ function validate_scales_form(){
   var min, max, current_upper, new_lower;
   var name_array = new Array();
   min = $(rows[row_count]).children("td").children('input')[SCALE_FROM_BOX_INDEX].value;
-  if (min != 0) return false;
+  if (min != 0)
+    display_error("Ranges must start at 0 and end at 100");
+    return false;
+  }
   while(row_count--){
     //Check if TO and FROM values are consecutive
     current_row = $(rows[row_count]).children("td").children('input');
@@ -494,15 +503,22 @@ function validate_scales_form(){
     //Check if grade name is unique
     if (name_array[grade_name] === undefined)
      name_array[grade_name] = true;
-    else
+    else{
+      display_error("Ranges must have unique names");
       return false;
+    }
     //For now, only consecutive integers are valid
-    if(new_lower - current_upper != 1)
+    if(new_lower - current_upper != 1){
+      display_error("Ranges must be consecutive");
       return false;
+    }
   }
   max = $(rows[0]).children("td").children('input')[SCALE_TO_BOX_INDEX].value;
   if(max == 100)
     return true;
+
+
+  display_error("Ranges must start at 0 and end at 100");
   return false;
 }
 
