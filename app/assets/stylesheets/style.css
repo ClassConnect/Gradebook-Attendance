@@ -127,3 +127,7 @@ ul {
 #assignment_date_due{
   width: 100px;
 }
+
+tbody{
+  font-size:12px;
+}
