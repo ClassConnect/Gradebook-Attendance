@@ -36,7 +36,8 @@ jeditable_dictionary = {
           });
       },
       onShow: function(){
-      }
+      },
+      predelay: 70
     };
 
 comment_tooltip_dictionary = {
@@ -299,7 +300,7 @@ function initTable(num_students) {
     "iDisplayLength": num_students,
     "bDestroy": true,
     "bAutoWidth": false,
-    "sScrollX": "550px",
+    "sScrollX": "600px",
     "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
     "bProcessing": true,
