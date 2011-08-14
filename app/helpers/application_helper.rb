@@ -23,6 +23,7 @@ module ApplicationHelper
       render(association.to_s.singularize + "_fields", :f => builder)
     end
     button_to_function(name, "add_fields(this, '#{association}', '#{escape_javascript(fields)}')", :id => "add_range_button")
+    #content_tag(:div,name,:id => "add_range_button", :onclick => "add_fields(this, '#{association}', '#{escape_javascript(fields)}')")
   end
 
 end

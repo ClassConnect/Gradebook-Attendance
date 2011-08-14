@@ -1,9 +1,8 @@
 :javascript
   $(document).ready(function() {
     scale_mode_validate($('input[checked=checked]'));
-    $('#edit_scale').prepend('<div id="notice"></div>');
     $('#edit_scale').bind('submit', function(){
-      $('#notice').hide();
+      $('#cert_alert').hide();
       if($("input[type=radio]:checked").attr('value') === "scale"){
         if(validate_scales_form()){
           $.post('/grade_scales/#{@scale.id}', $(this).serialize(), null, "script");
@@ -11,8 +10,8 @@
           return false;
         }
         else{
-          $('#notice').html('<h2>Grade ranges are busted.</h2>');
-          $('#notice').show();
+          $('#cert_alert').html('<h2>Grade ranges are busted.</h2>');
+          $('#cert_alert').slideDown();
           return false;
         }
       }
@@ -23,26 +22,40 @@
       }
     });
 
-    $("input[type=radio]").click(function(){
-      scale_mode_validate(this);
+    $("#options").children().each(function(i,elem){
+      $(elem).click(function(){
+        $("#options").children().each(function(i,elem){
+          $(elem).removeClass("selected");
+          $(elem).find("input[type=radio]").attr("checked",false)
+        });
+        $(this).addClass("selected");
+        var radio = $(this).find("input[type=radio]");
+        radio.attr("checked",true);
+        scale_mode_validate(radio);
+      });
     });
   }); 
 
+%div{ :class => "scale-header fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix" }= "Change Grade Scale"
 =form_for @scale, :remote => true, :html => {:id => "edit_scale", :method => "put"} do |s|
   %div{:id => "options"}
-    %div{:id => "scale_button"}
-      =s.radio_button :scale_type, :scale 
+    %div{:class => (@scale.scale_type == "scale" ? "selected" : "")}
+      =s.radio_button :scale_type, :scale, :style => "display:none"
       =s.label :scale_type, "Scale"
-    =s.radio_button :scale_type, :percentage
-    =s.label :scale_type, "Percentage"
-    %br
-    =s.radio_button :scale_type, :manual
-    =s.label :scale_type, "Manual"
-  %div{:id => "range_fields"}
-    -#Nested models ignore scope, so you need to do it as the second arg
-    =s.fields_for :grade_ranges, @scale.grade_ranges.desc(:from) do |builder|  
-      =render "grade_range_fields", :f => builder
-  =link_to_add_fields "Add Range", s, :grade_ranges
-  %div{:id => "scale_submission"}
+    %div{:class => (@scale.scale_type == "percentage" ? "selected" : "")}
+      =s.radio_button :scale_type, :percentage, :style => "display:none"
+      =s.label :scale_type, "Percentage"
+    %div{:class => "last "+(@scale.scale_type == "manual" ? "selected" : "")}
+      =s.radio_button :scale_type, :manual, :style => "display:none"
+      =s.label :scale_type, "Manual"
+  %div{:id => "cert_alert", :style => "display:none"}
+  %div{:id => "range_fields", :style => ""}
+    %table{:class => "grade_range"}
+      -#Nested models ignore scope, so you need to do it as the second arg
+      =s.fields_for :grade_ranges, @scale.grade_ranges.desc(:from) do |builder|  
+        =render "grade_range_fields", :f => builder
+      %tr{:class => "add_button_row"}
+        %td{ :colspan => 6 }=link_to_add_fields "+ Add Range", s, :grade_ranges
+  %div{:id => "scale_submission", :class => "scale-footer fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}
     =s.submit
     =close_openBox_input

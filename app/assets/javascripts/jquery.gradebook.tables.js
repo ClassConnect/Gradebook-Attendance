@@ -339,15 +339,15 @@ function link_to_openbox(text, url){
 //TODO: add 
 function validate_scales_form(){
   rows = $('.grade_detail_row:visible');
-  row_count = rows.length-1;
+  var row_count = rows.length-1;
   var min, max, current_upper, new_lower;
   var name_array = new Array();
-  min = $(rows[row_count]).children('input')[SCALE_FROM_BOX_INDEX].value;
+  min = $(rows[row_count]).children("td").children('input')[SCALE_FROM_BOX_INDEX].value;
   if (min != 0) return false;
   while(row_count--){
     //Check if TO and FROM values are consecutive
-    current_row = $(rows[row_count]).children('input');
-    current_upper = $(rows[row_count+1]).children('input')[SCALE_TO_BOX_INDEX].value;
+    current_row = $(rows[row_count]).children("td").children('input');
+    current_upper = $(rows[row_count+1]).children("td").children('input')[SCALE_TO_BOX_INDEX].value;
     new_lower = current_row[SCALE_FROM_BOX_INDEX].value; 
     grade_name = current_row[SCALE_NAME_BOX_INDEX].value;
 
@@ -356,19 +356,18 @@ function validate_scales_form(){
      name_array[grade_name] = true;
     else
       return false;
-    
     //For now, only consecutive integers are valid
     if(new_lower - current_upper != 1)
       return false;
   }
-  max = $(rows[0]).children('input')[SCALE_TO_BOX_INDEX].value;
+  max = $(rows[0]).children("td").children('input')[SCALE_TO_BOX_INDEX].value;
   if(max == 100)
     return true;
   return false;
 }
 
 function remove_fields(link){
-  $(link).prev("input[type=hidden]").val("1");
+  $(link).parent().prev("input[type=hidden]").val("1");
   $(link).closest(".grade_detail_row input[type=text]").attr("disabled", true);
   $(link).closest(".grade_detail_row").hide();
 }
@@ -376,7 +375,8 @@ function remove_fields(link){
 function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g");
-  $(link).parent().children("#range_fields").append(content.replace(regexp, new_id));
+  var html = content.replace(regexp, new_id);
+  $(link).parent().parent().before(html);
 }
 
 function assignment_id(index){
@@ -396,12 +396,15 @@ function scale_mode_validate(object){
   if($(object).attr('value') === "scale"){
     $("#range_fields").show();
     $("#add_range_button").show();
+    if($("#cert_alert").html())
+      $("#cert_alert").show();
     $("#range_fields input").removeAttr("disabled");
     $("#range_fields").removeAttr("disabled");
   }
   else{
     $("#range_fields").hide();
     $("#add_range_button").hide();
+    $("#cert_alert").hide();
     $("#range_fields input").attr("disabled", true);
     $("#range_fields").attr("disabled", true);
   }

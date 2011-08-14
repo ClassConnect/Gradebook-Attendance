@@ -1,9 +1,8 @@
-%p{:class => "grade_detail_row"}
-  =f.label :from
-  =f.text_field :from, {:size => "1", :maxlength => "3"}
-  =f.label :to
-  =f.text_field :to, {:size => "1", :maxlength => "3"}
-  =f.label "="
-  =f.text_field :name, {:size => "2", :maxlength => "3"} 
+%tr{:class => "grade_detail_row"}
+  %td=f.text_field :from, {:size => "1", :maxlength => "3"}
+  %td{ :class => "operator" }=f.label :to,"to"
+  %td=f.text_field :to, {:size => "1", :maxlength => "3"}
+  %td{ :class => "operator" }=f.label "="
+  %td=f.text_field :name, {:size => "2", :maxlength => "3"} 
   =f.hidden_field :_destroy, {:id => "range_destroy_field"}
-  =button_to_function "Remove", "remove_fields(this)"
+  %td{ :class => "remove_button" }=button_to_function "X", "remove_fields(this)"

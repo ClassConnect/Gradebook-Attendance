@@ -11,7 +11,7 @@ class GradeScalesController < ApplicationController
   end
 
   def scale
-    @scale = GradeScale.where(course_id: params[:course_id]).first
+    @scale = GradeScale.where(:course_id => params[:course_id]).first
     respond_to do |format|
       format.html {render :layout => false}
     end

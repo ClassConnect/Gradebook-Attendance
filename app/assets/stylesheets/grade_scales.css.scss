@@ -3,3 +3,158 @@
   They will automatically be included in application.css.
   You can use Sass (SCSS) here: http://sass-lang.com/
 */
+$tab-color:#AAAAAA;
+$add-button-color:#3B3B3B;
+$add-button-text-color:#FFFFFF;
+$grade-range-border-color:#AAAAAA;
+$remove-grade-range-button-color:#CCCCCC;
+
+.scale-header {
+	height:30px;
+	font-size:18px;
+	text-align:center;
+	padding-top:10px;
+}
+
+.scale-footer {
+	height:30px;
+	padding-top:6px;
+	left:0px;
+	
+	input {
+		width:50px;
+	}
+}
+
+#options {
+	top:0px;
+	left:0px;
+	width:100%;
+	height:30px;
+	padding:0px;
+	border-top:1px solid black;
+	border-bottom:1px solid black;
+	background-color:$tab-color;
+	
+	div {
+		float:left;
+		margin:0px;
+		height:25px;
+		padding:0px;
+		width:115px;
+		cursor:pointer;
+		padding-top:5px;
+		font-weight:bold;
+		text-align:center;
+		border-right:1px solid black;
+		display:inline-block;
+		
+		label {
+			cursor:pointer;
+		}
+	}
+	
+	div.selected {
+		color:white;
+		cursor:inherit;
+		background-color:darken($tab-color,10%);
+	}
+	
+	div:hover {
+		background-color:lighten($tab-color,5%);
+	}
+	
+	div.selected:hover {
+		background-color:darken($tab-color,10%);
+	}
+	
+	div.last {
+		border-right:0px;
+	}
+}
+
+.grade_range {
+  width:100%;
+	border-spacing:0px;
+//	border:1px solid $grade-range-border-color;
+	
+	tr {
+		td {
+			margin:0px;
+			padding:2px;
+			text-align:center;
+			border-bottom:1px solid $grade-range-border-color;
+			
+			input {
+				border:0px;
+				text-align:center;
+			}
+		}
+		
+		td.operator {
+			background-color:#EEEEEE;
+			color:#AAAAAA;
+			border-right:1px solid $grade-range-border-color;
+			border-bottom:0px;
+		}
+		
+		td.operator {
+		  border-left:1px solid $grade-range-border-color;
+		} 
+		
+		td.remove_button {
+		  margin:0px;
+		  padding:0px;
+		  background-color:$remove-grade-range-button-color;
+		  background-color:$grade-range-border-color;
+		  border-left:1px solid $grade-range-border-color;
+		  
+		  input {
+		    margin:0px;
+		    width:100%;
+		    
+		    cursor:pointer;
+		    
+		    font-size:12;
+		    font-weight:bold;
+		    font-family:"Comic Sans MS", cursive, sans-serif;
+		    
+		    background-color:$remove-grade-range-button-color;
+		    border-top:3px solid $remove-grade-range-button-color;
+		    border-bottom:2px solid $remove-grade-range-button-color;
+		  }
+		}
+	}
+	
+	tr.controls {
+	  td {
+	    border:0px;
+	  }
+	}
+	
+	.add_button_row {
+    td {
+      padding:0px;
+    }
+  }
+}
+
+#add_range_button {
+  width:100%;
+  margin:0px;
+  color: #FFD700;
+  background-color:#4D4D4D;
+  border-top:1px solid #4D4D4D;
+}
+
+#cert_alert {
+  color:white;
+  background-color:#F05044;
+  text-align:center;
+  border-bottom: 1px solid black;
+  
+  h2 {
+    margin:0px;
+    padding:10px;
+  }
+}
