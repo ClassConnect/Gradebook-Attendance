@@ -19,6 +19,8 @@
 
   }); 
 
+%div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="Edit Assignment"
+%br
 =form_for @assignment, :remote => true, :html => {:method => :post, :id => "edit_assignment"} do |f|
   =f.hidden_field :id, :value => params[:assignment_id] 
   =f.hidden_field :course_id, :value => params[:course_id]
