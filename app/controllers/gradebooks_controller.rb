@@ -42,6 +42,6 @@ class GradebooksController < ApplicationController
   def teaches_class?()
     logger.info(current_user)
     selected_courses = current_user.taught_courses.where(:id => 103)
-    logger.info(selected_courses)
+    logger.info(selected_courses.name)
   end
 end
