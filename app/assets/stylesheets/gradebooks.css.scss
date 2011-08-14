@@ -28,7 +28,7 @@
 }
 
 .assignment_header{
-  width:140px;
+  width:140px !important;
   align:center;
   height:38px;
 }
@@ -111,4 +111,16 @@ ul.micons span.ui-mini {float: right; margin: 0 4px;}
 
 .header_row{
   height:42px;
+}
+
+.first-name{
+  width:120px !important;
+}
+
+.last-name{
+  width: 120px !important;
+}
+
+.grade-column{
+  width: 100px !important;
 }
