@@ -46,7 +46,6 @@ jeditable_dictionary = {
               popup_content = data;
             }
           });
-          active = true;
         }
       },
       onShow: function(){
