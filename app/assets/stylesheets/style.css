@@ -64,7 +64,12 @@ ul {
 
 #new_assignment{
   margin-top:-5px;
-  margin-left:15px;
+  margin-left:13px;
+}
+
+#edit_assignment{
+  margin-top:-5px;
+  margin-left:13px;
 }
 .tooltip {
   display:none;

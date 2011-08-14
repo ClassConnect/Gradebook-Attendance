@@ -34,13 +34,10 @@
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {:selected => @assignment.assignment_type.id});
   %div{:class => "field"}
     =f.label :point_value, "Point Value"
-    %br
     =f.text_field :point_value, :value => @assignment.point_value
-  %div{:class => "field"}
     =f.label :date_due, "Date Due"
-    %br
     =f.text_field :date_due, :value => @assignment.date_due
-  %div{:class => "button"}
+  %div{:class => "new_assignment_buttons"}
     %button{:type => "button", :class => "button", :id => "submit_edit_assignment"}="Submit"
     =close_openBox_button
     %button{:id => "delete_assignment", :class => "button", :value => "Delete Assignment"}="Delete"
