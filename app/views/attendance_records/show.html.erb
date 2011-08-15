@@ -162,6 +162,7 @@
   	function get_table_from_url(url)
   	{
   	  url += "?tableonly=true";
+  	  $("#attendance_table_wrap").html('<img src="/app/core/site_img/loading.gif" />');
   	  $.ajax(url,{
   	    success:function(data){
   	      $("#attendance_table_wrap").html(data);
