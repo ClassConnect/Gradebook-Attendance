@@ -2,6 +2,10 @@ $absent: #F05044;
 $tardy: #FEE660;
 $table-color: #FFFFFF;
 
+#attendance_table_wrapper {
+  margin-left:10px;
+}
+
 .ui-datepicker {
 	margin-left:-119px;
 }
@@ -146,6 +150,6 @@ $table-color: #FFFFFF;
 
 #current_date {
   display:inline;
-  margin-right:70px;
+  margin-right:120px;
   font-weight:bold;
 }
