@@ -10,8 +10,8 @@
     $("#submit_new_assignment").click(function(){
       $("#new_assignment").submit();
     });
-
   }); 
+
 %div{:class => "overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="New Assignment"
 %br
 =form_for @assignment, :html => {:id => "new_assignment"} do |f|
@@ -24,15 +24,13 @@
     =f.label :assignment_type_id, "Assignment Type"
     %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
-  %div{:class => "field"}
-    =f.label :point_value, "Point Value"
-    %br
+  %div{:class => "field", :style => "margin-top:10px;"}
+    =f.label :point_value, "Point Value: "
     =f.text_field :point_value
-  %div{:class => "field"}
+  %div{:class => "field", :style => "margin-top:10px;"}
     =f.label :date_due, "Date Due"
-    %br
     =f.text_field :date_due 
-  %div{:class => "button"}
+  %div{:class => "new_assignment_buttons"}
     %button{:type => "button", :class => "button", :id => "submit_new_assignment"}="Submit"
     =close_openBox_button
     

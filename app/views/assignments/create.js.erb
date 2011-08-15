@@ -16,10 +16,12 @@ header_html += "<p class='assignment-name' display='inline' padding='0'>" + "<%=
 $(header_html).insertAfter('thead th:last');
 
 var student_count=0;
+console.log("before each");
 $('.datatable tbody tr').each(function(index, value){
   $(this).append("<td align='center' width='150'></td>");
   student_count++;
 });
+console.log("after each");
 
 
 initTable(student_count);

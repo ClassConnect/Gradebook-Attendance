@@ -63,7 +63,13 @@ ul {
 */
 
 #new_assignment{
-  margin-top:-10px;
+  margin-top:-5px;
+  margin-left:13px;
+}
+
+#edit_assignment{
+  margin-top:-5px;
+  margin-left:13px;
 }
 .tooltip {
   display:none;
@@ -107,4 +113,33 @@ ul {
   float:left;
   align:left;
   margin-top:-40px;
+}
+
+.new_assignment_buttons{
+  float:right;
+  margin-top:10px;
+}
+
+#assignment_point_value{
+  width: 50px;
+}
+
+#assignment_date_due{
+  width: 100px;
+}
+
+tbody{
+}
+
+thead{
+}
+
+.row_entry td{
+  padding:3px;
+}
+
+.no-students{
+  position: absolute;
+  width: 600px;
+  margin-left: -150px;
 }

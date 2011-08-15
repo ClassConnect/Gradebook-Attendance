@@ -1,9 +1,9 @@
 %table{:id => "gradebook_display", :class=> "datatable", :width => "#{@assignments.count * 150}px"}
   %thead
     %tr{:class => "header_row"}
-      %th{:width => 110, :class => "first-name"} First Name
-      %th{:width => 110, :class => "last-name"} Last Name
-      %th{:width => 100, :class => "grade-column"} Grade
+      %th{ :class => "first-name"} First Name
+      %th{ :class => "last-name"} Last Name
+      %th{ :class => "grade-column"} Grade
       %span{:id => "assignment_names"}
         -@assignments.each do |assignment|
           %th{:class => "assignment_header", :value => assignment.point_value, :id => "#{assignment.id}", :align => "left"}
@@ -15,16 +15,16 @@
       -if student.is_student?
         -id_string = student.id.to_s
         %tr{:class => "row_entry", :id => "#{student.id}", :num => i}
-          %td{:width => 110}=student.first_name.capitalize
-          %td{:width => 110}=student.last_name.capitalize
+          %td=student.first_name.capitalize
+          %td=student.last_name.capitalize
           -if @settings.grade_scale.scale_type == "manual"
-            %td{:width => 100, :class => "grade", :align => "center"}=@settings.grade_scale.manual_grades[student.id.to_s]
+            %td{:class => "grade", :align => "center"}=@settings.grade_scale.manual_grades[student.id.to_s]
           -else
-            %td{:width => 100, :class => "grade", :align => "center"}="" 
+            %td{:class => "grade", :align => "center"}="" 
           -@assignments.each do |assignment|
             -if current_assignment = assignment.grades[id_string]
               -if assignment.grades[id_string][0].is_a?(Numeric)
-                %td{:align => "center", :class => "grade_entry", :score => assignment.grades[id_string][0]}=number_to_percentage((assignment.grades[id_string][0].to_f / assignment.point_value) * 100, :precision => 2, :strip_insignificant_zeros => true)
+                %td{:class => "grade_entry", :score => assignment.grades[id_string][0]}=number_to_percentage((assignment.grades[id_string][0].to_f / assignment.point_value) * 100, :precision => 2, :strip_insignificant_zeros => true)
               -else
                 -if assignment.grades[id_string][0] == :ungraded
                   -if assignment.grades[id_string][1] == :nocomment

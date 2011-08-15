@@ -2,15 +2,7 @@
   $(document).ready(function(){
   });
 
-=@assignment.name
-%br
-=@assignment.assignment_type.name
-%br
--unless @assignment.average == "no_grades"
-  ="Average: " + @assignment.average.to_s
-%br
+=render :partial => "graph"
 
 %div{:align => "right"}
-  =close_openBox_input
-
-=render :partial => "graph"
+  =close_openBox_button

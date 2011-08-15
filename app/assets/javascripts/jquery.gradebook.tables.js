@@ -26,31 +26,18 @@ jeditable_dictionary = {
       onBeforeShow: function(){
         var assignment_id = this.getTrigger().parent().parent().attr('id');
         var url_string = '/assignments/' + assignment_id; 
-        if(active){
+        $('.tooltip').html("");
           $.ajax({
             type: 'GET',
             url: url_string,
             dataType: "html",
             success: function(data){
-              popup_content = data;
+              $('.tooltip').html(data);
             }
           });
-        }
-        else{
-          $.ajax({
-            type: 'GET',
-            url: url_string,
-            async: false,
-            dataType: "html",
-            success: function(data){
-              popup_content = data;
-            }
-          });
-        }
       },
       onShow: function(){
-          $('.tooltip').html(popup_content);
-        }
+      }
     };
 
 comment_tooltip_dictionary = {
@@ -319,14 +306,16 @@ function initTable(num_students) {
     "bProcessing": true,
     "bJQueryUI": true,
     "sDom": '<"H"rf>t<"F">',
-    "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true, "sWidth":"140px"}],
-    "bScrollCollapse": true
+    "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true, "sWidth":"140px"}
+    ,{"aTargets": [0, 1], "sWidth": "100px"}]
+    //,{"aTargets": [0], "sWidth": 0}, {"aTargets": [1], "sWidth":"0" }, {"aTargets": [2], "sWidth":"50%"}]
+    ,"bScrollCollapse": true
   });
 
   new FixedColumns(oTable, {
     //look at sizing stuff
     "iLeftColumns": 3,
-    "iLeftWidth":320,
+    "iLeftWidth":340,
     "sHeightMatch": "none"
   });
 
@@ -382,6 +371,7 @@ function initTable(num_students) {
   
   if(grading_scale_method == "manual")
     enable_editing();
+
 
 }//last one
 

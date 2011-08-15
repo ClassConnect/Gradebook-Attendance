@@ -11,3 +11,4 @@ vender/cache/*
 .DS_Store
 *.tmproj
 config/database.yml
+public/rapps
