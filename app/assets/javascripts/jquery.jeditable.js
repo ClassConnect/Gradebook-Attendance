@@ -290,7 +290,6 @@
                             form.submit();
                         }, 50);
                         */
-
                         _blurred_cell = this;
                     });
                 } else if ($.isFunction(settings.onblur)) {

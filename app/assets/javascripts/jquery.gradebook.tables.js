@@ -123,6 +123,41 @@ function click_block(e){
     }
   }
 }
+
+function keyboard_block(e){
+  if(e.which == 9){
+  }
+  if(_focused_cell != null){
+    switch(e.which){
+      //up press
+      case 38:
+        var column_position = oTable.fnGetPosition(_focused_cell)[1];
+        $($(_focused_cell).parent().prev().children()[column_position]).trigger("click");
+        break;
+      //down press
+      case 13:
+        e.preventDefault();
+      case 40:
+        var column_position = oTable.fnGetPosition(_focused_cell)[1];
+        $($(_focused_cell).parent().next().children()[column_position]).trigger("click");
+        break;
+      //left press
+      case 37:
+        $(_focused_cell).prev().trigger("click");
+        break;
+      //right press
+      case 9:
+        e.preventDefault();
+      case 39:
+        $(_focused_cell).next().trigger("click");
+        break;
+      default:
+        return;
+    }
+  }
+  else
+    return;
+}
     
 function new_assignment(id, point_value){
   return {_id : id, 

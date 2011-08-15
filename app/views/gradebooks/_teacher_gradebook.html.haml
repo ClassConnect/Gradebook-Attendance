@@ -34,6 +34,7 @@
       _focused_cell = null;
 
       document.addEventListener('click', click_block, true);
+      document.addEventListener('keydown', keyboard_block, true);
     
       hide_filter_label();
       init_headers();
@@ -84,13 +85,20 @@
     }
   });
 
+%br
+%br
+%br
+%br
+%br
+%br
+%br
 %button{:type => "button", :class => "button", :id => "add_assignment_button"}="Add Assignment"
 %button{:type => "button", :class => "button", :id => "edit_scale_button"}="Edit Scale"
 %div{:id => "gradebook_div"}
   =render "students_table"
--#%div{:id => "dialogBox"}
--#%div{:id => "clearbox"}
--#%div{:id => "blackbox"}
+%div{:id => "dialogBox"}
+%div{:id => "clearbox"}
+%div{:id => "blackbox"}
 %div{:class => "comment-tip"}
   %div{:id => "comment-box-text"}="Enter a comment"
   %textarea{:id => "comment-entry", :rows => 2, :cols => 17}
