@@ -34,7 +34,7 @@
 				bAutoWidth: false
 			});
 			$("#date_wrapper").css("float","right");
-  		$("#date_wrapper").append('<button onclick="gototoday()">today</button><span>&nbsp;</span>');
+  		$("#date_wrapper").append('<button class="button" onclick="gototoday()">today</button><span>&nbsp;</span>');
   		$("#date_wrapper").append('<label>Go to date: <input id="datepicker" type="text" /></label>');
   		$("#datepicker").datepicker({
   			dateFormat:"yy-mm-dd",
@@ -44,7 +44,7 @@
   				get_table_from_url(url);
   			}
   		});
-  		$("#current_date").text(formatDate(new Date(_date),"MM-dd-yyyy"))
+  		$("#current_date").text(formatDate(new Date(_date),"NNN dd, yyyy"))
   	}
 
   	/*/
