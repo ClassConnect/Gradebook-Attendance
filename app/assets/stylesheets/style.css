@@ -128,18 +128,30 @@ ul {
   width: 100px;
 }
 
-tbody{
-}
 
-thead{
+.grade{
+  width:125px !important;
+  padding: 0px;
 }
 
 .row_entry td{
   padding:3px;
 }
 
+.row_entry .grade_entry{
+  padding:0px;
+  align:center !important;
+  float:center;
+}
+
 .no-students{
   position: absolute;
   width: 600px;
   margin-left: -150px;
+  margin-top: 50px;
+}
+
+.calc-grade{
+  margin-left:-30px;
+  margin-right:-30px;
 }

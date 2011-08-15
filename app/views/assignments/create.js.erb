@@ -26,5 +26,7 @@ console.log("after each");
 
 initTable(student_count);
 
-$('.dataTables_scroll .scrollHeadInner').attr('style', "");
+//$('.dataTables_scroll .scrollHeadInner').attr('style', "");
+if(assignments_array.length == 1)
+  $('.dataTables_scroll .datatable').attr('style', "");
 init_headers();

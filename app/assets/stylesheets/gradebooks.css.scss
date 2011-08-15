@@ -19,7 +19,7 @@
 
 .grade_entry{
   width:140px;
-  align:center;
+  align:center !important;
 }
 
 .grade_display{
@@ -28,12 +28,13 @@
 }
 
 .assignment_header{
-  width:140px !important;
+  width:150px !important;
   align:center;
   height:38px;
 }
 
 .assignment-name{
+
   padding-top:0px;
   padding-bottom:0px;
 }
@@ -105,10 +106,6 @@ ul.micons span.ui-mini {float: right; margin: 0 4px;}
   padding-left:-5px;
 }
 
-.grade{
-  align:center;
-}
-
 .header_row{
   height:42px;
 }
@@ -122,5 +119,5 @@ ul.micons span.ui-mini {float: right; margin: 0 4px;}
 }
 
 .grade-column{
-  width: 100px !important;
+  width: 110px !important;
 }
