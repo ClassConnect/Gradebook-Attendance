@@ -2,6 +2,7 @@ class AttendanceRecordsController < ApplicationController
   # GET /attendance_records/1
   # GET /attendance_records/1.json
   def show
+    @from_ajax = !(params[:tableonly].nil?)
     @course = Course.find(params[:course_id])
     if params[:date].nil?
       @date = Date.today

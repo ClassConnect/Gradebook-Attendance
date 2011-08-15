@@ -1,191 +1,207 @@
-<%= javascript_include_tag "application" %>
-<div style="width:700px">
-	<p id="notice"><%= notice %></p>
-	<style>
-/*	.absent {
-		background-color:#F0BDBD;
-	}
-	.tardy {
-		background-color:#F3EAC0;
-	}*/
-	</style>
-	<script>
-		var _oTable;
-		$(document).ready(function(){
-			$('.attendance').each(function(i){
-				var checkboxParamObject = {sWidth:"20px", bSearchable:false, bSortable:false};
-				var namesParamObject = {sType:"string"};
-				var numberParamObject = {sType:"numeric", sWidth:"85px", bSearchable:false};
-				_oTable = $(this).dataTable({
-					aoColumns:[
-						checkboxParamObject,
-						checkboxParamObject,
-						namesParamObject,
-						namesParamObject,
-						numberParamObject,
-						numberParamObject,
-						{sType:"date",sDefaultContent:"none",sWidth:"90px",bSearchable:false}
-					],
-					sDom:'<"H"rf<"#date_wrapper">>t<"F">',
-					<% if !@dtlength.nil? %>
-					iDisplayLength: <%= @dtlength %>,
-					<% end %>
-					bAutoWidth: false
-				});
+<% if @from_ajax %>
+  <script>
+    _date = '<%= @date %>';
+    make_attendance_table($('#attendance_table'));
+  </script>
+<% else %>
+  <%= javascript_include_tag "application" %>
+  <script>
+  	var _oTable;
+  	var _date = '<%= @date %>';
+  	$(document).ready(function(){
+  		make_attendance_table($('#attendance_table'));
+  	});
+  	
+  	function make_attendance_table(table)
+  	{
+  	  var checkboxParamObject = {sWidth:"20px", bSearchable:false, bSortable:false};
+			var namesParamObject = {sType:"string"};
+			var numberParamObject = {sType:"numeric", sWidth:"85px", bSearchable:false};
+			_oTable = table.dataTable({
+				aoColumns:[
+					checkboxParamObject,
+					checkboxParamObject,
+					namesParamObject,
+					namesParamObject,
+					numberParamObject,
+					numberParamObject,
+					{sType:"date",sDefaultContent:"none",sWidth:"90px",bSearchable:false}
+				],
+				sDom:'<"H"rf<"#date_wrapper"<"#current_date">>>t<"F">',
+				<% if !@dtlength.nil? %>
+				iDisplayLength: <%= @dtlength %>,
+				<% end %>
+				bAutoWidth: false
 			});
 			$("#date_wrapper").css("float","right");
-			$("#date_wrapper").append('<button onclick="gototoday()">today</button><span>&nbsp;</span>');
-			$("#date_wrapper").append('<label>Go to date: <input id="datepicker" type="text" /></label>');
-			$("#datepicker").datepicker({
-				dateFormat:"yy-mm-dd",
-				onSelect:function(dateText,inst){
-					window.location.href = '<%= course_attendance_path(@course,"'+dateText+'") %>';
-				}
-			});
-		});
-	
-		/*/
-		 *	Functions for grabbing HTML elements
-		/*/
-		function row(student)
-		{
-			return $("#"+student);
-		}
-	
-		function checkbox(student,type)
-		{
-			return $("#"+type+"_"+student)[0];
-		}
-	
-		function count_box(student,type)
-		{
-			return $("#"+student+"_"+type+"_count");
-		}
-	
-		/*/
-		 *	Main function that updates all the boxes that need it
-		/*/
-		function update(student,type)
-		{
-			type = (type == 1 ? "absent" : "tardy");
-			var antitype = (type == "absent" ? "tardy" : "absent");
-			if(checkbox(student,antitype).checked)
-				decrement_count_box(count_box(student,antitype))
-			checkbox(student,antitype).checked = false;
-			if(checkbox(student,type).checked)
-				increment_count_box(count_box(student,type));
-			else
-				decrement_count_box(count_box(student,type));
-			update_row_styling(student,type);
-			update_last_date(student);
-			update_server(student,{type:type});
-		}
-	
-		/*/
-		 *	Helper functions
-		/*/
-		function increment_count_box(box)
-		{
-			set_cell_text(box,parseInt(box.text()) + 1);
-		}
-	
-		function decrement_count_box(box)
-		{
-			set_cell_text(box,parseInt(box.text()) - 1);
-		}
-	
-		function update_last_date(student)
-		{
-			var box = $("#"+student+"_last_violation"),
-					current = box.text(),
-					today = new Date("<%= @date.to_s %>"),
-					acb = checkbox(student,"absent"),
-					tcb = checkbox(student,"tardy");
-			if(box.data("cache") == "")
-				box.data("cache", box.text());
-			if((acb.checked || tcb.checked) && (current == "none" || today > new Date(current)))
-				set_cell_text(box,formatDate(today,"MM-dd-yyyy"));
-			if(!acb.checked && !tcb.checked)
-				set_cell_text(box,box.data("cache"))
-		}
-	
-		function set_cell_text(cell,text)
-		{
-			//	Update datatables
-			if(_oTable)
-			{
-				var pos = _oTable.fnGetPosition(cell[0]);
-				_oTable.fnUpdate(text,pos[0],pos[1],false);
-			}
-			cell.text(text);
-		}
-	
-		function update_row_styling(student,type)
-		{
-			row(student).removeClass("absent tardy");
-			if(checkbox(student,type).checked)
-				row(student).addClass(type);
-		}
-	
-		function update_server(student,data)
-		{
-			var url = '<%= update_student_attendance_path(@course,"'+student+'",@date) %>';
-			$.ajax(url,{
-				type:"post",
-				data:data
-			});
-		}
-		
-		function view_student(student)
-		{
-			var url = '<%= student_attendance_path(@course,"'+student+'")%>';
-			openBox(url,350,0);
-		}
-		
-		function gotodate(date)
-		{
-			var url = '<%= course_attendance_path(@course,"'+date+'") %>';
-			window.location.href = url;
-		}
-		
-		function gototoday()
-		{
-			var url = '<%= course_attendance_path(@course) %>';
-			window.location.href = url;
-		}
+  		$("#date_wrapper").append('<button onclick="gototoday()">today</button><span>&nbsp;</span>');
+  		$("#date_wrapper").append('<label>Go to date: <input id="datepicker" type="text" /></label>');
+  		$("#datepicker").datepicker({
+  			dateFormat:"yy-mm-dd",
+  			onSelect:function(dateText,inst){
+  			  var url = '<%= course_attendance_path(@course,"'+dateText+'") %>'
+  				//  window.location.href = url;
+  				get_table_from_url(url);
+  			}
+  		});
+  		$("#current_date").text(formatDate(new Date(_date),"MM-dd-yyyy"))
+  	}
 
-	</script>
-	<table class="attendance" style="width:100%;">
-		<thead>
-			<tr>
-				<th>A</th>
-				<th>T</th>
-				<th>First name</th>
-				<th>Last name</th>
-				<th>Absent</th>
-				<th>Tardy</th>
-				<th>Last</th>
-			</tr>
-		</thead>
-		<tbody>
-			<% @students.each do |student| %>
-				<% if student.is_student? %>
-					<tr id="<%= student.id.to_s %>" class="<%= @attendance_record.cases[student.id.to_s].to_s %>">
-						<% last_case = student.last_day_absent_or_tardy(@course) %>
-						<% cache = (last_case == @date ? student.second_to_last_day_absent_or_tardy(@course) : "") %>
-						<%= checkbox_element('update('+student.id.to_s+',1);', :checked => @attendance_record.student_absent?(student), :id => "absent_"+student.id.to_s) %>
-						<%= checkbox_element('update('+student.id.to_s+',2);', :checked => @attendance_record.student_tardy?(student), :id => "tardy_"+student.id.to_s) %>
-						<%= table_element(student.first_name.capitalize, :onclick => "view_student("+student.id_s+")", :class => "hoverable") %>
-						<%= table_element(student.last_name.capitalize, :onclick => "view_student("+student.id_s+")", :class => "hoverable") %>
-						<%= table_element(student.days_absent_for_course(@course).count.to_s, :id => student.id_s+"_absent_count") %>
-						<%= table_element(student.days_tardy_for_course(@course).count.to_s, :id => student.id_s+"_tardy_count") %>
-						<%= table_element(last_case.nil? ? "none" : last_case.strftime("%m-%d-%Y"), :id => student.id_s+"_last_violation", :data_cache => cache) %>
-					</tr>
-				<% end %>
-			<% end %>
-		</tbody>
-	</table>
-</div>
-<div id="dialogBox"></div>
-<div id="clearbox"></div>
-<div id="blackbox"></div>
+  	/*/
+  	 *	Functions for grabbing HTML elements
+  	/*/
+  	function row(student)
+  	{
+  		return $("#"+student);
+  	}
+
+  	function checkbox(student,type)
+  	{
+  		return $("#"+type+"_"+student)[0];
+  	}
+
+  	function count_box(student,type)
+  	{
+  		return $("#"+student+"_"+type+"_count");
+  	}
+
+  	/*/
+  	 *	Main function that updates all the boxes that need it
+  	/*/
+  	function update(student,type)
+  	{
+  		type = (type == 1 ? "absent" : "tardy");
+  		var antitype = (type == "absent" ? "tardy" : "absent");
+  		if(checkbox(student,antitype).checked)
+  			decrement_count_box(count_box(student,antitype))
+  		checkbox(student,antitype).checked = false;
+  		if(checkbox(student,type).checked)
+  			increment_count_box(count_box(student,type));
+  		else
+  			decrement_count_box(count_box(student,type));
+  		update_row_styling(student,type);
+  		update_last_date(student);
+  		update_server(student,{type:type});
+  	}
+
+  	/*/
+  	 *	Helper functions
+  	/*/
+  	function increment_count_box(box)
+  	{
+  		set_cell_text(box,parseInt(box.text()) + 1);
+  	}
+
+  	function decrement_count_box(box)
+  	{
+  		set_cell_text(box,parseInt(box.text()) - 1);
+  	}
+
+  	function update_last_date(student)
+  	{
+  		var box = $("#"+student+"_last_violation"),
+  				current = box.text(),
+  				today = new Date(_date),
+  				acb = checkbox(student,"absent"),
+  				tcb = checkbox(student,"tardy");
+  		if(box.data("cache") == "")
+  			box.data("cache", box.text());
+  		if((acb.checked || tcb.checked) && (current == "none" || today > new Date(current)))
+  			set_cell_text(box,formatDate(today,"MM-dd-yyyy"));
+  		if(!acb.checked && !tcb.checked)
+  			set_cell_text(box,box.data("cache"))
+  	}
+
+  	function set_cell_text(cell,text)
+  	{
+  		//	Update datatables
+  		if(_oTable)
+  		{
+  			var pos = _oTable.fnGetPosition(cell[0]);
+  			_oTable.fnUpdate(text,pos[0],pos[1],false);
+  		}
+  		cell.text(text);
+  	}
+
+  	function update_row_styling(student,type)
+  	{
+  		row(student).removeClass("absent tardy");
+  		if(checkbox(student,type).checked)
+  			row(student).addClass(type);
+  	}
+
+  	function update_server(student,data)
+  	{
+  		var url = '<%= update_student_attendance_path(@course,"'+student+'","'+_date+'") %>';
+  		$.ajax(url,{
+  			type:"post",
+  			data:data
+  		});
+  	}
+	
+  	function view_student(student)
+  	{
+  		var url = '<%= student_attendance_path(@course,"'+student+'")%>';
+  		openBox(url,350,0);
+  	}
+	
+  	function gotodate(date)
+  	{
+  		var url = '<%= course_attendance_path(@course,"'+date+'") %>';
+//  		window.location.href = url;
+      get_table_from_url(url);
+  	}
+	
+  	function gototoday()
+  	{
+  		var url = '<%= course_attendance_path(@course) %>';
+//  		window.location.href = url;
+  		get_table_from_url(url);
+  	}
+  	
+  	function get_table_from_url(url)
+  	{
+  	  url += "?tableonly=true";
+  	  $.ajax(url,{
+  	    success:function(data){
+  	      $("#attendance_table_wrap").html(data);
+  	    }
+  	  });
+  	}
+
+  </script>
+  <div id="attendance_table_wrap">
+<% end %>
+  <table id="attendance_table" class="attendance" style="width:100%;">
+  	<thead>
+  		<tr>
+  			<th>A</th>
+  			<th>T</th>
+  			<th>First name</th>
+  			<th>Last name</th>
+  			<th>Absent</th>
+  			<th>Tardy</th>
+  			<th>Last</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+  		<% @students.each do |student| %>
+  			<% if student.is_student? %>
+  				<tr id="<%= student.id.to_s %>" class="<%= @attendance_record.cases[student.id.to_s].to_s %>">
+  					<% last_case = student.last_day_absent_or_tardy(@course) %>
+  					<% cache = (last_case == @date ? student.second_to_last_day_absent_or_tardy(@course) : "") %>
+  					<%= checkbox_element('update('+student.id.to_s+',1);', :checked => @attendance_record.student_absent?(student), :id => "absent_"+student.id.to_s) %>
+  					<%= checkbox_element('update('+student.id.to_s+',2);', :checked => @attendance_record.student_tardy?(student), :id => "tardy_"+student.id.to_s) %>
+  					<%= table_element(student.first_name.capitalize, :onclick => "view_student("+student.id_s+")", :class => "hoverable") %>
+  					<%= table_element(student.last_name.capitalize, :onclick => "view_student("+student.id_s+")", :class => "hoverable") %>
+  					<%= table_element(student.days_absent_for_course(@course).count.to_s, :id => student.id_s+"_absent_count") %>
+  					<%= table_element(student.days_tardy_for_course(@course).count.to_s, :id => student.id_s+"_tardy_count") %>
+  					<%= table_element(last_case.nil? ? "none" : last_case.strftime("%m-%d-%Y"), :id => student.id_s+"_last_violation", :data_cache => cache) %>
+  				</tr>
+  			<% end %>
+  		<% end %>
+  	</tbody>
+  </table>
+<% if !@from_ajax %>
+  </div>
+<% end %>
