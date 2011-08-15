@@ -117,7 +117,6 @@ function click_block(e){
         case "submit-comment":
           return;
         default:
-          console.log(e);
           _focused_cell && $(_focused_cell).children("form").submit();
           _current_tooltip && _current_tooltip.hide();
       }
@@ -239,17 +238,13 @@ function add_new_input(){
       $(comment_button).tooltip(comment_tooltip_dictionary);
 
       $(comment_button).click(function(event){
-        console.log($(this).tooltip().isShown());
         event.stopPropagation();
-        //$(this).parent().focus();
       });
 
       $(option_button).tooltip(options_tooltip_dictionary);
 
       $(option_button).click(function(event){
-        console.log($(this).tooltip().isShown());
         event.stopPropagation();
-        //$(this).parent().focus();
       });
     }
 
@@ -314,7 +309,6 @@ function initTable(num_students) {
     });
     _columns_to_destroy.length = 0;
   }
-
   
   init_student_names();
   oTable = $('#gradebook_display').dataTable(
@@ -357,7 +351,6 @@ function initTable(num_students) {
      }
       if(value != ""){
         if(isNaN(value)){
-          console.log(value);
           return value;
         }
         else{
@@ -377,13 +370,11 @@ function initTable(num_students) {
     "onedit": function(e){
     },
     "data": function(){
-      console.log($(this).attr('score'));
       return $(this).attr('score');
     },
     "callback" : function(value, settings) {
       var position = oTable.fnGetPosition(this);
       oTable.fnUpdate(value, position[0], position[2], false);
-      console.log("Wrote to " + position[0] + ", " + position[2]);
       if(grading_scale_method !== "manual"){
         var grade = calculateGrade($(this).parent());
         apply_grade_by_column($(this).parent(), position[0], grade);
@@ -667,7 +658,6 @@ function update_assignment(assignment_id, assignment_points, assignment_name){
         var td = $(grade_listing[entry_count]).children()[position];
         var score = parseInt(td.getAttribute('score'));
         if(score){
-          console.log(score);
           var formatted_num = percentage_format((score / cache_point_value) * 100);
           $(td).html(formatted_num);
           oTable.fnUpdate(formatted_num, entry_count, true_position, false);
