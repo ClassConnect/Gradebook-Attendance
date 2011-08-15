@@ -34,7 +34,7 @@
 				bAutoWidth: false
 			});
 			$("#date_wrapper").css("float","right");
-  		$("#date_wrapper").append('<button onclick="gototoday()">today</button><span>&nbsp;</span>');
+  		$("#date_wrapper").append('<button class="button" onclick="gototoday()">today</button><span>&nbsp;</span>');
   		$("#date_wrapper").append('<label>Go to date: <input id="datepicker" type="text" /></label>');
   		$("#datepicker").datepicker({
   			dateFormat:"yy-mm-dd",
@@ -44,7 +44,7 @@
   				get_table_from_url(url);
   			}
   		});
-  		$("#current_date").text(formatDate(new Date(_date),"MM-dd-yyyy"))
+  		$("#current_date").text(formatDate(new Date(_date),"NNN dd, yyyy"))
   	}
 
   	/*/
@@ -162,6 +162,7 @@
   	function get_table_from_url(url)
   	{
   	  url += "?tableonly=true";
+  	  $("#attendance_table_wrap").html('<img src="/app/core/site_img/loading.gif" />');
   	  $.ajax(url,{
   	    success:function(data){
   	      $("#attendance_table_wrap").html(data);
