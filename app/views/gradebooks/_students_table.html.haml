@@ -15,8 +15,8 @@
       -if student.is_student?
         -id_string = student.id.to_s
         %tr{:class => "row_entry", :id => "#{student.id}", :num => i}
-          %td=student.first_name.capitalize
-          %td=student.last_name.capitalize
+          %td{:class => "first-name"}=student.first_name.capitalize
+          %td{:class => "last-name"}=student.last_name.capitalize
           -if @settings.grade_scale.scale_type == "manual"
             %td{:class => "grade", :align => "center"}=@settings.grade_scale.manual_grades[student.id.to_s]
           -else
@@ -24,7 +24,7 @@
           -@assignments.each do |assignment|
             -if current_assignment = assignment.grades[id_string]
               -if assignment.grades[id_string][0].is_a?(Numeric)
-                %td{:class => "grade_entry", :score => assignment.grades[id_string][0]}=number_to_percentage((assignment.grades[id_string][0].to_f / assignment.point_value) * 100, :precision => 2, :strip_insignificant_zeros => true)
+                %td{:class => "grade_entry", :align => "center", :score => assignment.grades[id_string][0]}=number_to_percentage((assignment.grades[id_string][0].to_f / assignment.point_value) * 100, :precision => 2, :strip_insignificant_zeros => true)
               -else
                 -if assignment.grades[id_string][0] == :ungraded
                   -if assignment.grades[id_string][1] == :nocomment

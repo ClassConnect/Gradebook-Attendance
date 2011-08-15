@@ -12,7 +12,7 @@ student_names = [];
 assignments_array = [];
 _columns_to_destroy = [];
 assignments_hash = new Object();
-visible_columns = 0;
+_total_columns = 0;
 var grading_scale_method;
 _focused_cell = null;
 _focused_cell_pos = null;
@@ -110,11 +110,16 @@ function click_block(e){
   if(_focused_cell != null){
     if(_focused_cell != $(e.target).parents("td")[0]){
       var target_id = e.target.getAttribute("id");
-      if(target_id === "in_button" || target_id === "submit-comment"){
-      }
-      else{
-        _focused_cell && $(_focused_cell).children("form").submit();
-        _current_tooltip && _current_tooltip.hide();
+      switch(target_id){
+        case "in_button":
+        case "ex_button":
+        case "dr_button":
+        case "submit-comment":
+          return;
+        default:
+          console.log(e);
+          _focused_cell && $(_focused_cell).children("form").submit();
+          _current_tooltip && _current_tooltip.hide();
       }
     }
   }
@@ -122,8 +127,26 @@ function click_block(e){
     
 function new_assignment(id, point_value){
   return {_id : id, 
-  point_value : point_value};
+  point_value : point_value,
+  position: assignments_array.length+3};
+  _total_columns++;
 }
+
+function reset_assignment_position(){
+  _total_columns = assignments_array.length;
+  for(i=0; i< _total_columns; i++){
+    assignments_array[i].position = i+3;
+  }
+}
+
+function remove_assignment(assignment_id){
+  var position = find_assignment_by_id(assignment_id);
+  var true_position = assignments_array[position].position;
+  assignments_array.splice(position, 1);
+  _columns_to_destroy.push(true_position);
+  oTable.fnSetColumnVis(true_position, false);
+}
+
 
 /*
 * This is necessary because of me having shitty datastructures. 
@@ -150,7 +173,6 @@ function init_gradescale(scale, type, id){
 
 function init_assignments_array(json){
   assignments_array = json;
-  visible_columns = assignments_array.length
 }
 
 function get_table(){
@@ -300,14 +322,14 @@ function initTable(num_students) {
     "iDisplayLength": num_students,
     "bDestroy": true,
     "bAutoWidth": false,
-    "sScrollX": "550px",
+    "sScrollX": "555px",
     "sScrollY": "400px",
     "aaSorting": [[1, 'asc']],
     "bProcessing": true,
     "bJQueryUI": true,
     "sDom": '<"H"rf>t<"F">',
     "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true, "sWidth":"140px"}
-    ,{"aTargets": [0, 1], "sWidth": "100px"}]
+    ,{"aTargets": [0, 1], "sWidth": "100px"}, {"aTargets":[2], "sWidth": "120px"}]
     //,{"aTargets": [0], "sWidth": 0}, {"aTargets": [1], "sWidth":"0" }, {"aTargets": [2], "sWidth":"50%"}]
     ,"bScrollCollapse": true
   });
@@ -372,6 +394,7 @@ function initTable(num_students) {
   if(grading_scale_method == "manual")
     enable_editing();
 
+  reset_assignment_position();
 
 }//last one
 
@@ -437,14 +460,14 @@ function calculateGrade(dom_element){
 */ 
 function apply_grade(dom_element, grade){
   var row_id = "#" + $(dom_element).attr('id');
-  $(row_id + "> .grade").html(grade);
+  $(row_id + "> .grade").html('<div class="calc-grade">' + grade + '</div>');
   var position = oTable.fnGetPosition(dom_element);
   oTable.fnUpdate(grade, position, 2, false);
 }
 
 function apply_grade_by_column(dom_element, column, grade){
   var row_id = "#" + $(dom_element).attr('id');
-  $(row_id + "> .grade").html(grade);
+  $(row_id + "> .grade").html('<div class="calc-grade">' + grade + '</div>');
   oTable.fnUpdate(grade, column, 2, false);
 }
 
@@ -623,8 +646,9 @@ function get_true_position(position){
 * we need to check twice. This sucks but I can't think of another way to do it 
 * for now.
 */
-function update_assignment(assignment_id, assignment_points){
+function update_assignment(assignment_id, assignment_points, assignment_name){
   var position = find_assignment_by_id(assignment_id);
+  $("#" + assignment_id + " .assignment-name").html(assignment_name);
   if(position >= 0){
     if(assignments_array[position].point_value !== assignment_points){
       assignments_array[position].point_value = assignment_points;
@@ -657,9 +681,7 @@ function update_assignment(assignment_id, assignment_points){
 }
 
 function misc_grades(code){
-  var input_field = $(_current_tooltip.getTrigger().parents("form").children()[0]).children("input");
   $(".grade_field").val(code);
-
   if(code === "EX" || code === "DR"){
     $(_focused_cell).removeAttr('score');
   }
@@ -671,11 +693,12 @@ function misc_grades(code){
 }
 
 function submit_comment(){
+  var comment = $('#comment-entry').val();
   _current_tooltip.hide();
   $.ajax({
     type: 'POST',
     url: comment_url(_current_assignment_id),
-    data: {"_method": 'put', "student_id": _current_student_id, "value": $('.comment-tip').children("textarea").val()}
+    data: {"_method": 'put', "student_id": _current_student_id, "value": comment}
   });
   $($(_focused_cell).children("form").children()[0]).children()[0].focus();
 }
