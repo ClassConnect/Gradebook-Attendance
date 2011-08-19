@@ -1,14 +1,14 @@
 :javascript
   $(document).ready(function() {
     $('#assignment_date_due').datepicker({ dateFormat: 'yy-mm-dd' });
-    $('#new_assignment').bind('submit', function(){
-    $.post($(this).attr("action") + '.js', $(this).serialize(), null, "script");
-    closeBox();
-    return false;
+    $('.new_assignment').bind('submit', function(){
+      $.post($(this).attr("action") + '.js', $(this).serialize(), null, "script");
+      closeBox();
+      return false;
     });
 
     $("#submit_new_assignment").click(function(){
-      $("#new_assignment").submit();
+      $(".new_assignment").submit();
     });
   }); 
 
