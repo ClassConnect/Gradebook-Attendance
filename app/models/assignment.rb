@@ -21,7 +21,7 @@ class Assignment
 
   validates_presence_of :course_id, :name, :point_value
 
-  default_scope asc(:created_at)
+  #default_scope asc(:created_at)
 
   #Mongoid won't give me changes to arrays?
   #It sucks because I'm going to have to store a bool
@@ -35,8 +35,6 @@ class Assignment
     if(dirty_grade)
       total_grade=0.0
       valid_grades=0
-      puts self.grades.keys.any?
-      puts self.grades.keys
       self.grades.each_key do |student_id|
         if(grades[student_id][0].is_a?(Numeric) )
           total_grade += grades[student_id][0]
