@@ -1,0 +1,48 @@
+:javascript
+  $(document).ready(function(){
+    assignment_type_validate($("input[checked=checked]")[0]);
+
+  
+    $('#submit_weight').click(function(){
+      $(".edit_gradebook_settings").submit();
+      closeBox();
+    });
+
+    $(".edit_gradebook_settings").bind('submit', function(){
+      $.post('/gradebooks/settings/#{@settings.id}/weight', $(this).serialize(), null, "script");
+      return false;
+    });
+
+    $("#weight_type").children().each(function(i,elem){
+      $(elem).click(function(){
+        $("#weight_type").children().each(function(i,elem){
+          $(elem).removeClass("selected");
+          $(elem).find("input[type=radio]").attr("checked",false)
+        });
+        $(this).addClass("selected");
+        var radio = $(this).find("input[type=radio]");
+        radio.attr("checked",true);
+        assignment_type_validate(radio);
+      });
+    });
+    //$(".weight_field").hide();
+  });
+
+
+=form_for @settings, :remote => true, :url => "/settings/#{@settings.id}/weight", :html => {:method => "put"} do |f|
+  %div{:id => "assignment_types", :style => ""}
+    =f.fields_for :assignment_types do |builder|
+      =render "assignment_type_fields", :f => builder
+  %div{:id => "weight_type"}
+    %div{:id => "equal_weight"}
+      =f.label :weight_type, "Equal Weight"
+      =f.radio_button :weight_type, :equal_weight
+    %div{:id => "no_weight"}
+      =f.label :weight_type, "No Weight"
+      =f.radio_button :weight_type, :no_weight
+    %div{:id => "manual_weight"}
+      =f.label :weight_type, "Manual Weight"
+      =f.radio_button :weight_type, :manual_weight
+  =link_to_add_fields "+ Add Type", f, :assignment_types, "assignment_type"
+  %button{:type => "button", :class => "button", :id => "submit_weight"}="Submit"
+  =close_openBox_button
