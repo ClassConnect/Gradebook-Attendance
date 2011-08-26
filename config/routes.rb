@@ -6,6 +6,7 @@ Gradebook::Application.routes.draw do
 
   resources :grade_scales
   resources :courses
+  resources :gradebook_settings
 
   #In production, this should be changed...
   #For now, it might be too confusing
@@ -14,6 +15,7 @@ Gradebook::Application.routes.draw do
   resources :assignment_grades
   resources :assignments, :except => [:index]
   match 'assignments/update/' => 'assignments#update', :via => :post
+
   match 'gradebooks/:course_id/assignments/update' => 'assignments#update' , :via => :post
   match 'gradebooks/:course_id/:assignment_id/edit' => 'assignments#edit'
   match 'gradebooks/:course_id/report' => 'gradebooks#report'
@@ -23,6 +25,12 @@ Gradebook::Application.routes.draw do
   match 'gradebooks/assignments/:id/report' => 'assignments#grade_report'
   match 'gradebooks/assignments/:id/comment' => 'assignments#comment_submit', :via => :put
   match 'gradebooks/assignments/:id/manual_grade' => 'grade_scales#grade', :via => :put
+  match 'gradebooks/:course_id/weight' => 'gradebooks#weight'
+  match 'gradebooks/settings/:settings_id/weight' => 'gradebook_settings#update_weight', :via => :put
+
+  match 'gradebooks/:course_id/student/:student_id' => 'gradebooks#student_view'
+
+  match 'gradebooks/:course_id/:student_id/course_grade' => 'gradebooks#update_course_grade', :via => :put
 
   match 'attendance/:course_id/student/:student_id/:date', :to => "attendance_records#update_student", :via => :post, :as => "update_student_attendance"
   match 'attendance/:course_id/student/:student_id/', :to => "attendance_records#student_record", :via => :get, :as => "student_attendance"

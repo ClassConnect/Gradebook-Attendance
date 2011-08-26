@@ -20,7 +20,7 @@
       }
     });
 
-    $("#options").children().each(function(i,elem){
+    $("#weight_type").children().each(function(i,elem){
       $(elem).click(function(){
         $("#options").children().each(function(i,elem){
           $(elem).removeClass("selected");
@@ -58,7 +58,7 @@
       =s.fields_for :grade_ranges, @scale.grade_ranges.desc(:from) do |builder|  
         =render "grade_range_fields", :f => builder
       %tr{:class => "add_button_row"}
-        %td{ :colspan => 6 }=link_to_add_fields "+ Add Range", s, :grade_ranges
+        %td{ :colspan => 6 }=link_to_add_fields("+ Add Range", s, :grade_ranges, "range")
   %div{:id => "scale_submission", :class => "scale-footer fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}
     %button{:type => "button", :class => "button", :id => "submit_scale"}="Submit"
     =close_openBox_button

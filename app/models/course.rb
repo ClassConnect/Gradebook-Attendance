@@ -47,4 +47,12 @@ class Course < ActiveRecord::Base
     @legacy ||= reg_date > LEGACY_DATA
   end
 
+  def assignment_types
+    AssignmentType.where(:course_id => id)
+  end
+
+  def gradebook_settings
+    GradebookSettings.where(:course_id => id).first
+  end
+
 end

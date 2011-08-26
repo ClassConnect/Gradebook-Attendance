@@ -71,11 +71,17 @@ class AssignmentsController < ApplicationController
       @assignment.save
     end
     
-    if params[:value] != ""
-      if params[:value] == "EX" || params[:value] == "IN" || params[:value] == "DR"
-        @assignment.grades[id.to_s][0] = params[:value]
+    grade_value = params[:value]
+    
+    if grade_value != ""
+      if grade_value == "EX" || grade_value == "IN" || grade_value == "DR"
+        @assignment.grades[id.to_s][0] = grade_value
       else
-        @assignment.grades[id.to_s][0] = params[:value].to_i
+        if grade_value % 1 != 0
+          @assignment.grades[id.to_s][0] = params[:value].to_f
+        else
+          @assignment.grades[id.to_s][0] = params[:value].to_i
+        end
       end
     else
       @assignment.grades[id.to_s][0] = :ungraded

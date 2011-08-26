@@ -7,9 +7,12 @@ var keys;
 var COLUMN_NUMBER_INDEX = 1;
 var VISIBLE_INDEX = 1;
 var TOTAL_INDEX = 2;
+var GRAPH_STUDENT_SCORE = 3;
+var GRAPH_POINT_VALUE = 4;
 var student_count;
 student_names = [];
 assignments_array = [];
+types_array = [];
 _columns_to_destroy = [];
 assignments_hash = new Object();
 _total_columns = 0;
@@ -20,7 +23,11 @@ _current_tooltip = null;
 _current_assignment_id = null;
 _current_student_id = null;
 _grade_scale_id = null;
+_weight_type = null;
 active = false;
+_course_id = null;
+_grading_bucket = new Object();
+_student_grades = new Object();
 
 jeditable_dictionary = {
       onBeforeShow: function(){
@@ -100,6 +107,31 @@ function enable_editing(){
   });
 }
 
+function init_assignment_types(assignment_types_dictionary, weight_type){
+  types_array = assignment_types_dictionary;
+  var length = types_array.length;
+  var cache;
+  while(length--){
+    cache = types_array[length]._id;
+    console.log(cache);
+    _grading_bucket[cache] = new Object();
+    _grading_bucket[cache].earned_points = 0;
+    _grading_bucket[cache].total_points = 0;
+  }
+  _weight_type = weight_type;
+}
+
+function find_type_by_id(type_id){
+  var length = types_array.length;
+  while(length--){
+    if(types_array[length] == type_id){
+      //return position of object
+      return length;
+    }
+  }
+  return -1;
+}
+
 function disable_editing(){
   $('.grade').editable("disable");
 }
@@ -158,8 +190,8 @@ function keyboard_block(e){
   else
     return;
 }
-    
-function new_assignment(id, point_value){
+
+function new_assignment(id, point_value, type_id){
   return {_id : id, 
   point_value : point_value,
   position: assignments_array.length+3};
@@ -207,6 +239,10 @@ function init_gradescale(scale, type, id){
 
 function init_assignments_array(json){
   assignments_array = json;
+}
+
+function init_course_id(course_id){
+  _course_id = course_id;
 }
 
 function get_table(){
@@ -283,49 +319,6 @@ function add_new_input(){
       });
     }
 
-    /*
-    plugin: function(settings, original){
-      var a = keys.fnGetCurrentPosition();
-
-      $('input', this).bind('keydown', function(event){
-        switch(event.keyCode){
-          //Up key
-          case 38:
-            if((a[1] - 1) >= 0){
-              keys.fnSetPosition(a[0], a[1] - 1);
-            }
-            break;
-
-          //Return key
-          case 13:
-          //Down key
-          case 40:
-            if((a[1] + 1) < oTable.fnSettings().aiDisplay.length){
-              keys.fnSetPosition(a[0], a[1] + 1);
-            }
-            break;
-
-          //Left key
-          case 37:
-            if((a[0] - 1) >= 0){
-              keys.fnSetPosition(a[0]-1, a[1]);
-            }
-            break;
-
-          //Right key
-          case 39:
-            if((a[0] + 1) < parseInt($('tbody').attr('cols')) - 3){
-              keys.fnSetPosition(a[0]+1, a[1]);
-            }
-            break;
-
-          //Otherwise, we don't care
-          default:
-            return;
-        }
-      });
-
-    }*/
   });
 }
 
@@ -345,7 +338,6 @@ function initTable(num_students) {
     _columns_to_destroy.length = 0;
   }
   
-  init_student_names();
   oTable = $('#gradebook_display').dataTable(
   {
     "iDisplayLength": num_students,
@@ -369,7 +361,6 @@ function initTable(num_students) {
     "iLeftWidth":340,
     "sHeightMatch": "none"
   });
-
   
   //TODO: focusing when score doesn't change and blank
   //TODO: make this restful?
@@ -412,6 +403,14 @@ function initTable(num_students) {
       oTable.fnUpdate(value, position[0], position[2], false);
       if(grading_scale_method !== "manual"){
         var grade = calculateGrade($(this).parent());
+        
+        $.ajax({
+          type: 'POST',
+          url: course_grade_update(this),
+          data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": grade},
+          dataType: "html"
+        });
+        
         apply_grade_by_column($(this).parent(), position[0], grade);
       }
     },
@@ -452,20 +451,40 @@ function gradeMatch(value){
 * Returns the grade to be displayed as a string.
 */
 function calculateGrade(dom_element){
-  var grade=0, total_points=0, graded=false;
+  var grade=0, total_points=0, graded=false, current_assignment;
+  reset_bucket();
   if(grading_scale_method !== "manual"){
     //Iterate over every cell and calculate score
     $(dom_element).children('[score]').each(function(){
       var position = oTable.fnGetPosition(this);
       graded = true;
+
       //We only factor in grades that have been graded
       //(Blank - "" - is "ungraded")
-      grade += parseInt($(this).attr('score'));
-      total_points += assignment_point_value(position[1]);
+
+      //Fill up proper grading bucket
+      current_assignment = get_assignment(position[1]);
+      bucket = _grading_bucket[current_assignment.assignment_type_id];
+      bucket.total_points += assignment_point_value(position[1]);
+      bucket.earned_points += parseInt($(this).attr('score'));
     });
+
     if(graded){
-      grade = grade / total_points;
-      grade *= 100;
+      switch(_weight_type){
+        // Earned divided by total points
+        case "no_weight":
+          grade = no_weight_grade(_grading_bucket);
+          break;
+        case "equal_weight":
+          grade = equal_weight_grade(_grading_bucket);
+          break;
+        case "manual_weight":
+          grade = manual_weight_grade(_grading_bucket);
+          break;
+        default:
+          console.log("Unsupported weight type");
+      }
+
       if(grading_scale_method === "scale"){
         grade = "" + percentage_format(grade) + " " +  (gradeMatch(grade));
       }
@@ -579,17 +598,38 @@ function validate_scales_form(){
   return false;
 }
 
-function remove_fields(link){
-  $(link).parent().prev("input[type=hidden]").val("1");
-  $(link).closest(".grade_detail_row input[type=text]").attr("disabled", true);
-  $(link).closest(".grade_detail_row").hide();
+function remove_fields(link, type){
+  if(type === "range"){
+    $(link).parent().prev("input[type=hidden]").val("1");
+    $(link).closest(".grade_detail_row input[type=text]").attr("disabled", true);
+    $(link).closest(".grade_detail_row").hide();
+  }
+  if(type === "assignment_type"){
+    $(link).parents(".assignment_type").children(".type_destroy_field").val("1");
+    $(link).parents(".assignment_type").children().attr("disabled", true);
+    $(link).parents(".assignment_type").hide();
+  }
 }
 
-function add_fields(link, association, content) {
+function add_fields(link, association, content, situation) {
   var new_id = new Date().getTime();
-  var regexp = new RegExp("new_" + association, "g");
-  var html = content.replace(regexp, new_id);
-  $(link).parent().parent().before(html);
+  var html, regexp, test;
+  regexp = new RegExp("new_" + association, "g");
+  if(situation === "range"){
+    $(link).parent().parent().before(html);
+    html = content.replace(regexp, new_id);
+  }
+  if(situation === "assignment_type"){
+    var field_regexp = new RegExp("attributes_", "g");
+    var bracket_regexp = new RegExp("\\]\\[", "g");
+    html = content.replace(field_regexp, "attributes_new_assignment_types_");
+    html = html.replace(bracket_regexp, "][new_assignment_types][");
+    html = html.replace(regexp, new_id);
+    $(link).parent("form").children("#assignment_types").append(html);
+    $($(".assignment_type:last .type_course_id")[0]).val(_course_id);
+    //$(link).parent().prev().append(html);
+    //console.log($(".assignment_type:last").children(".type_course_id"));
+  }
 }
 
 function assignment_id(index){
@@ -598,6 +638,10 @@ function assignment_id(index){
 
 function assignment_point_value(index){
   return assignments_array[index].point_value;
+}
+
+function get_assignment(index){
+  return assignments_array[index];
 }
 
 function update_grade_url(object){
@@ -631,8 +675,27 @@ function scale_mode_validate(object){
   }
 }
 
+function assignment_type_validate(object){
+  if($(object).attr('value') === "manual_weight"){
+    $(".weight_percent_field").show();
+  }
+  //either no weight or even weight
+  else{
+    console.log("click");
+    $(".weight_percent_field").hide();
+    $(".weight_percent_field").val("");
+  }
+}
+
 function init_student_names(){
   student_names = jQuery.parseJSON($('#gradebook_display tbody ').attr('students'));
+  /*
+  $.each(student_names, function(student_id, name){
+    var cache_id = ("" + student_id);
+    _student_grades[cache_id] = new Object();
+    _student_grades[cache_id].total_points = 0;
+  })
+  */
 }
 
 function series_comparator(a, b){
@@ -774,4 +837,132 @@ function jeditable_validator(string){
     return false;
   else
     return true;
+}
+
+/*
+* Could optimize this
+*/
+function reset_bucket(){
+  var length = types_array.length;
+  var cache_id;
+  while(length--){
+    cache_id = types_array[length]._id;
+    _grading_bucket[cache_id].total_points = 0;
+    _grading_bucket[cache_id].earned_points = 0;
+  }
+}
+
+/*
+* Calculated by dividing earned points by total points
+*/
+function no_weight_grade(bucket){
+  var length = types_array.length;
+  var cache_id, total_points=0, earned_points=0;
+  while(length--){
+    cache_id = types_array[length]._id;
+    total_points += bucket[cache_id].total_points;
+    earned_points += bucket[cache_id].earned_points;
+  }
+  return (earned_points / total_points) * 100;
+}
+
+/*
+*
+*/
+
+function equal_weight_grade(bucket){
+ var length = types_array.length;
+ var weight = 1 / length;
+ var grade = 0;
+ var cache_id;
+ while(length--){
+   cache_id = types_array[length]._id;
+   var div = bucket[cache_id].earned_points / bucket[cache_id].total_points;
+   if(!isNaN(div))
+     grade += (weight*div);
+ }
+ if(isNaN(grade)){
+   return 0;
+ }
+ return grade * 100;
+}
+
+function manual_weight_grade(bucket){
+  var length = types_array.length;
+  var grade=0, cache_id, type_weight=0, type;
+  while(length--){
+    type = types_array[length];
+    cache_id = type._id;
+    type_weight = type.weight;
+    var div = bucket[cache_id].earned_points / bucket[cache_id].total_points;
+    if(!isNaN(div))
+      grade += (type_weight * div);
+  }
+
+  if(isNaN(grade)){
+    return 0;
+  }
+  return grade;
+}
+
+function course_grade_update(object){
+  return '/gradebooks/' + _course_id + '/' + $(object).parents("tr").attr("id") + '/course_grade';
+}
+
+function student_grade_chart(){
+  var course_name = $("#grade-chart-display").attr("course_name");
+  var parsed_array;
+  var grade_array = [];
+  $("td.assignment-grade").each(function(){
+    parsed_array = jQuery.parseJSON($(this).attr("assignment_info"));
+    //because we stored the damn date as a date and not int
+    grade_array.push(parsed_array);
+  });
+
+  console.log(grade_array);
+
+  return  new Highcharts.Chart({
+      chart: {
+         renderTo: 'grade-chart-display',
+         type: 'line',
+         width: 600
+      },
+      title: {
+         text: course_name 
+      },
+      subtitle: {
+      },
+      xAxis: {
+         type: 'datetime',
+         dateTimeLabelFormats: { // don't display the dummy year
+            month: '%B',
+            year: '%b',
+            hour: '%b',
+            second: '%b'
+         },
+         tickInterval: (1000 * 3600 * 24 * 30)
+      },
+      yAxis: {
+         min: 0,
+         max: 100,
+         title: {
+           text: null
+         },
+         labels:{
+           formatter: function(){
+             return '' + this.value + '%';
+           }
+         }
+      },
+      tooltip: {
+         formatter: function() {
+                   return '<b>'+ this.point.name +'</b><br/>'+ this.y + '%';
+         }
+      },
+      plotOptions:{
+      },
+      series: [{
+         data: grade_array
+      }]
+   });
 }

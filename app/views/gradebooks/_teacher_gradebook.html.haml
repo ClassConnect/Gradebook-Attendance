@@ -3,10 +3,12 @@
       //START OTHER STUFF
       add_new_input();
       add_manual_input();
-      init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value]});
+      init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value, :assignment_type_id]});
+      init_assignment_types(#{@settings.assignment_types.to_json}, "#{@settings.weight_type}");
       init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}", "#{@settings.grade_scale.id}");
-    console.log(#{@students.count});
+      init_course_id(#{@course.id});
     var num_students = #{@students.count};
+      init_student_names();
       
     _grading_options = ["DR", "EX", "IN"];
     $('#add_assignment_button').click(function(){
@@ -15,6 +17,10 @@
 
     $('#edit_scale_button').click(function(){
       openBox('/gradebooks/grading_scale/#{@course.id}', 350);
+    });
+
+    $('#edit_weight_button').click(function(){
+      openBox('/gradebooks/#{@course.id}/weight', 350);
     });
 
       initTable(#{@students.count});
@@ -39,51 +45,7 @@
       hide_filter_label();
       init_headers();
 
-      $("#ex_button").click(function(){
-        misc_grades("EX");
-      });
-
-      $("#dr_button").click(function(){
-        misc_grades("DR");
-      });
-
-      $("#in_button").click(function(){
-        misc_grades("IN");
-      });
-
-      $("#submit-comment").click(function(){
-        submit_comment();
-      });
-
   }); 
-
-  $(document).delegate(".ui-icon-info", "mouseover", function(){
-    tooltip_init(this);
-  });
-
-  $(document).delegate(".grade_field", "keyup", function(){
-    if(jeditable_validator($(this).val())){
-    }
-    else{
-      $(this).val("");
-    }
-  });
-
-  $(document).delegate("#filter_text", "focus", function(){
-    var text = $("#filter_text").value;
-    if($("#filter_text").val() === "enter name to filter"){
-      $("#filter_text").removeClass("filter_placeholder_text");
-      $("#filter_text").val("");
-    }
-
-  });
-
-  $(document).delegate("#filter_text", "blur", function(){
-    if($("#filter_text").val() == ""){
-      $("#filter_text").addClass("filter_placeholder_text");
-      $("#filter_text").val("enter name to filter");
-    }
-  });
 
 %br
 %br
@@ -94,6 +56,7 @@
 %br
 %button{:type => "button", :class => "button", :id => "add_assignment_button"}="Add Assignment"
 %button{:type => "button", :class => "button", :id => "edit_scale_button"}="Edit Scale"
+%button{:type => "button", :class => "button", :id => "edit_weight_button"}="Edit Weighting"
 %div{:id => "gradebook_div"}
   =render "students_table"
 %div{:id => "dialogBox"}

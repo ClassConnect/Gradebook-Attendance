@@ -95,4 +95,5 @@ class GradeScalesController < ApplicationController
       format.html {render :text => ""}
     end
   end
+
 end

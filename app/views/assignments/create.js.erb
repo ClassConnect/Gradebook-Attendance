@@ -1,6 +1,6 @@
 destroy_table();
 
-created_assignment = new_assignment("<%= @assignment.id %>", <%= @assignment.point_value %>);
+created_assignment = new_assignment("<%= @assignment.id %>", <%= @assignment.point_value %>, "<%= @assignment.assignment_type_id %>");
 assignments_array.push(created_assignment);
 
 $('.datatable').width(function(index, value){

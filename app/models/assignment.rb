@@ -6,6 +6,7 @@ class Assignment
   cache
   
   belongs_to :assignment_type
+  index :assignment_type_id
 
   field :course_id, :type => Integer
   index :course_id
@@ -51,6 +52,39 @@ class Assignment
       self.dirty_grade = false
       self.save
     end
+  end
+
+  def graded?(student_id)
+    grade = grades[student_id.to_s]
+    if !grade
+      return false
+    else
+      if grade[0] == :ungraded
+        return false
+      end
+      return true
+    end
+  end
+
+  #Assumes that grade entry exists for student id
+  def grade_percentage(student_id)
+    grade = grades[student_id.to_s][0]
+    return percentage((grade * 100)/point_value)
+  end
+
+  def teacher_comment(student_id)
+    comment = grades[student_id.to_s][1]
+    if comment != :nocomment
+      return comment
+    else return false
+    end
+  end
+
+  #Properly formatted array to display in the student view
+  #Assumes that the grade actually exists
+  def graph_array(student_id)
+    grade = (self.grades[student_id.to_s][0].to_f / self.point_value) * 100
+    return {:name => self.name, :x => date_due.to_time.to_i * 1000, :y => '%2.f' % grade}
   end
 
   private

@@ -1,0 +1,29 @@
+=@student.first_name
+=@student.last_name
+
+
+%div{:id => "course-grade-display"}=@course.gradebook_settings.course_grades[@student.id.to_s]
+%div{:id => "grade-chart-display", :course_name => @course.name}
+-@types.each do |type|
+  -empty=true
+  -unless type.assignments.empty?
+    %div{:class => "type_entry"}
+      %p{:class => "type-name"}=type.name  
+      %table
+        %thead
+          %th{:class => "student-assignment-name", :align => "left"}="Name"
+          %th{:class => "due-date"}="Due Date"
+          %th="Score"
+        -type.assignments.each do |assignment|
+          -if assignment.graded?(@student.id)
+            -empty=false
+            %tr{:class => "student-grade-entry"}
+              -if comment=assignment.teacher_comment(@student.id)
+                %td{:class => "student-assignment-name", :comment => comment}=assignment.name
+              -else
+                %td{:class => "student-assignment-name"}=assignment.name
+              %td{:class => "due-date", :align => "center"}=assignment.date_due
+              -numeric_grade = assignment.grade_percentage(@student.id)
+              %td{:assignment_info => assignment.graph_array(@student.id).to_json, :class => "assignment-grade"}=numeric_grade
+        -if empty
+          %tr{:class => "no_scores"}
