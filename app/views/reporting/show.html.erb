@@ -1,0 +1,79 @@
+<%= javascript_include_tag "application" %>
+<script>
+  $(function() {
+      new Highcharts.Chart({
+        chart: {
+          renderTo: "grade_reporting",
+          defaultSeriesType: "scatter",
+          zoomType:'xy'
+        },
+        title: {
+          text: "Grades over time"
+        },
+        xAxis: {
+          type: "datetime"
+        },
+        yAxis: {
+          min:0,
+          max:100,
+          title: {
+            text: "Percentage"
+          }
+        },
+        tooltip: {
+          formatter: function() {
+            return this.point.name + ': ' +
+              Highcharts.numberFormat(this.y, 2)+"%";
+          }
+        },
+        series: [
+        <% { "Homework" => @course.homework, "Quizzes" => @course.quizzes, "Tests" => @course.tests, "Projects" =>  @course.projects}.each do |name, assignments| %>
+          {
+            name: "<%= name %>",
+            data:<%= assignment_chart_series(assignments) %>
+          },
+        <% end %>
+        ]
+      });
+      // new Highcharts.Chart({
+      //   chart: {
+      //     renderTo: "attendance_reporting"
+      //   },
+      //   title: {
+      //     text: "Orders by Day"
+      //   },
+      //   xAxis: {
+      //     type: "datetime"
+      //   },
+      //   yAxis: {
+      //     title: {
+      //       text: "Dollars"
+      //     }
+      //   },
+      //   tooltip: {
+      //     formatter: function() {
+      //       return Highcharts.dateFormat("%B %e, %Y", this.x) + ': ' +
+      //         "$" + Highcharts.numberFormat(this.y, 2);
+      //     }
+      //   },
+      //   series: [
+      //   <%# { "Download" => Order.download, "Shipping" => Order.shipping }.each do |name, orders| %>
+      //   {
+      //     name: "<%# name %>",
+      //     pointInterval: <%# 1.day * 1000 %>,
+      //     pointStart: <%# 3.weeks.ago.to_i * 1000 %>,
+      //     data: <%# orders_chart_series(orders, 3.weeks.ago) %>
+      //   },
+      //   <%# end %>
+      //   ]
+      // });
+    });
+</script>
+<% if Rails.env.development? %>
+  <div style="width:700px;">
+<% end %>
+    <div id="grade_reporting"></div>
+    <div id="attendance_reporting"></div>
+<% if Rails.env.development? %>  
+  </div>
+<% end %>

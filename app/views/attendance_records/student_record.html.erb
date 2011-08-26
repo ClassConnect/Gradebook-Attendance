@@ -25,7 +25,7 @@
 				<% @records.each do |record| %>
 					<tr class="<%= record.cases[@student.id_s] == :absent ? "absent" : "tardy" %>">
 						<td class="initial" style="width:30px"><%= record.cases[@student.id_s] == :absent ? "A" : "T" %></td>
-						<td class="date" onclick="gotodate('<%= record.date.strftime("%Y-%m-%d") %>')"><%= record.date.strftime("%m-%d-%Y") %></td>
+						<td class="date" onclick="gotodate('<%= record.date.strftime("%Y-%m-%d") %>'); closeBox();"><%= record.date.strftime("%m-%d-%Y") %></td>
 					</tr>
 				<% end %>
 			</tbody>
@@ -35,6 +35,6 @@
 	<% end %>
 	<div style="margin-top:10px; margin-bottom:20px;">
 		<!--<button class="action" onclick="print();">Print</button>-->
-		<button class="action lawsuit" onclick="closeBox();">Close</button>
+		<button class="button" onclick="closeBox();" style="float:right; margin-bottom:5px;">Close</button>
 	</div>
 </div>

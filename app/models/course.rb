@@ -31,16 +31,31 @@ class Course < ActiveRecord::Base
     Assignment.where(:course_id => id)
   end
 
-  def get_assignment_by_type(type)
-    Assignment.where(:type => type)
+  def assignments_by_type(type)
+    # AssignmentType.where(:name => type).assignments.where(:course_id => id)
+    # Assignment.where(:course_id => id, :type => {:name => type})
+    # atid = AssignmentType.where(:course_id => id, :name => type).first.id
+    Assignment.where(:course_id => id, :assignment_type_id => AssignmentType.where(:course_id => id, :name => type).first.id)
+  end
+  
+  def homework
+    assignments_by_type("Homework")
+  end
+  
+  def quizzes
+    assignments_by_type("Quiz")
+  end
+  
+  def tests
+    assignments_by_type("Test")
+  end
+  
+  def projects
+    assignments_by_type("Project")
   end
 
   def active_assignments
     Assignment.where(:date_due.gt => Time.now)
-  end
-
-  def ungraded_assignments
-    Assignment.where(:course_id => id, :graded => false)
   end
 
   def legacy?

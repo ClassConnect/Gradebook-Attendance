@@ -1,4 +1,6 @@
 Gradebook::Application.routes.draw do
+  match 'reporting/:course_id' => 'reporting#show'
+  
   get "courses/index"
 
   match 'gradebooks/:course_id/table' => 'gradebooks#table'
