@@ -15,6 +15,8 @@ class ApplicationController < ActionController::Base
     if session[:session_key].nil?
       return redirect_to "/app/home.cc"
     end
+    logger.info(params[:session_id])
+    logger.info(session[:session_key])
     key = UsersKey.where(:session_key => session[:session_key]).first
     if key.nil?
       return redirect_to "/app/home.cc"
