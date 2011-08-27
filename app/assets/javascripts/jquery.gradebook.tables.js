@@ -1006,6 +1006,7 @@ function _gradebook_delegates(){
 }
 
 function _gradebook_buttons(){
+  console.log("button handlers added");
   $("#ex_button").click(function(){
     misc_grades("EX");
   });
