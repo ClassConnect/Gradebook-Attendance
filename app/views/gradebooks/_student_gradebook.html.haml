@@ -20,7 +20,6 @@
     //
   });
 
--#%h1{:class => "student-name-display"}=@student.first_name + " " + @student.last_name
 %div{:class => "student-view-container"}
   %div{:id => "grade-chart-display", :course_name => @course.name}
   -@types.each do |type|
