@@ -13,6 +13,11 @@
       initTable();
       $('.dataTables_scrollHeadInner .datatable').attr('style', "");
 
+      document.addEventListener('click', click_block, true);
+      document.addEventListener('keydown', keyboard_block, true);
+      teacher_gradebook();
+
+      console.log("pre grade...");
       if(#{@students.count} > 0){
         if(grading_scale_method != "manual"){
           $('.dataTables_scrollBody .datatable tbody tr').each(function(){
@@ -22,18 +27,6 @@
         }
       }
 
-      console.log("pre listeners");
-      document.addEventListener('click', click_block, true);
-      document.addEventListener('keydown', keyboard_block, true);
-
-      /*
-      $(document).click(function(e){
-        console.log(e);
-      });
-      */
-    
-      teacher_gradebook();
-      console.log("test");
       
   }); 
 
