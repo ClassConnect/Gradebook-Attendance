@@ -54,8 +54,9 @@
           %th{:class => "total_entry", :align => "right"}=type.name + " Total: " 
           %th{:class => "total_grade_entry"}=number_to_percentage((earned_points.to_f / total_points) * 100, :precision => 2, :strip_insignificant_zeros => true) 
         %br
-%div{:id => "course-grade-display", :class => "ui-toolbar ui-widget-header"}
-  %div{:id => "inception"}
-    -split_string = @course.gradebook_settings.course_grades[@student.id.to_s].split(" ")
-    %span{:id => "percentage-display"}=split_string[0]
-    %span{:id => "letter-grade-display"}=split_string[1]
+-if @course.gradebook_settings.course_grades[@student.id.to_s]
+  %div{:id => "course-grade-display", :class => "ui-toolbar ui-widget-header"}
+    %div{:id => "inception"}
+      -split_string = @course.gradebook_settings.course_grades[@student.id.to_s].split(" ")
+      %span{:id => "percentage-display"}=split_string[0]
+      %span{:id => "letter-grade-display"}=split_string[1]
