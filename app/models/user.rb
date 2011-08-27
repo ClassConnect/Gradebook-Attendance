@@ -19,16 +19,22 @@ class User < ActiveRecord::Base
   has_many :course_teachers, :foreign_key => "uid"
   has_many :taught_courses, :through => :course_teachers, :source => :course
 
+  attr_accessible :level
+
   #In some legacy entries, there are users who are both teachers and students
   #As of ClassConnect 4, this should not happen
 
 
+  #these two are weird for some reason...
+  #they're queried correctly but when you access the attr, they get messed up
   def is_teacher?
-    get_role == TEACHER
+    #get_role == TEACHER
+    get_role == false
   end
 
   def is_student?
-    get_role == STUDENT
+    #get_role == STUDENT
+    get_role == true
   end
 
   def is_admin?

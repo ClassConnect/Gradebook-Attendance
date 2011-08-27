@@ -12,8 +12,6 @@ class GradebooksController < ApplicationController
         @student = current_user
       end
     end
-    puts current_user
-    puts "LOL"
     @course = Course.find(params[:course_id])
     @students = @course.students.order_names
     @assignments = @course.assignments.asc(:created_at).cache
@@ -73,8 +71,12 @@ class GradebooksController < ApplicationController
   def teaches_class?(viewed_id)
     selected_course = current_user.taught_courses.find_by_id(viewed_id)
     if(selected_course == nil)
-      return redirect_to "/app/home.cc"
+      return false
     end
+  end
+
+  def student_in_class?(viewed_id)
+
   end
 
 end
