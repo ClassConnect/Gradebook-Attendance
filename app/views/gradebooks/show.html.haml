@@ -3,9 +3,7 @@
   = render :partial => "teacher_gradebook"
 -else
   -if @current_user.is_teacher?
-    -logger.info("teacher"
     =render :partial => "teacher_gradebook"
   -else
     -if @current_user.is_student?
-      -logger.info("student")
       =render :partial => "student_gradebook"
