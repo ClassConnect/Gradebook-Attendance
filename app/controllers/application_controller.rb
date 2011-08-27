@@ -19,9 +19,7 @@ class ApplicationController < ActionController::Base
     if key.nil?
       return redirect_to "/app/home.cc"
     end
-    logger.info(key.user.id)
     @current_user = key.user 
-    logger.info(@current_user)
   end
 
 end
