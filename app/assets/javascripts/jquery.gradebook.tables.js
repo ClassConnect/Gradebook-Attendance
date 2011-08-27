@@ -326,7 +326,7 @@ function hide_filter_label(){
   $("#filter_text").val("enter name to filter");
 }
 
-function initTable(num_students) {
+function initTable() {
   if(_columns_to_destroy.length != 0){
     $('.datatable tr').each(function(){
       var destroy_length = _columns_to_destroy.length;
@@ -339,7 +339,7 @@ function initTable(num_students) {
   
   oTable = $('#gradebook_display').dataTable(
   {
-    "iDisplayLength": num_students,
+    "iDisplayLength": student_count,
     "bDestroy": true,
     "bAutoWidth": false,
     "sScrollX": "555px",
@@ -973,4 +973,72 @@ function regrade(){
       apply_grade(this, grade);
     });
   }
+}
+
+function _gradebook_delegates(){
+  //
+  $(document).delegate(".grade_field", "keyup", function(){
+    if(jeditable_validator($(this).val())){
+      }
+      else{
+        $(this).val("");
+      }
+    });
+
+  $(document).delegate("#filter_text", "focus", function(){
+    var text = $("#filter_text").value;
+    if($("#filter_text").val() === "enter name to filter"){
+      $("#filter_text").removeClass("filter_placeholder_text");
+      $("#filter_text").val("");
+    }
+  });
+
+  $(document).delegate("#filter_text", "blur", function(){
+    if($("#filter_text").val() == ""){
+      $("#filter_text").addClass("filter_placeholder_text");
+      $("#filter_text").val("enter name to filter");
+    }
+  });
+
+  $(document).delegate(".ui-icon-info", "mouseover", function(){
+    tooltip_init(this);
+  });
+}
+
+function _gradebook_buttons(){
+  $("#ex_button").click(function(){
+    misc_grades("EX");
+  });
+
+  $("#dr_button").click(function(){
+    misc_grades("DR");
+  });
+
+  $("#in_button").click(function(){
+    misc_grades("IN");
+  });
+
+  $("#submit-comment").click(function(){
+    submit_comment();
+  });
+
+  $('#add_assignment_button').click(function(){
+    openBox('/gradebooks/' + _course_id + '/assignments', 300);
+  });
+
+  $('#edit_scale_button').click(function(){
+    openBox('/gradebooks/grading_scale/' + _course_id, 350);
+  });
+
+  $('#edit_weight_button').click(function(){
+    openBox('/gradebooks/' + _course_id + '/weight', 350);
+  });
+}
+
+function teacher_gradebook(){
+    _focused_cell = null;
+    hide_filter_label();
+    init_headers();
+    _gradebook_delegates();
+    _gradebook_buttons();
 }

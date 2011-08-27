@@ -4,27 +4,12 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-// require jquery
+//= require jquery
 //= require jquery_ujs
 //= require jquery.dataTables
 //= require_tree .
 
 $(document).ready(function(){
-  $("#ex_button").click(function(){
-    misc_grades("EX");
-  });
-
-  $("#dr_button").click(function(){
-    misc_grades("DR");
-  });
-
-  $("#in_button").click(function(){
-    misc_grades("IN");
-  });
-
-  $("#submit-comment").click(function(){
-    submit_comment();
-  });
 
 });
 

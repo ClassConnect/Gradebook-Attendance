@@ -9,24 +9,9 @@
       init_course_id(#{@course.id});
     var num_students = #{@students.count};
       init_student_names();
-      
     _grading_options = ["DR", "EX", "IN"];
-    $('#add_assignment_button').click(function(){
-      openBox('/gradebooks/#{@course.id}/assignments', 300);
-    });
-
-    $('#edit_scale_button').click(function(){
-      openBox('/gradebooks/grading_scale/#{@course.id}', 350);
-    });
-
-    $('#edit_weight_button').click(function(){
-      openBox('/gradebooks/#{@course.id}/weight', 350);
-    });
-
-      initTable(#{@students.count});
+      initTable();
       $('.dataTables_scrollHeadInner .datatable').attr('style', "");
-      //$('.assignment_head .datatable').attr('style', "");
-      //$('.DTFC_Cloned .header_row th').attr('style', "");
 
       if(#{@students.count} > 0){
         if(grading_scale_method != "manual"){
@@ -37,39 +22,19 @@
         }
       }
 
-      _focused_cell = null;
-
+      debugger;
       document.addEventListener('click', click_block, true);
+      debugger;
       document.addEventListener('keydown', keyboard_block, true);
+
+      /*
+      $(document).click(function(e){
+        console.log(e);
+      });
+      */
     
-      hide_filter_label();
-      init_headers();
-      $(document).delegate(".ui-icon-info", "mouseover", function(){
-        tooltip_init(this);
-      });
-
-      $(document).delegate(".grade_field", "keyup", function(){
-        if(jeditable_validator($(this).val())){
-          }
-        else{
-        $(this).val("");
-        }
-        });
-
-      $(document).delegate("#filter_text", "focus", function(){
-        var text = $("#filter_text").value;
-        if($("#filter_text").val() === "enter name to filter"){
-        $("#filter_text").removeClass("filter_placeholder_text");
-        $("#filter_text").val("");
-        }
-      });
-
-      $(document).delegate("#filter_text", "blur", function(){
-      if($("#filter_text").val() == ""){
-      $("#filter_text").addClass("filter_placeholder_text");
-      $("#filter_text").val("enter name to filter");
-      }
-      });
+      teacher_gradebook();
+      
   }); 
 
 -if Rails.env.development?
