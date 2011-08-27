@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
   end
 
   def get_role
-    @role ||= SchoolRelationship.find_by_uid(id).relationship_type
+    @role ||= self.level
   end
 
 #Teacher functionality
