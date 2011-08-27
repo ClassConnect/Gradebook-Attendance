@@ -4,7 +4,7 @@
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file.
 //
-//= require jquery
+// require jquery
 //= require jquery_ujs
 //= require jquery.dataTables
 //= require_tree .
@@ -28,30 +28,3 @@ $(document).ready(function(){
 
 });
 
-  $(document).delegate(".ui-icon-info", "mouseover", function(){
-    tooltip_init(this);
-  });
-
-  $(document).delegate(".grade_field", "keyup", function(){
-    if(jeditable_validator($(this).val())){
-    }
-    else{
-      $(this).val("");
-    }
-  });
-
-  $(document).delegate("#filter_text", "focus", function(){
-    var text = $("#filter_text").value;
-    if($("#filter_text").val() === "enter name to filter"){
-      $("#filter_text").removeClass("filter_placeholder_text");
-      $("#filter_text").val("");
-    }
-
-  });
-
-  $(document).delegate("#filter_text", "blur", function(){
-    if($("#filter_text").val() == ""){
-      $("#filter_text").addClass("filter_placeholder_text");
-      $("#filter_text").val("enter name to filter");
-    }
-  });
