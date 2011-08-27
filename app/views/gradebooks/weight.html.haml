@@ -1,7 +1,6 @@
 :javascript
   $(document).ready(function(){
     assignment_type_validate($("input[checked=checked]")[0]);
-
   
     $('#submit_weight').click(function(){
       $(".edit_gradebook_settings").submit();
@@ -28,7 +27,7 @@
     //$(".weight_field").hide();
   });
 
-
+%div{:class => "scale-header fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}= "Change Assignment Weight"
 =form_for @settings, :remote => true, :url => "/settings/#{@settings.id}/weight", :html => {:method => "put"} do |f|
   %div{:id => "assignment_types", :style => ""}
     =f.fields_for :assignment_types do |builder|

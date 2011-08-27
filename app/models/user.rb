@@ -23,8 +23,6 @@ class User < ActiveRecord::Base
   #As of ClassConnect 4, this should not happen
 
 
-
-  
   def is_teacher?
     get_role == TEACHER
   end

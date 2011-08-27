@@ -77,7 +77,7 @@ class AssignmentsController < ApplicationController
       if grade_value == "EX" || grade_value == "IN" || grade_value == "DR"
         @assignment.grades[id.to_s][0] = grade_value
       else
-        if grade_value % 1 != 0
+        if (grade_value.to_f % 1 != 0.0)
           @assignment.grades[id.to_s][0] = params[:value].to_f
         else
           @assignment.grades[id.to_s][0] = params[:value].to_i

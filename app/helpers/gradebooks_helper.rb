@@ -16,5 +16,8 @@ module GradebooksHelper
     return returned_hash
   end
 
+  def link_to_student(student_id, text)
+  end
+
 
 end

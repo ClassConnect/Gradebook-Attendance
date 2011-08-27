@@ -1,2 +1,9 @@
 = javascript_include_tag "application"
-= render :partial => "teacher_gradebook"
+-if Rails.env.development?
+  = render :partial => "teacher_gradebook"
+-else
+  -if @current_user.is_teacher?
+    =render :partial => "teacher_gradebook"
+  -else
+    -if @current_user.is_student?
+      =render :partial => "student_gradebook"

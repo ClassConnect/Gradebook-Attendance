@@ -70,4 +70,12 @@ class Course < ActiveRecord::Base
     GradebookSettings.where(:course_id => id).first
   end
 
+  def attendance_records
+    AttendanceRecord.where(:course_id => id).first
+  end
+
+  def attendance_records_with_case
+    AttendanceRecord.where(:course_id => id, :cases.ne => {})
+  end
+
 end

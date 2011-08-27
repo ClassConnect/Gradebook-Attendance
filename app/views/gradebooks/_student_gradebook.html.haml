@@ -1,29 +1,61 @@
-=@student.first_name
-=@student.last_name
+:javascript
+  $(document).ready(function(){
+    $(".no_scores").parents(".type_entry").remove();
+    chart1 = student_grade_chart();
 
+    //Floating stuff
+    var thisPage = $(this);
+    var panel = $("#course-grade-display");
+    var panelTop = panel.offset().top;
+    var thisPageTop = 0;
+    $(window).bind('scroll', function(){  
+      thisPageTop = thisPage.scrollTop();
+      if(thisPageTop > (panelTop - 10) && !panel.hasClass('floatingPanel')){
+        panel.addClass('floatingPanel'); 
+      }
+      else if(thisPageTop <= (panelTop - 10) && panel.hasClass('floatingPanel')){ 
+        panel.removeClass('floatingPanel');
+      }
+    });
+    //
+  });
 
-%div{:id => "course-grade-display"}=@course.gradebook_settings.course_grades[@student.id.to_s]
-%div{:id => "grade-chart-display", :course_name => @course.name}
--@types.each do |type|
-  -empty=true
-  -unless type.assignments.empty?
-    %div{:class => "type_entry"}
-      %p{:class => "type-name"}=type.name  
-      %table
-        %thead
-          %th{:class => "student-assignment-name", :align => "left"}="Name"
-          %th{:class => "due-date"}="Due Date"
-          %th="Score"
-        -type.assignments.each do |assignment|
-          -if assignment.graded?(@student.id)
-            -empty=false
-            %tr{:class => "student-grade-entry"}
-              -if comment=assignment.teacher_comment(@student.id)
-                %td{:class => "student-assignment-name", :comment => comment}=assignment.name
-              -else
-                %td{:class => "student-assignment-name"}=assignment.name
-              %td{:class => "due-date", :align => "center"}=assignment.date_due
-              -numeric_grade = assignment.grade_percentage(@student.id)
-              %td{:assignment_info => assignment.graph_array(@student.id).to_json, :class => "assignment-grade"}=numeric_grade
-        -if empty
-          %tr{:class => "no_scores"}
+-#%h1{:class => "student-name-display"}=@student.first_name + " " + @student.last_name
+%div{:class => "student-view-container"}
+  %div{:id => "grade-chart-display", :course_name => @course.name}
+  -@types.each do |type|
+    -empty=true
+    -unless type.assignments.empty?
+      -total_points = 0
+      -earned_points = 0
+      %div{:class => "type_entry"}
+        %table{:class => "type_entry_table"}
+          %thead
+            %tr{:class => "ui-toolbar ui-widget-header"}
+              %th{:class => "student-assignment-name", :align => "left"}=type.name
+              %th{:class => "due-date"}="Due Date"
+              %th{:class => "assignment-grade"}="Score"
+          -type.assignments.each do |assignment|
+            -if assignment.graded?(@student.id)
+              -empty=false
+              -total_points += assignment.point_value
+              %tr{:class => "student-grade-entry"}
+                -if comment=assignment.teacher_comment(@student.id)
+                  %td{:class => "student-assignment-name student_view_cell", :comment => comment}=assignment.name
+                -else
+                  %td{:class => "student-assignment-name student_view_cell"}=assignment.name
+                %td{:class => "due-date student_view_cell", :align => "center"}=assignment.date_due.to_time.strftime("%m-%d-%Y")
+                -numeric_grade = assignment.grade_percentage(@student.id)
+                -earned_points += assignment.grades[@student.id.to_s][0]
+                %td{:assignment_info => assignment.graph_array(@student.id).to_json, :class => "assignment-grade student_view_cell", :align => "center"}=numeric_grade
+          -if empty
+            %tr{:class => "no_scores"}
+        %table{:class => "totals"}  
+          %th{:class => "total_entry", :align => "right"}=type.name + " Total: " 
+          %th{:class => "total_grade_entry"}=number_to_percentage((earned_points.to_f / total_points) * 100, :precision => 2, :strip_insignificant_zeros => true) 
+        %br
+%div{:id => "course-grade-display", :class => "ui-toolbar ui-widget-header"}
+  %div{:id => "inception"}
+    -split_string = @course.gradebook_settings.course_grades[@student.id.to_s].split(" ")
+    %span{:id => "percentage-display"}=split_string[0]
+    %span{:id => "letter-grade-display"}=split_string[1]

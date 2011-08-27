@@ -123,12 +123,97 @@ ul.micons span.ui-mini {float: right; margin: 0 4px;}
 }
 
 .student-assignment-name{
-  width: 200px;
+  width: 400px;
   float:left !important;
   align:left !important;
+  padding: 5px;
 }
 
 .due-date{
   width: 100px;
   align: center;
+}
+
+td.assignment-grade{
+  width: 60px;
+  align: center;
+}
+
+.type_entry_table{
+  margin-left: 20px;
+  border-collapse: collapse;
+}
+
+th.total_entry{
+  width: 520px;
+  colspan: 2;
+  vertical-align: right !important;
+}
+
+th.total_grade_entry{
+  width: 60px;
+}
+
+.student_view_cell{
+  padding: 5px;
+  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+}
+
+tr.student-grade-entry{
+  border: 1px solid #ccc;
+}
+
+div#course-grade-display{
+  float: left;
+  //position: relative;
+  //margin-left: 610px;
+  margin-bottom: 30px;
+  width: 200px;
+  padding: 8px;
+  font-size: 40px;
+  font-weight:bold;
+  color: #333;
+  border: 2px solid #ccc;
+  border-radius         : 5px; 
+	-moz-border-radius    : 5px; 
+	-webkit-border-radius : 5px;
+
+  //background: #e1e1e1;
+}
+
+span#letter-grade-display{
+  color:red;
+}
+
+.floatingPanel 
+{ 
+  position: fixed; top: 10px;
+  margin-left: 610px;
+}
+
+div.student-view-container{
+  width: 600px;
+  float: left;
+}
+
+div#inception{
+ padding: 3px; 
+ background: #fff;
+ filter:alpha(opacity=7);
+ -moz-opacity:0.7;
+ -khtml-opacity: 0.7;
+ opacity: 0.7;
+ 
+ border-radius         : 5px; 
+ -moz-border-radius    : 5px; 
+ -webkit-border-radius : 5px;
+
+ 	-webkit-box-shadow: 0 0 3px #ccc;
+	-moz-box-shadow: 0 0 3px #ccc;
+	box-shadow: 0 0 3px #ccc;
+}
+
+span#percentage-display{
+  padding-left: 13px;
 }

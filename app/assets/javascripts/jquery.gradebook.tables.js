@@ -108,6 +108,7 @@ function enable_editing(){
 }
 
 function init_assignment_types(assignment_types_dictionary, weight_type){
+  console.log("in init");
   types_array = assignment_types_dictionary;
   var length = types_array.length;
   var cache;
@@ -119,6 +120,10 @@ function init_assignment_types(assignment_types_dictionary, weight_type){
     _grading_bucket[cache].total_points = 0;
   }
   _weight_type = weight_type;
+}
+
+function test_function(){
+  console.log("this is fucked up");
 }
 
 function find_type_by_id(type_id){
@@ -250,7 +255,7 @@ function get_table(){
 }
 
 function destroy_table(){
-  $("#gradebook_div").after($("#add_assignment_button")).after($("#edit_scale_button"));
+  $("#gradebook_div").after($("#add_assignment_button")).after($("#edit_scale_button")).after($("#edit_weight_button"));
   oTable.fnDestroy();
 }
 
@@ -282,6 +287,7 @@ function add_new_input(){
     element : function(settings, original){
       var input = $('<input type="text" class="grade_field" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
+      console.log(position);
       var points = $('<span class="assignment-value">' + '/' + assignment_point_value(position[1]) + '</span>');
       var container_span = $('<div class="entry-container"></span>');
       container_span.append(input).append(points);
@@ -637,6 +643,7 @@ function assignment_id(index){
 }
 
 function assignment_point_value(index){
+  console.log(assignments_array[index].point_value);
   return assignments_array[index].point_value;
 }
 
@@ -819,7 +826,7 @@ function init_headers(){
       $(this).children("form").children()[0].focus();
     });
 
-    $('#gradebook_display_filter').after($('#add_assignment_button')).after($('#edit_scale_button'));
+    $('#gradebook_display_filter').after($('#add_assignment_button')).after($('#edit_scale_button')).after($('#edit_weight_button'));
 }
 
 function tooltip_init(object){
@@ -919,18 +926,21 @@ function student_grade_chart(){
     grade_array.push(parsed_array);
   });
 
-  console.log(grade_array);
-
   return  new Highcharts.Chart({
       chart: {
          renderTo: 'grade-chart-display',
-         type: 'line',
+         type: 'scatter',
          width: 600
       },
       title: {
-         text: course_name 
+        //enabled: false
+         text: "" 
       },
-      subtitle: {
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
       },
       xAxis: {
          type: 'datetime',
@@ -965,4 +975,13 @@ function student_grade_chart(){
          data: grade_array
       }]
    });
+}
+
+function regrade(){
+  if(grading_scale_method != "manual"){
+    $('.dataTables_scrollBody .datatable tbody tr').each(function(){
+      var grade = calculateGrade(this);
+      apply_grade(this, grade);
+    });
+  }
 }
