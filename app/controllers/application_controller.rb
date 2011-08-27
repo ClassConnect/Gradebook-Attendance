@@ -18,10 +18,13 @@ class ApplicationController < ActionController::Base
     logger.info(params[:session_id])
     logger.info(session[:session_key])
     key = UsersKey.where(:session_key => session[:session_key]).first
+    logger.info(key)
     if key.nil?
       return redirect_to "/app/home.cc"
     end
+    logger.info(key.user)
     @current_user = key.user 
+    logger.info(@current_user)
   end
 
 end
