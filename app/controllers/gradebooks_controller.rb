@@ -1,7 +1,7 @@
 class GradebooksController < ApplicationController
   #there's going to need to be lots of memcaching going on...
 
-  before_filter :authenticate_session!
+  before_filter :authenticate_session!, :except => [:weight]
   
   #Standard 10-point scale
   DEFAULT_SCALE = [{:from => 0,:to => 59, :name =>"F"}, {:from=>60,:to=>69,:name=>"D"}, {:from=>70,:to =>79,:name =>"C"}, {:from =>80,:to=>89,:name=>"B"},{:from=>90,:to=>100,:name=>"A"}]
@@ -25,6 +25,9 @@ class GradebooksController < ApplicationController
         @student = current_user
         @types = @settings.assignment_types
       end
+    end
+    respond_to do |format|
+      format.html {render :layout => false}
     end
   end
 

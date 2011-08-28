@@ -9,25 +9,15 @@
       init_course_id(#{@course.id});
     var num_students = #{@students.count};
       init_student_names();
-      
     _grading_options = ["DR", "EX", "IN"];
-    $('#add_assignment_button').click(function(){
-      openBox('/gradebooks/#{@course.id}/assignments', 300);
-    });
-
-    $('#edit_scale_button').click(function(){
-      openBox('/gradebooks/grading_scale/#{@course.id}', 350);
-    });
-
-    $('#edit_weight_button').click(function(){
-      openBox('/gradebooks/#{@course.id}/weight', 350);
-    });
-
-      initTable(#{@students.count});
+      initTable();
       $('.dataTables_scrollHeadInner .datatable').attr('style', "");
-      //$('.assignment_head .datatable').attr('style', "");
-      //$('.DTFC_Cloned .header_row th').attr('style', "");
 
+      document.addEventListener('click', click_block, true);
+      document.addEventListener('keydown', keyboard_block, true);
+      teacher_gradebook();
+
+      console.log("pre grade...");
       if(#{@students.count} > 0){
         if(grading_scale_method != "manual"){
           $('.dataTables_scrollBody .datatable tbody tr').each(function(){
@@ -37,14 +27,7 @@
         }
       }
 
-      _focused_cell = null;
-
-      document.addEventListener('click', click_block, true);
-      document.addEventListener('keydown', keyboard_block, true);
-    
-      hide_filter_label();
-      init_headers();
-
+      
   }); 
 
 -if Rails.env.development?

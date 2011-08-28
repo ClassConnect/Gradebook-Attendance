@@ -5,54 +5,10 @@
 // the compiled file.
 //
 // we only want this for dev require jquery
-//= require jquery
 //= require jquery_ujs
 //= require jquery.dataTables
 //= require_tree .
 
 $(document).ready(function(){
-  $("#ex_button").click(function(){
-    misc_grades("EX");
-  });
-
-  $("#dr_button").click(function(){
-    misc_grades("DR");
-  });
-
-  $("#in_button").click(function(){
-    misc_grades("IN");
-  });
-
-  $("#submit-comment").click(function(){
-    submit_comment();
-  });
 
 });
-
-  $(document).delegate(".ui-icon-info", "mouseover", function(){
-    tooltip_init(this);
-  });
-
-  $(document).delegate(".grade_field", "keyup", function(){
-    if(jeditable_validator($(this).val())){
-    }
-    else{
-      $(this).val("");
-    }
-  });
-
-  $(document).delegate("#filter_text", "focus", function(){
-    var text = $("#filter_text").value;
-    if($("#filter_text").val() === "enter name to filter"){
-      $("#filter_text").removeClass("filter_placeholder_text");
-      $("#filter_text").val("");
-    }
-
-  });
-
-  $(document).delegate("#filter_text", "blur", function(){
-    if($("#filter_text").val() == ""){
-      $("#filter_text").addClass("filter_placeholder_text");
-      $("#filter_text").val("enter name to filter");
-    }
-  });

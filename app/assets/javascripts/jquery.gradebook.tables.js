@@ -108,22 +108,16 @@ function enable_editing(){
 }
 
 function init_assignment_types(assignment_types_dictionary, weight_type){
-  console.log("in init");
   types_array = assignment_types_dictionary;
   var length = types_array.length;
   var cache;
   while(length--){
     cache = types_array[length]._id;
-    console.log(cache);
     _grading_bucket[cache] = new Object();
     _grading_bucket[cache].earned_points = 0;
     _grading_bucket[cache].total_points = 0;
   }
   _weight_type = weight_type;
-}
-
-function test_function(){
-  console.log("this is fucked up");
 }
 
 function find_type_by_id(type_id){
@@ -287,7 +281,6 @@ function add_new_input(){
     element : function(settings, original){
       var input = $('<input type="text" class="grade_field" autocomplete="off">');
       var position = oTable.fnGetPosition(original);
-      console.log(position);
       var points = $('<span class="assignment-value">' + '/' + assignment_point_value(position[1]) + '</span>');
       var container_span = $('<div class="entry-container"></span>');
       container_span.append(input).append(points);
@@ -333,7 +326,7 @@ function hide_filter_label(){
   $("#filter_text").val("enter name to filter");
 }
 
-function initTable(num_students) {
+function initTable() {
   if(_columns_to_destroy.length != 0){
     $('.datatable tr').each(function(){
       var destroy_length = _columns_to_destroy.length;
@@ -346,7 +339,7 @@ function initTable(num_students) {
   
   oTable = $('#gradebook_display').dataTable(
   {
-    "iDisplayLength": num_students,
+    "iDisplayLength": student_count,
     "bDestroy": true,
     "bAutoWidth": false,
     "sScrollX": "555px",
@@ -635,8 +628,6 @@ function add_fields(link, association, content, situation) {
     $("#assignment_fields table").append(html);
     $($(".assignment_type:last .type_course_id")[0]).val(_course_id);
     assignment_type_validate($("#weight_type .selected input"));
-    //$(link).parent().prev().append(html);
-    //console.log($(".assignment_type:last").children(".type_course_id"));
   }
 }
 
@@ -645,7 +636,6 @@ function assignment_id(index){
 }
 
 function assignment_point_value(index){
-  console.log(assignments_array[index].point_value);
   return assignments_array[index].point_value;
 }
 
@@ -690,7 +680,6 @@ function assignment_type_validate(object){
   }
   //either no weight or even weight
   else{
-    console.log("click");
     $(".weight_percent_field").parent().hide();
     $(".weight_percent_field").parent().val("");
   }
@@ -717,8 +706,8 @@ function series_comparator(a, b){
 }
 
 function assignment_column_from_id(assignment_id){
-  console.log($('.dataTables_scrollHead .header_row' + " #" + assignment_id));
-  console.log(oTable.fnGetPosition($('.dataTables_scrollHead .header_row' + " #" + assignment_id)));
+  $('.dataTables_scrollHead .header_row' + " #" + assignment_id);
+  oTable.fnGetPosition($('.dataTables_scrollHead .header_row' + " #" + assignment_id));
 }
 
 /*
@@ -986,4 +975,73 @@ function regrade(){
       apply_grade(this, grade);
     });
   }
+}
+
+function _gradebook_delegates(){
+  //
+  $(document).delegate(".grade_field", "keyup", function(){
+    if(jeditable_validator($(this).val())){
+      }
+      else{
+        $(this).val("");
+      }
+    });
+
+  $(document).delegate("#filter_text", "focus", function(){
+    var text = $("#filter_text").value;
+    if($("#filter_text").val() === "enter name to filter"){
+      $("#filter_text").removeClass("filter_placeholder_text");
+      $("#filter_text").val("");
+    }
+  });
+
+  $(document).delegate("#filter_text", "blur", function(){
+    if($("#filter_text").val() == ""){
+      $("#filter_text").addClass("filter_placeholder_text");
+      $("#filter_text").val("enter name to filter");
+    }
+  });
+
+  $(document).delegate(".ui-icon-info", "mouseover", function(){
+    tooltip_init(this);
+  });
+}
+
+function _gradebook_buttons(){
+  console.log("button handlers added");
+  $("#ex_button").click(function(){
+    misc_grades("EX");
+  });
+
+  $("#dr_button").click(function(){
+    misc_grades("DR");
+  });
+
+  $("#in_button").click(function(){
+    misc_grades("IN");
+  });
+
+  $("#submit-comment").click(function(){
+    submit_comment();
+  });
+
+  $('#add_assignment_button').click(function(){
+    openBox('/gradebooks/' + _course_id + '/assignments', 300);
+  });
+
+  $('#edit_scale_button').click(function(){
+    openBox('/gradebooks/grading_scale/' + _course_id, 350);
+  });
+
+  $('#edit_weight_button').click(function(){
+    openBox('/gradebooks/' + _course_id + '/weight', 350);
+  });
+}
+
+function teacher_gradebook(){
+    _focused_cell = null;
+    hide_filter_label();
+    init_headers();
+    _gradebook_delegates();
+    _gradebook_buttons();
 }
