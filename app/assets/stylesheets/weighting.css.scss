@@ -27,28 +27,28 @@ $remove-grade-range-button-color:#CCCCCC;
   -webkit-border-top-right-radius: $radius;
 }
 
-.scale-header, .edit_grade_scale {
-  font-family: Arial, Helvetica, sans-serif;
-}
+//.scale-header, .edit_grade_scale {
+//  font-family: Arial, Helvetica, sans-serif;
+//}
+//
+//.scale-header {
+//  height:30px;
+//  font-size:18px;
+//  text-align:center;
+//  padding-top:10px;
+//}
+//
+//.scale-footer {
+//  height:30px;
+//  padding-top:6px;
+//  left:0px;
+//  
+//  input {
+//    width:50px;
+//  }
+//}
 
-.scale-header {
-	height:30px;
-	font-size:18px;
-	text-align:center;
-	padding-top:10px;
-}
-
-.scale-footer {
-	height:30px;
-	padding-top:6px;
-	left:0px;
-	
-	input {
-		width:50px;
-	}
-}
-
-#options {
+#weight_type {
 	top:0px;
 	left:0px;
 	width:100%;
@@ -57,6 +57,7 @@ $remove-grade-range-button-color:#CCCCCC;
 	border-top:1px solid black;
 	border-bottom:1px solid black;
 	background-color:$tab-color;
+	font-family:Arial, Helvetica, sans-serif;
 	
 	div {
 		float:left;
@@ -97,45 +98,44 @@ $remove-grade-range-button-color:#CCCCCC;
 	}
 }
 
-.grade_range {
-  width:100%;
-	border-spacing:0px;
-//	border:1px solid $grade-range-border-color;
-	
-	tr {
-		td {
-			margin:0px;
-			padding:2px;
-			text-align:center;
-			border-bottom:1px solid $grade-range-border-color;
-			
-			input {
-				border:0px;
-				text-align:center;
-			}
-		}
-		
-		td.operator {
+#assignment_fields {
+  table {
+    width:100%;
+    border-spacing:0px;
+    
+    td {
+      padding:10px;
+      border-right:1px solid $grade-range-border-color;
+      border-bottom:1px solid $grade-range-border-color;
+      
+      input {
+        width:100%;
+        height:100%;
+        border:0px;
+      } 
+    }
+    
+    td.operator {
 			background-color:#EEEEEE;
 			color:#AAAAAA;
 			border-right:1px solid $grade-range-border-color;
 			border-bottom:0px;
+			font-family:Arial,Helvetica,sans-serif;
+			font-size:13px;
 		}
-		
-		td.operator {
-		  border-left:1px solid $grade-range-border-color;
-		} 
-		
-		td.remove_button {
+    
+    td.remove_button {
 		  margin:0px;
 		  padding:0px;
 		  background-color:$remove-grade-range-button-color;
-		  background-color:$grade-range-border-color;
-		  border-left:1px solid $grade-range-border-color;
+		  border:0px;
+		  border-bottom:1px solid $grade-range-border-color;
 		  
 		  input {
+		    border:0px;
 		    margin:0px;
 		    width:100%;
+		    height:100%;
 		    
 		    cursor:pointer;
 		    
@@ -143,46 +143,8 @@ $remove-grade-range-button-color:#CCCCCC;
 		    font-family:"Comic Sans MS", cursive, sans-serif;
 		    
 		    background-color:$remove-grade-range-button-color;
-		    border-top:3px solid $remove-grade-range-button-color;
-		    border-bottom:2px solid $remove-grade-range-button-color;
 		    @include rounded-rect(0);
 		  }
 		}
-	}
-	
-	tr.controls {
-	  td {
-	    border:0px;
-	  }
-	}
-	
-	.add_button_row {
-    td {
-      padding:0px;
-    }
-  }
-}
-
-#add_range_button {
-  width:100%;
-  margin:0px;
-  color: #FFD700;
-  background-color:#4D4D4D;
-  border-top:1px solid #4D4D4D;
-  padding-top:5px;
-  padding-bottom:7px;
-  @include rounded-rect(0);
-}
-
-#cert_alert {
-  color:white;
-  background-color:#F05044;
-  text-align:center;
-  border-bottom: 1px solid black;
-  
-  h2 {
-    margin:0px;
-    padding:10px;
-    color:white;
   }
 }

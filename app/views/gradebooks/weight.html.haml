@@ -29,19 +29,22 @@
 
 %div{:class => "scale-header fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}= "Change Assignment Weight"
 =form_for @settings, :remote => true, :url => "/settings/#{@settings.id}/weight", :html => {:method => "put"} do |f|
-  %div{:id => "assignment_types", :style => ""}
-    =f.fields_for :assignment_types do |builder|
-      =render "assignment_type_fields", :f => builder
   %div{:id => "weight_type"}
-    %div{:id => "equal_weight"}
+    %div{:id => "equal_weight", :class => (@settings.weight_type == "equal_weight" ? "selected" : "")}
       =f.label :weight_type, "Equal Weight"
-      =f.radio_button :weight_type, :equal_weight
-    %div{:id => "no_weight"}
+      =f.radio_button :weight_type, :equal_weight, :style => "display:none"
+    %div{:id => "no_weight", :class => (@settings.weight_type == "no_weight" ? "selected" : "")}
       =f.label :weight_type, "No Weight"
-      =f.radio_button :weight_type, :no_weight
-    %div{:id => "manual_weight"}
+      =f.radio_button :weight_type, :no_weight, :style => "display:none"
+    %div{:id => "manual_weight", :class => "last "+(@settings.weight_type == "manual_weight" ? "selected" : "")}
       =f.label :weight_type, "Manual Weight"
-      =f.radio_button :weight_type, :manual_weight
+      =f.radio_button :weight_type, :manual_weight, :style => "display:none"
+  %div{:id => "cert_alert", :style => "display:none"}
+  %div{:id => "assignment_fields", :style => ""}
+    %table{:class => "assignment_types"}
+      =f.fields_for :assignment_types do |builder|
+        =render "assignment_type_fields", :f => builder
   =link_to_add_fields "+ Add Type", f, :assignment_types, "assignment_type"
-  %button{:type => "button", :class => "button", :id => "submit_weight"}="Submit"
-  =close_openBox_button
+  %div{:id => "scale_submission", :class => "scale-footer fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}
+    %button{:type => "button", :class => "button", :id => "submit_weight"}="Submit"
+    =close_openBox_button

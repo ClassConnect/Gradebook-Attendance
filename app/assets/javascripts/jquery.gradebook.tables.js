@@ -622,8 +622,8 @@ function add_fields(link, association, content, situation) {
   var html, regexp, test;
   regexp = new RegExp("new_" + association, "g");
   if(situation === "range"){
-    $(link).parent().parent().before(html);
     html = content.replace(regexp, new_id);
+    $(link).parent().parent().before(html);
   }
   if(situation === "assignment_type"){
     var field_regexp = new RegExp("attributes_", "g");
@@ -631,8 +631,10 @@ function add_fields(link, association, content, situation) {
     html = content.replace(field_regexp, "attributes_new_assignment_types_");
     html = html.replace(bracket_regexp, "][new_assignment_types][");
     html = html.replace(regexp, new_id);
-    $(link).parent("form").children("#assignment_types").append(html);
+    //$(link).parent("form").children("#assignment_types").append(html);
+    $("#assignment_fields table").append(html);
     $($(".assignment_type:last .type_course_id")[0]).val(_course_id);
+    assignment_type_validate($("#weight_type .selected input"));
     //$(link).parent().prev().append(html);
     //console.log($(".assignment_type:last").children(".type_course_id"));
   }
@@ -684,13 +686,13 @@ function scale_mode_validate(object){
 
 function assignment_type_validate(object){
   if($(object).attr('value') === "manual_weight"){
-    $(".weight_percent_field").show();
+    $(".weight_percent_field").parent().show();
   }
   //either no weight or even weight
   else{
     console.log("click");
-    $(".weight_percent_field").hide();
-    $(".weight_percent_field").val("");
+    $(".weight_percent_field").parent().hide();
+    $(".weight_percent_field").parent().val("");
   }
 }
 

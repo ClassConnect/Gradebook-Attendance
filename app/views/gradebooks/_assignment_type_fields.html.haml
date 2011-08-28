@@ -1,6 +1,8 @@
-%div{:class => "assignment_type"}
-  =f.text_field :name, {:size => "30"}
-  =f.text_field :weight, {:size => "3", :maxlength => "2", :float => "right", :class => "weight_percent_field"}
+%tr{:class => "assignment_type"}
+  %td=f.text_field :name, {:size => "30"}
+  %td{ :class => "operator" }
+    %label{:class => "weight_percent_field"}= "weighs"
+  %td=f.text_field :weight, {:size => "3", :maxlength => "2", :float => "right", :class => "weight_percent_field"}
   =f.hidden_field :_destroy, {:class => "type_destroy_field", :id => "type_destroy_field"}
   =f.hidden_field :course_id, {:class => "type_course_id"}
-  %span{:class => "remove_button button"}=button_to_function "X", "remove_fields(this, 'assignment_type')"
+  %td{:class => "remove_button button ui-widget-toolbar ui-widget-header"}=button_to_function "X", "remove_fields(this, 'assignment_type')", :class => "ui-widget-toolbar ui-widget-header"
