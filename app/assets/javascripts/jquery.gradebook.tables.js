@@ -901,14 +901,23 @@ function no_weight_grade(bucket){
 function equal_weight_grade(bucket){
  var length = types_array.length;
  var weight = 1 / length;
+ var points_array = [];
  var grade = 0;
  var cache_id;
  while(length--){
    cache_id = types_array[length]._id;
    var div = bucket[cache_id].earned_points / bucket[cache_id].total_points;
    if(!isNaN(div))
-     grade += (weight*div);
+     points_array.push(div);
  }
+
+ //when equal weight, it'll change depending on how many assignment types have been used
+ length = points_array.length;
+ weight = 1/length;
+ while(length--){
+  grade += (weight * points_array[length]);
+ }
+
  if(isNaN(grade)){
    return 0;
  }
@@ -918,19 +927,32 @@ function equal_weight_grade(bucket){
 function manual_weight_grade(bucket){
   var length = types_array.length;
   var grade=0, cache_id, type_weight=0, type;
+  var total_weight =0;
+  type_weight_array = [];
   while(length--){
     type = types_array[length];
     cache_id = type._id;
+    new_array = [];
     type_weight = type.weight;
     var div = bucket[cache_id].earned_points / bucket[cache_id].total_points;
-    if(!isNaN(div))
-      grade += (type_weight * div);
+    if(!isNaN(div)){
+      new_array[0] = div;
+      new_array[1] = type_weight;
+      type_weight_array.push(new_array);
+      total_weight += type_weight;
+    }
   }
+
+  
+ length = type_weight_array.length;
+ while(length--){
+  grade += ((type_weight_array[length][1] / total_weight) * type_weight_array[length][0]);
+ }
 
   if(isNaN(grade)){
     return 0;
   }
-  return grade;
+  return grade * 100;
 }
 
 function course_grade_update(object){
