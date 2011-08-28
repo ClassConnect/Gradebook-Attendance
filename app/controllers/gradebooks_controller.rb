@@ -12,13 +12,6 @@ class GradebooksController < ApplicationController
     @assignments = @course.assignments.asc(:created_at).cache
     @settings = GradebookSettings.where(:course_id => params[:course_id])
     @settings &&= @settings.first
-    logger.info(@settings)
-    logger.info(@settings.assignment_types)
-    logger.info(@settings.id)
-    @settings.assignment_types.each do |typ|
-      logger.info(typ.name)
-      logger.info("this is extremely gay");
-    end
     if !@settings
       @settings = GradebookSettings.create!(:course_id => params[:course_id])
       for type in AssignmentType::DEFAULT_ASSIGNMENTS  
