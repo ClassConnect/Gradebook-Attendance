@@ -685,6 +685,28 @@ function assignment_type_validate(object){
   }
 }
 
+//Ensures that the weights add up to 100
+
+function assignment_weight_validation(){
+  if($("#gradebook_settings_weight_type_manual_weight").attr("checked") == "checked"){
+    var total = 0, current_value;
+    $("td input.weight_percent_field").each(function(){
+      current_value = parseInt(this.value);
+      if(isNaN(current_value) || (current_value < 0)){
+        display_error("Values must be positive numbers");
+        return false;
+      }
+      total += current_value;
+    });
+    if(total != 100){
+      display_error("Values must add up to 100");
+      return false;
+    }
+  }
+  return true;
+}
+
+
 function init_student_names(){
   student_names = jQuery.parseJSON($('#gradebook_display tbody ').attr('students'));
   /*
@@ -830,6 +852,14 @@ function tooltip_init(object){
 function jeditable_validator(string){
   if(string === "")
     return true;
+  var num_string = Number(string);
+  if(num_string < 0 || isNaN(num_string))
+    return false;
+  else
+    return true;
+}
+
+function is_num(string){
   var num_string = Number(string);
   if(num_string < 0 || isNaN(num_string))
     return false;
@@ -1045,3 +1075,25 @@ function teacher_gradebook(){
     _gradebook_delegates();
     _gradebook_buttons();
 }
+
+function validate_new_assignment(){
+  var current_value;
+  if(!$("input#assignment_name").val()){
+    display_error("Please enter a name");
+    return false;
+  }
+
+  if(!is_num($("input#assignment_point_value").val())){
+    display_error("Point value must be a number");
+    return false;
+  }
+
+  current_value = $("input#assignment_date_due").val();
+  if(!isDate(current_value, "yyyy-M-d")){
+    display_error("Date due must be a valid date");
+    return false;
+  }
+
+  return true;
+}
+

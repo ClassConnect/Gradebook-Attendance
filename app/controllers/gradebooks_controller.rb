@@ -26,8 +26,10 @@ class GradebooksController < ApplicationController
         @types = @settings.assignment_types
       end
     end
-    respond_to do |format|
-      format.html {render :layout => false}
+    if !Rails.env.development?
+      respond_to do |format|
+        format.html {render :layout => false}
+      end
     end
   end
 

@@ -1,5 +1,6 @@
 :javascript
   $(document).ready(function() {
+    $('#cert_alert').hide();
     $('#assignment_date_due').datepicker({ dateFormat: 'yy-mm-dd' });
     $('.new_assignment').bind('submit', function(){
       $.post($(this).attr("action") + '.js', $(this).serialize(), null, "script");
@@ -8,27 +9,32 @@
     });
 
     $("#submit_new_assignment").click(function(){
-      $(".new_assignment").submit();
+      if(validate_new_assignment()){
+        $(".new_assignment").submit();
+      }
+      else{
+        return false;
+      }
     });
   }); 
 
 %div{:class => "scale-header overview-info fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}="New Assignment"
-%br
+%div{:id => "cert_alert"}
 =form_for @assignment, :html => {:id => "new_assignment"} do |f|
   =f.hidden_field :course_id, :value => params[:course_id]
   %div{:class => "field"}
-    =f.label :name
+    =f.label :name, "Name:", {:class => "new_assignment_labels"}
     %br
     =f.text_field :name
-  %div{:class => "field"}
-    =f.label :assignment_type_id, "Assignment Type"
+  %div{:class => "field", :style => "margin-top:10px;"}
+    =f.label :assignment_type_id, "Assignment Type:"
     %br
     =collection_select(:assignment, :assignment_type, @types, :id, :name, {});
   %div{:class => "field", :style => "margin-top:10px;"}
-    =f.label :point_value, "Point Value: "
+    =f.label :point_value, "Point Value: ", {:class => "new_assignment_labels"}
     =f.text_field :point_value
   %div{:class => "field", :style => "margin-top:10px;"}
-    =f.label :date_due, "Date Due"
+    =f.label :date_due, "Date Due:", {:class => "new_assignment_labels"}
     =f.text_field :date_due 
   %div{:class => "new_assignment_buttons"}
     %button{:type => "button", :class => "button", :id => "submit_new_assignment"}="Submit"
