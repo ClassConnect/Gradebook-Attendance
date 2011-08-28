@@ -14,6 +14,9 @@ class GradebooksController < ApplicationController
     @settings &&= @settings.first
     logger.info(@settings)
     logger.info(@settings.assignment_types)
+    @settings.assignment_types.each do |typ|
+      logger.info(typ.name)
+    end
     if !@settings
       @settings = GradebookSettings.create!(:course_id => params[:course_id])
       for type in AssignmentType::DEFAULT_ASSIGNMENTS  
