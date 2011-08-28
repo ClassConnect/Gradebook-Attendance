@@ -35,7 +35,7 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: ccbeta
+  database: cc_production
   pool: 5
   username: root
   password: pbbJ3NzFyChPrir6xP5I
