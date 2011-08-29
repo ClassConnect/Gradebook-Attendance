@@ -29,6 +29,7 @@ _course_id = null;
 _grading_bucket = new Object();
 _student_grades = new Object();
 var _table_width = 0;
+var we_talked_about_diffs_last_night = false;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
@@ -377,27 +378,46 @@ function initTable() {
     
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
     var position = oTable.fnGetPosition(this);
-    if(value != $(this).attr('score')){
+    if(value == ""){
+      //if the assignment is already ungraded
+      if($(this).attr('score') !== undefined){
        $.ajax({
          type: 'POST',
          url: update_grade_url(this), 
          data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": value},
          dataType: "html"
        });
-     }
-      if(value != ""){
-        if(isNaN(value)){
-          return value;
-        }
-        else{
-          $(this).attr('score', value);
-          return percentage_format((value / assignment_point_value(position[1]) * 100));
-        }
+       we_talked_about_diffs_last_night = true;
       }
       else{
-        $(this).removeAttr('score');
-        return "";
+       we_talked_about_diffs_last_night = false;
+       $(this).removeAttr('score');
       }
+     return "";
+    }
+
+    else{
+      if(value != $(this).attr('score')){
+        $.ajax({
+          type: 'POST',
+          url: update_grade_url(this), 
+          data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": value},
+          dataType: "html"
+        });
+        we_talked_about_diffs_last_night = true;
+        $(this).attr('score', value);
+      }
+      else{
+        we_talked_about_diffs_last_night = false;
+      }
+
+      if(isNaN(value)){
+        return value;
+      }
+      else{
+        return percentage_format((value / assignment_point_value(position[1]) * 100));
+      }
+    }
     }, {
     "type": "edit_grade",
     "height": "",
@@ -409,19 +429,21 @@ function initTable() {
       return $(this).attr('score');
     },
     "callback" : function(value, settings) {
-      var position = oTable.fnGetPosition(this);
-      oTable.fnUpdate(value, position[0], position[2], false);
-      if(grading_scale_method !== "manual"){
-        var grade = calculateGrade($(this).parent());
-        
-        $.ajax({
-          type: 'POST',
-          url: course_grade_update(this),
-          data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": grade},
-          dataType: "html"
-        });
-        
-        apply_grade_by_column($(this).parent(), position[0], grade);
+      if(we_talked_about_diffs_last_night){
+        var position = oTable.fnGetPosition(this);
+        oTable.fnUpdate(value, position[0], position[2], false);
+        if(grading_scale_method !== "manual"){
+          var grade = calculateGrade($(this).parent());
+
+          $.ajax({
+            type: 'POST',
+            url: course_grade_update(this),
+            data: {"_method": 'put', "student_id": $(this).parent().attr('id'), "value": grade},
+            dataType: "html"
+          });
+
+          apply_grade_by_column($(this).parent(), position[0], grade);
+        }
       }
     },
   });
