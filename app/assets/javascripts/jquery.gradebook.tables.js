@@ -30,6 +30,7 @@ _grading_bucket = new Object();
 _student_grades = new Object();
 var _table_width = 0;
 var we_talked_about_diffs_last_night = false;
+var $table = null;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
@@ -109,8 +110,9 @@ function enable_editing(){
   });
 }
 
-function init_assignment_types(assignment_types_dictionary, weight_type){
-  types_array = assignment_types_dictionary;
+function init_assignment_types(){
+  types_array = jQuery.parseJSON($("#gradebook_div").attr("types"));
+  $("#gradebook_div").attr("weight");
   var length = types_array.length;
   var cache;
   while(length--){
@@ -119,7 +121,7 @@ function init_assignment_types(assignment_types_dictionary, weight_type){
     _grading_bucket[cache].earned_points = 0;
     _grading_bucket[cache].total_points = 0;
   }
-  _weight_type = weight_type;
+  _weight_type = $("#gradebook_div").attr("weight");
 }
 
 function find_type_by_id(type_id){
@@ -241,15 +243,16 @@ function find_assignment_by_id(id){
   return -1;
 }
 
-function init_gradescale(scale, type, id){
-  grading_scale = scale;
-  grading_scale_method = type;
+function init_gradescale(type, id){
+  var stupid = $("#gradebook_div");
+  grading_scale = jQuery.parseJSON(stupid.attr("ranges"));
+  grading_scale_method = type;//jQuery.parseJSON(stupid.attr("range_type"));
   student_count = $('.row_entry').length;
-  _grade_scale_id = id;
+  _grade_scale_id = id//jQuery.parseJSON(stupid.attr("scale_id"));
 }
 
-function init_assignments_array(json){
-  assignments_array = json;
+function init_assignments_array(){
+  assignments_array = jQuery.parseJSON($('#gradebook_div').attr('assignments'));
   _table_width = assignments_array.length * 150;
 }
 
@@ -339,6 +342,18 @@ function hide_filter_label(){
   $("#filter_text").val("enter name to filter");
 }
 
+function gradebook_init(type, id){
+  $table = $('#gradebook_display');
+  add_new_input();
+  add_manual_input();
+  init_student_names();
+  init_assignments_array();
+  init_assignment_types();
+  _grading_options = ["DR", "EX", "IN"];
+  init_gradescale(type, id);
+  _course_id = parseInt($("#gradebook_div").attr("course_id"))
+}
+
 function initTable() {
   if(_columns_to_destroy.length != 0){
     $('.datatable tr').each(function(){
@@ -350,7 +365,7 @@ function initTable() {
     _columns_to_destroy.length = 0;
   }
   
-  oTable = $('#gradebook_display').dataTable(
+  oTable = $table.dataTable(
   {
     "iDisplayLength": student_count,
     "bDestroy": true,
@@ -373,9 +388,6 @@ function initTable() {
     "sHeightMatch": "none"
   });
   
-  //TODO: focusing when score doesn't change and blank
-  //TODO: make this restful?
-    
   $('td', oTable.fnGetNodes()).editable(function(value, settings){
     var position = oTable.fnGetPosition(this);
     if(value == ""){
@@ -1095,7 +1107,6 @@ function _gradebook_delegates(){
 }
 
 function _gradebook_buttons(){
-  console.log("button handlers added");
   $("#ex_button").click(function(){
     misc_grades("EX");
   });
@@ -1125,12 +1136,16 @@ function _gradebook_buttons(){
   });
 }
 
+//Stuff in here that for some reason 
 function teacher_gradebook(){
     _focused_cell = null;
     hide_filter_label();
     init_headers();
     _gradebook_delegates();
     _gradebook_buttons();
+    $('.dataTables_scroll .datatable').attr('style', "");
+    document.addEventListener('click', click_block, true);
+    document.addEventListener('keydown', keyboard_block, true);
 }
 
 function validate_new_assignment(){
