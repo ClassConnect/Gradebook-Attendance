@@ -3,7 +3,7 @@ class GradebookSettings
   include Mongoid::Document
   field :course_id, :type => Integer
   has_one :grade_scale
-  has_many :assignment_types
+  has_many :assignment_types, :dependent => :destroy
 
   validates_presence_of :course_id
 

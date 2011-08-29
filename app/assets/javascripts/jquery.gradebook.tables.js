@@ -1128,3 +1128,14 @@ function validate_new_assignment(){
   return true;
 }
 
+function find_type(type){
+  var length = types_array.length;  
+  while(length--){
+    
+  }
+}
+
+function populate_issues(){
+
+
+}
