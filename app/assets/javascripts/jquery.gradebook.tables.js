@@ -614,7 +614,7 @@ function remove_fields(link, type){
   }
   if(type === "assignment_type"){
     $(link).parents(".assignment_type").children(".type_destroy_field").val("1");
-    $(link).parents(".assignment_type").children().attr("disabled", true);
+    $(link).parents(".assignment_type").children().not(".type_destroy_field").attr("disabled", true);
     $(link).parents(".assignment_type").hide();
   }
 }
