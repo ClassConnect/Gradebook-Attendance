@@ -1,34 +1,30 @@
 destroy_table();
 
 created_assignment = new_assignment("<%= @assignment.id %>", <%= @assignment.point_value %>, "<%= @assignment.assignment_type_id %>");
+console.log(created_assignment);
 assignments_array.push(created_assignment);
 
-/*
-$('.datatable').width(function(index, value){
-  console.log(assignments_array.length * 150);
-  return assignments_array.length * 150;
-});
-*/
-//this is incredibly ghetto...we'll have to read to find where this damn thing is placed
+$('.datatable').attr('width', new_table_width());
 
 var header_html = "<th class='assignment_header' align='left' id=<%=@assignment.id%>>";
 header_html += "<span class='ui-icon-info hover_button' float='right' title='info'></span>";
-header_html += "<p class='assignment-name' display='inline' padding='0'>" + "<%=@assignment.name%>" + "</p></th>"
+header_html += "<p class='assignment-name' display='inline' padding='0' margin-top='0'>" + "<%=@assignment.name%>" + "</p></th>"
 
 $(header_html).insertAfter($('.header_row th:last'));
 
 var student_count=0;
 
-$(".datatable .row_entry").each(function(index, value){
-  $(this).append("<td align='center' width='150'></td>");
+var student_rows = $(".datatable .row_entry");
+var length = student_rows.length;
+var new_cell = $("<td align='center' class='grade_entry'></td>");
+while(length--){
+  $(student_rows[length]).append(new_cell.clone());
   student_count++;
-});
-
+}
 
 initTable(student_count);
 
-
+resize_datatable();
 $('.dataTables_scroll .datatable').attr('style', "");
-$('.dataTables_scroll .datatable').attr('width', assignments_array.length * 150);
 init_headers();
 

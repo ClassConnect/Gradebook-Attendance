@@ -28,6 +28,7 @@ active = false;
 _course_id = null;
 _grading_bucket = new Object();
 _student_grades = new Object();
+var _table_width = 0;
 
 jeditable_dictionary = {
       onBeforeShow: function(){
@@ -202,7 +203,8 @@ function keyboard_block(e){
 function new_assignment(id, point_value, type_id){
   return {_id : id, 
   point_value : point_value,
-  position: assignments_array.length+3};
+  position: assignments_array.length+3,
+  assignment_type_id: type_id};
   _total_columns++;
 }
 
@@ -247,6 +249,7 @@ function init_gradescale(scale, type, id){
 
 function init_assignments_array(json){
   assignments_array = json;
+  _table_width = assignments_array.length * 150;
 }
 
 function init_course_id(course_id){
@@ -1136,7 +1139,13 @@ function find_type(type){
   }
 }
 
-function populate_issues(){
+//Datatables caches the width of the scrollheader to keep things matching up
+//We need to change it before 
+function resize_datatable(){
+  var width_string = "width: " + (_table_width + 15) + "px";
+  $('.dataTables_scrollHeadInner').attr('style', width_string);
+}
 
-
+function new_table_width(){
+  return _table_width += 150;
 }
