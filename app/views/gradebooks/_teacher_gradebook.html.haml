@@ -53,8 +53,9 @@
   %textarea{:id => "comment-entry", :rows => 2, :cols => 17}
   %button{:id => "submit-comment"}="Submit"
 %div{:class => "options-tip"}
-  %button{:id => "ex_button", :class => "button"}="Excused" 
-  %br
-  %button{:id => "dr_button", :class => "button"}="Dropped"
-  %br
-  %button{:id => "in_button", :class => "button"}="Incomplete"
+  %div{:class => "options-button-div"}
+    %button{:id => "ex_button", :class => "button"}="Excused" 
+    %br
+    %button{:id => "dr_button", :class => "button"}="Dropped"
+    %br
+    %button{:id => "in_button", :class => "button"}="Incomplete"
