@@ -159,7 +159,7 @@ function keyboard_block(e){
   if(e.which == 9){
   }
   if(_focused_cell != null){
-    switch(e.which){
+    switch(e.keyCode){
       //up press
       case 38:
         var column_position = oTable.fnGetPosition(_focused_cell)[1];
@@ -168,9 +168,18 @@ function keyboard_block(e){
       //down press
       case 13:
         e.preventDefault();
+      //enter key
       case 40:
-        var column_position = oTable.fnGetPosition(_focused_cell)[1];
-        $($(_focused_cell).parent().next().children()[column_position]).trigger("click");
+        var position = oTable.fnGetPosition(_focused_cell);
+        var column_position = position[1];
+        //Submit if last cell
+        if(position[0]+1 === student_count){
+          $(_focused_cell).children("form").submit();
+        }
+        //Otherwise, move down to the next one
+        else{
+          $($(_focused_cell).parent().next().children()[column_position]).trigger("click");
+        }
         break;
       //left press
       case 37:
