@@ -359,7 +359,6 @@ function initTable() {
     "sDom": '<"H"rf>t<"F">',
     "aoColumnDefs":[{"aTargets":['assignment_header'], "sType":'percent', "bSortable": true, "sWidth":"140px"}
     ,{"aTargets": [0, 1], "sWidth": "100px"}, {"aTargets":[2], "sWidth": "120px"}]
-    //,{"aTargets": [0], "sWidth": 0}, {"aTargets": [1], "sWidth":"0" }, {"aTargets": [2], "sWidth":"50%"}]
     ,"bScrollCollapse": true
   });
 
@@ -426,6 +425,8 @@ function initTable() {
   
   if(grading_scale_method == "manual")
     enable_editing();
+
+  hide_filter_label();
 
   reset_assignment_position();
 

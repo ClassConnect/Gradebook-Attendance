@@ -3,10 +3,12 @@ destroy_table();
 created_assignment = new_assignment("<%= @assignment.id %>", <%= @assignment.point_value %>, "<%= @assignment.assignment_type_id %>");
 assignments_array.push(created_assignment);
 
+/*
 $('.datatable').width(function(index, value){
   console.log(assignments_array.length * 150);
   return assignments_array.length * 150;
 });
+*/
 //this is incredibly ghetto...we'll have to read to find where this damn thing is placed
 
 var header_html = "<th class='assignment_header' align='left' id=<%=@assignment.id%>>";
@@ -28,5 +30,6 @@ initTable(student_count);
 
 if(assignments_array.length == 1)
   $('.dataTables_scroll .datatable').attr('style', "");
+$('.dataTables_scroll .datatable').attr('width', assignments_array.length * 150);
 init_headers();
 
