@@ -2,10 +2,13 @@
   $(document).ready(function() {
       gradebook_init("#{@settings.grade_scale.scale_type}", "#{@settings.grade_scale.id}");
       initTable();
+
       teacher_gradebook();
       if(#{@students.count} > 0){
         regrade();
       }
+
+      
   }); 
 
 -if Rails.env.development?
