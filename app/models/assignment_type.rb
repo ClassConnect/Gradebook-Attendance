@@ -17,7 +17,7 @@ class AssignmentType
 
   private
   def validate_no_assignments
-    if self.assignments.count
+    if self.assignments.count > 0
       return false
     end
     return true
