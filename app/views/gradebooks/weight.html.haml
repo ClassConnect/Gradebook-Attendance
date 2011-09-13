@@ -3,8 +3,10 @@
     assignment_type_validate($("input[checked=checked]")[0]);
   
     $('#submit_weight').click(function(){
-      $(".edit_gradebook_settings").submit();
-      closeBox();
+      if(assignment_weight_validation()){
+        $(".edit_gradebook_settings").submit();
+        closeBox();
+      }
     });
 
     $(".edit_gradebook_settings").bind('submit', function(){
@@ -24,7 +26,6 @@
         assignment_type_validate(radio);
       });
     });
-    //$(".weight_field").hide();
   });
 
 %div{:class => "scale-header fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix"}= "Change Assignment Weight"

@@ -3,7 +3,7 @@ class GradebookSettings
   include Mongoid::Document
   field :course_id, :type => Integer
   has_one :grade_scale
-  has_many :assignment_types
+  has_many :assignment_types, :dependent => :destroy
 
   validates_presence_of :course_id
 
@@ -12,6 +12,6 @@ class GradebookSettings
 
   accepts_nested_attributes_for :assignment_types, :allow_destroy => true
   #Possible values: "equal_weight", "no_weight", "manual_weight"
-  field :weight_type, :type => String, :default => "equal_weight"
+  field :weight_type, :type => String, :default => "no_weight"
 
 end

@@ -10,9 +10,9 @@
     });
   });
 %div{:id => "show_buttons", :float => "right", :align => "right"}
-  %button{:class => "visualize"}="Graph"
+  %button{:type => "button", :class => "visualize"}="Graph"
   %br
-  %button{:class => "edit_assignment"}="Edit"
+  %button{:type => "button", :class => "edit_assignment"}="Edit"
 %div{:id => "assignment-stats"}
   =@assignment.name
   %br

@@ -1,30 +1,11 @@
 :javascript
   $(document).ready(function() {
-      //START OTHER STUFF
-      add_new_input();
-      add_manual_input();
-      init_assignments_array(#{@assignments.to_json :only => [:_id, :point_value, :assignment_type_id]});
-      init_assignment_types(#{@settings.assignment_types.to_json}, "#{@settings.weight_type}");
-      init_gradescale(#{@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]}, "#{@settings.grade_scale.scale_type}", "#{@settings.grade_scale.id}");
-      init_course_id(#{@course.id});
-    var num_students = #{@students.count};
-      init_student_names();
-    _grading_options = ["DR", "EX", "IN"];
+      gradebook_init("#{@settings.grade_scale.scale_type}", "#{@settings.grade_scale.id}");
       initTable();
-      $('.dataTables_scrollHeadInner .datatable').attr('style', "");
 
-      document.addEventListener('click', click_block, true);
-      document.addEventListener('keydown', keyboard_block, true);
       teacher_gradebook();
-
-      console.log("pre grade...");
       if(#{@students.count} > 0){
-        if(grading_scale_method != "manual"){
-          $('.dataTables_scrollBody .datatable tbody tr').each(function(){
-            var grade = calculateGrade(this);
-            apply_grade(this, grade);
-          });
-        }
+        regrade();
       }
 
       
@@ -41,7 +22,7 @@
 %button{:type => "button", :class => "button", :id => "add_assignment_button"}="Add Assignment"
 %button{:type => "button", :class => "button", :id => "edit_scale_button"}="Edit Scale"
 %button{:type => "button", :class => "button", :id => "edit_weight_button"}="Edit Weighting"
-%div{:id => "gradebook_div"}
+%div{:id => "gradebook_div", :assignments => (@assignments.to_json :only => [:_id, :point_value, :assignment_type_id]), :types => @settings.assignment_types.to_json, :weight => @settings.weight_type, :ranges => (@settings.grade_scale.grade_ranges.asc(:from).to_json :except => [:_id]), :rangetype => @settings.grade_scale.scale_type, :course_id => @course.id}
   =render "students_table"
 -if Rails.env.development?
   %div{:id => "dialogBox"}
@@ -52,8 +33,9 @@
   %textarea{:id => "comment-entry", :rows => 2, :cols => 17}
   %button{:id => "submit-comment"}="Submit"
 %div{:class => "options-tip"}
-  %button{:id => "ex_button"}="Excused" 
-  %br
-  %button{:id => "dr_button"}="Dropped"
-  %br
-  %button{:id => "in_button"}="Incomplete"
+  %div{:class => "options-button-div"}
+    %button{:id => "ex_button", :class => "button"}="Excused" 
+    %br
+    %button{:id => "dr_button", :class => "button"}="Dropped"
+    %br
+    %button{:id => "in_button", :class => "button"}="Incomplete"
