@@ -1,0 +1,24 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install', '-gf' ]
+info using npm@1.0.17
+info using node@v0.5.1
+verbose config file /Users/tedkalaw/.npmrc
+verbose config file /usr/etc/npmrc
+silly exec /usr/bin/node "/usr/lib/node_modules/npm/bin/npm-get-uid-gid.js" "nobody" 20
+silly output from getuid/gid {"uid":-2,"gid":20}
+silly output from getuid/gid 
+verbose into /usr/lib [ '.' ]
+verbose cache add [ '.', null ]
+ERR! Could not install: .
+ERR! Error: ENOENT, No such file or directory 'package.json'
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Darwin 11.1.0
+ERR! command "node" "/usr/bin/npm" "install" "-gf"
+ERR! cwd /Users/tedkalaw/classconnect/Gradebook-Attendance
+ERR! node -v v0.5.1
+ERR! npm -v 1.0.17
+verbose exit [ 2, true ]
