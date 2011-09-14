@@ -1,8 +1,6 @@
 class AssignmentsController < ApplicationController
   #GET /gradebooks/:course_id/:assignment_id
 
-  before_filter :authenticate_session!
-  
   def edit
     @assignment = Assignment.find(params[:assignment_id])
     @types = AssignmentType.where(:course_id => params[:course_id])
