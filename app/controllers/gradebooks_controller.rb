@@ -81,8 +81,4 @@ class GradebooksController < ApplicationController
     end
   end
 
-  def student_in_class?(viewed_id)
-
-  end
-
 end

@@ -1,7 +1,6 @@
 :javascript
   $(document).ready(function(){
-    $(".edit_assignment").click(function(){
-      console.log("#{id_to_link}");
+    $(".edit_assignment").bind('click', function(){
       openBox("#{id_to_link}", 300);
     });
 
